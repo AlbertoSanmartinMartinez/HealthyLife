@@ -15,9 +15,12 @@ class Food(models.Model):
     def __str__(self):
         return self.name
 
+    def addIngredient(self):
+        pass
 
-class Ingredient(models.Model):
-    ingredient_id = models.AutoField(primary_key=True)
+
+class Measure(models.Model):
+    measure_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
 
     def __unicode__(self):
@@ -25,3 +28,34 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Nutrient(models.Model):
+    nutrient_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
+
+class Ingredient(models.Model):
+    ingredient_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    fats = models.ForeignKey(Nutrient, default='')
+    # carbohydrates = models.ForeignKey(Nutrient)
+    # proteins = models.ForeignKey(Nutrient)
+    # fiber = models.ForeignKey(Nutrient)
+    # sodium = models.ForeignKey(Nutrient)
+    # calories = models.ForeignKey(Nutrient)
+
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
+    def calculateNutritionalData(self):
+        pass

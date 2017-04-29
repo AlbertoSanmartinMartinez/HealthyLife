@@ -38,7 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sport',
-    'nutrition'
+    'nutrition',
+    'health',
+    'statistics',
+    'awards'
 )
 
 MIDDLEWARE_CLASSES = (
