@@ -90,3 +90,6 @@ ENV/
 
 # archivos invisibles de mac
 .DS_store
+
+# bases de datos
+.dbsqlite3
