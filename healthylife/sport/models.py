@@ -18,7 +18,7 @@ class SportType(models.Model):
         return self.name
 
 
-class SportSesion(models.Model):
+class SportSession(models.Model):
     session_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     sport_type = models.ForeignKey(SportType)
