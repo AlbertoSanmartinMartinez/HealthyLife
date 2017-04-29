@@ -92,4 +92,4 @@ ENV/
 .DS_store
 
 # bases de datos
-.dbsqlite3
+db.sqlite3
