@@ -2,26 +2,40 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='sport_sesion',
+            name='SportSesion',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('session_id', models.AutoField(serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=100)),
+                ('date', models.DateField()),
             ],
         ),
         migrations.CreateModel(
-            name='sport_type',
+            name='SportType',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('sport_id', models.AutoField(serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=100)),
+                ('description', models.CharField(max_length=500)),
             ],
+        ),
+        migrations.AddField(
+            model_name='sportsesion',
+            name='sport_type',
+            field=models.ForeignKey(to='sport.SportType'),
+        ),
+        migrations.AddField(
+            model_name='sportsesion',
+            name='usuario',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
         ),
     ]
