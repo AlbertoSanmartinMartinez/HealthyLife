@@ -17,7 +17,10 @@
       </nav>
   </header>
   <section>
-    {{ login_form }}
+    <form method="POST" action="">{% csrf_token %}
+      {{ login_form }}
+      <input type ="submit" value="Aceptar"/>
+    </form>
   </section>
   <footer>
       <p>Creado por:</p>

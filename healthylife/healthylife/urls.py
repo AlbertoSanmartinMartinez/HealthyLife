@@ -18,7 +18,8 @@ from sport import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.inicio, name='inicio')
-    # url(r'^registro/$', views.register, name='registro')
-    # url(r'^$/blog', views.blog, name='blog')
+    url(r'^$', views.inicio, name='inicio'),
+    url(r'^registro/', views.register, name='registro'),
+    url(r'^login/', views.login, name='login'),
+    # url(r'^blog/', views.blog, name='blog')
 ]
