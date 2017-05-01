@@ -28,18 +28,13 @@
         </nav>
     </header>
     <section>
-        <h3>Busca lo que necistes</h3
+        <h3>Sport</h3
         <article>
-            <h5>Alimentación</h5>
-            <!-- <img src="http... -->
-        </articles>
-        <article>
-            <h5>Actividad Física</h5>
-            <!-- <img src="http... -->
-        </articles>
-            <h5>Salud</h5>
-            <!-- <img src="http... -->
-        <article>
+          <h5>Nueva Actividad</h5>
+          <form method="POST" action="">{% csrf_token %}
+            {{ sport_session_form.as_p }}
+            <input type ="submit" value="Aceptar"/>
+          </form>
         </articles>
     </section>
     <footer>

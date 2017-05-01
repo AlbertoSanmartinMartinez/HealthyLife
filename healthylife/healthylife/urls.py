@@ -21,5 +21,10 @@ urlpatterns = [
     url(r'^$', views.inicio, name='inicio'),
     url(r'^registro/', views.register, name='registro'),
     url(r'^login/', views.login, name='login'),
+    url(r'^sport/', views.sport, name='sport'),
+    url(r'^health/', views.health, name='health'),
+    url(r'^nutrition/', views.nutrition, name='nutrition'),
+    url(r'^statistics/', views.statistics, name='statistics'),
+    url(r'^awards/', views.awards, name='awards'),
     # url(r'^blog/', views.blog, name='blog')
 ]
