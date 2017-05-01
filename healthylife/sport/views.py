@@ -45,8 +45,8 @@ def nutrition(request):
 
 
 def statistics(request):
-    return render(request, "statistics", {})
+    return render(request, "statistics.html", {})
 
 
 def awards(request):
-    return render(request, "awards", {})
+    return render(request, "awards.html", {})
