@@ -8,7 +8,9 @@ def inicio(request):
 
 
 def register(request):
-    form = RegisterForm()
+    form = RegisterForm(request.POST or None)
+    if form.is_valid():
+        print form.cleaned_data
     context = {
         "register_form": form,
     }
@@ -16,7 +18,7 @@ def register(request):
 
 
 def login(request):
-    form = LogInForm()
+    form = LogInForm(request.POST or None)
     context = {
         "login_form": form,
     }

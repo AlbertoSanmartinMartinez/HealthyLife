@@ -7,18 +7,18 @@
 </head>
 <body>
   <header>
-      <!-- <img src="http... -->
       <h1>Healthy Life</h1>
       <nav>
           <ul>
-              <li>Registro</li>
-              <li>Login</li>
+            <li><a href="/registro">Registro</a></li>
+            <li><a href="/login">Login</a></li>
           </ul>
       </nav>
   </header>
   <section>
+    <h3>Accede</h3
     <form method="POST" action="">{% csrf_token %}
-      {{ login_form }}
+      {{ login_form.as_p }}
       <input type ="submit" value="Aceptar"/>
     </form>
   </section>
