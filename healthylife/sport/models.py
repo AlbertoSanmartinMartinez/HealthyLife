@@ -25,8 +25,7 @@ class SportSession(models.Model):
     date = models.DateField(date.today)
     usuario = models.ForeignKey(User)
     # duration
-    # calories
-    # time
+    # calories = models.IntegerField()
 
     def __unicode__(self):  # python 2
         return self.name

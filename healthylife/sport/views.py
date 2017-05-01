@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .forms import RegisterForm, LogInForm, SportSessionForm
-from .models import SportSession
+from .forms import RegisterForm, LogInForm, ContactForm, SportSessionForm
+# from .models import SportSession
 
 
 # Create your views here.
@@ -24,12 +24,19 @@ def login(request):
     return render(request, "login.html", context)
 
 
-def sport(request):
-    form = SportSessionForm(request.POST or None)
+def contact(request):
+    form = ContactForm(request.POST or None)
     if form.is_valid():
         form_data = form.cleaned_data
-        name = form_data.get("nombre")
-        obj = SportSession.objects.create(name=name)
+        print form_data.get("name")
+    context = {
+        "contact_form": form,
+    }
+    return render(request, "contact.html", context)
+
+
+def sport(request):
+    form = SportSessionForm()
     context = {
         "sport_session_form": form,
     }

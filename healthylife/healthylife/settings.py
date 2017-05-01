@@ -14,7 +14,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -92,6 +93,21 @@ DATABASES = {
     }
 }
 
+'''
+Password validation
+https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttribut/
+    eSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLeng/
+    thValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPass/
+    wordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPass/
+    wordValidator',},
+]
+'''
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

@@ -1,4 +1,7 @@
 from django import forms
+from django.forms import ModelForm
+from models import SportSession
+# from datetime import date
 
 
 class RegisterForm(forms.Form):
@@ -14,12 +17,13 @@ class LogInForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput())
 
 
-class SportSessionForm(forms.Form):
-    # session_id = models.AutoField(primary_key=True)
+class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
-    # sport_type = models.ForeignKey(SportType)
-    # date = models.DateField(date.today)
-    # usuario = models.ForeignKey(User)
-    # duration
-    # calories
-    # time
+    email = forms.EmailField()
+    topic = forms.CharField(max_length=500)
+
+
+class SportSessionForm(ModelForm):
+    class Meta:
+        model = SportSession
+        # exclude = ("usuario", "date", "session_id")
