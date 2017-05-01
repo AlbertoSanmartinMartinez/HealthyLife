@@ -26,4 +26,4 @@ class ContactForm(forms.Form):
 class SportSessionForm(ModelForm):
     class Meta:
         model = SportSession
-        # exclude = ("usuario", "date", "session_id")
+        exclude = ("usuario", "date", "session_id")
