@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'nutrition',
     'health',
     'statistics',
-    'awards'
+    'awards',
+    'healthylifeapp'
 )
 
 MIDDLEWARE_CLASSES = (
