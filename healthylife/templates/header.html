@@ -1,0 +1,23 @@
+<!--{% load staticfiles %}-->
+
+{% block content %}
+<body>
+    <header>
+        <!-- <img src="http... -->
+        <h1><a href="/">Healthy Life</a></h1>
+        <nav>
+            <p>Acceso</p>
+            <ul>
+              {% if user.is_authenticate %}
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/">Logout</a></li>
+              {% else %}
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/register">Registro</a></li>
+                <li><a href="/login">Login</a></li>
+              {% endif %}
+            </ul>
+        </nav>
+        {% include 'navbar.html' %}
+    </header>
+{% endblock %}

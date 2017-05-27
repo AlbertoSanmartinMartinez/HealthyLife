@@ -1,6 +1,7 @@
 from django import forms
 # from models import OwnUser
-# from django.forms import ModelForm
+from django.forms import ModelForm
+from healthylifeapp.models import SportSession, SportType
 
 
 class RegisterForm(forms.Form):
@@ -25,3 +26,24 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
     email = forms.EmailField()
     topic = forms.CharField(max_length=500)
+
+
+class WorkWithOurForm(forms.Form):
+    TYPE_WORK = (('Owner Shop'), ('Blogger'))
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    telephone = forms.IntegerField()
+    work_type = forms.ChoiceField(required=True, choices=TYPE_WORK)
+
+
+# Sport forms
+class SportSessionForm(ModelForm):
+    class Meta:
+        model = SportSession
+        fields = ['name', 'sport_type', 'date', 'duration', 'calories']
+
+
+class SportTypeForm(ModelForm):
+    class Meta:
+        model = SportType
+        fields = []

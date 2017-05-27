@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block work_with_our %}
+<form method="post" enctype="multipart/form-data" action="">{% csrf_token %}
+    {{ work_with_our_form.as_p }}
+  <input type="submit" value="Submit"/>
+</form>
+{% endblock %}
