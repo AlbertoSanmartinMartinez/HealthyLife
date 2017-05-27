@@ -14,21 +14,13 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from healthylifeapp.views import inicio, register, login, contact
+from healthylifeapp.views import inicio, register, login, contact, ownlogin
 from sport.views import sport
 from statistics.views import statistics
 from awards.views import awards
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', inicio, name='inicio'),
-    url(r'^register/', register, name='register'),
-    url(r'^login/', login, name='login'),
-    url(r'^contact/', contact, name='contact'),
-    url(r'^sport/', sport, name='sport'),
-    # url(r'^health/', views.health, name='health'),
-    # url(r'^nutrition/', views.nutrition, name='nutrition'),
-    url(r'^statistics/', statistics, name='statistics'),
-    url(r'^awards/', awards, name='awards'),
-    # url(r'^blog/', views.blog, name='blog')
+    url(r'^blog/$', views.blog, name='blog'),
+    url(r'^shop/$', views.shop, name='shop')
 ]

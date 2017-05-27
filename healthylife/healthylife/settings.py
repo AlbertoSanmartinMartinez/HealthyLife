@@ -38,12 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sport',
-    'nutrition',
-    'health',
-    'statistics',
-    'awards',
-    'healthylifeapp'
+    'healthylifeapp',
+    'register'
 )
 
 MIDDLEWARE_CLASSES = (
