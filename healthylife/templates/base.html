@@ -1,18 +1,33 @@
 <!DOCTYPE html>
+
 {% load staticfiles %}
+
 <html lang="es">
-<head>
+  <head>
     <meta charset="utf-8">
     <title>HealthyLife</title>
     <link rel="stylesheet" href="style.css">
-</head>
-{% include 'header.html' %}
-{% block legal_information %}
-{% endblock %}
-{% block work_with_our %}
-{% endblock %}
-{% block contact %}
-{% endblock %}
-{% block sport_session %}
-{% endblock %}
-{% include 'footer.html' %}
+  </head>
+  <body>
+    {% include 'header.html' %}
+
+    {% block sport_section %}
+    {% endblock %}
+    {% block nutrition_section %}
+    {% endblock %}
+    {% block health_section %}
+    {% endblock %}
+    {% block blog %}
+    {% endblock %}
+    {% block shop %}
+    {% endblock %}
+    {% block legal_information %}
+    {% endblock %}
+    {% block work_with_our %}
+    {% endblock %}
+    {% block contact %}
+    {% endblock %}
+
+    {% include 'footer.html' %}
+  </body>
+</html>

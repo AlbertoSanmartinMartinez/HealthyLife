@@ -1,7 +1,7 @@
 from django.contrib import admin
 from healthylifeapp.models import SportType, SportSession, Food, Measure, \
     Nutrient, Ingredient, Company, Award, Simpton, Illnes, GeneralStatistics, \
-    SpecificStatistics
+    SpecificStatistics, Category, Post, Comment, Product
 
 # Register your models here.
 admin.site.register(SportType)
@@ -16,3 +16,6 @@ admin.site.register(Simpton)
 admin.site.register(Illnes)
 admin.site.register(GeneralStatistics)
 admin.site.register(SpecificStatistics)
+admin.site.register(Category)
+admin.site.register(Post)
+admin.site.register(Comment)

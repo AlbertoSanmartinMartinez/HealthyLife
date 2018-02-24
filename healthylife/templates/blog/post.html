@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block detail_post %}
+    <h1>{{ post.title }}</h1>
+    <h3>{{ post.description }}</h3>
+    <p>{{ post.content }}</p>
+    <h3>{{ post.category }}</h3>
+{% endblock %}

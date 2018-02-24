@@ -1,0 +1,10 @@
+{% block content %}
+  <nav>
+    <p>Categorias del Blog</p>
+    <ul>
+      {% for category in categories %}
+        <li><h1>{{ category.name }}</h1></li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endblock %}

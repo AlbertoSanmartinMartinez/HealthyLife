@@ -1,8 +1,8 @@
-from django.shortcuts import render  # , render_to_response
+from django.shortcuts import render, render_to_response
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from healthylifeapp.forms import ContactForm, SportTypeForm, \
     SportSessionForm, WorkWithOurForm
-from healthylifeapp.models import SportSession, SportType
+from healthylifeapp.models import SportSession, SportType, Category, Post, Comment
 from django.utils import timezone
 
 
@@ -82,3 +82,26 @@ class SportSessionCreate(CreateView):
 
     def form_valid(self, form):
         return super(SportSessionCreate, self).form_valid(form)
+
+# Blog views
+def list_post(request):
+    posts = Post.objects.order_by("-creation_date")
+    categories = Category.objects.order_by("name")
+    return render_to_response(
+        "blog.html",
+        {
+            "posts":posts,
+            "categories":categories
+        },
+    )
+
+def detail_post(request, idpost):
+    post = Post.objects.get(id=idpost)
+    return render_to_response(
+        "post.html",
+        {
+            "post":post,
+        },
+    )
+
+# Shop views

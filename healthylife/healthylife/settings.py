@@ -58,7 +58,18 @@ ROOT_URLCONF = 'healthylife.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],
+        'DIRS': [
+                    os.path.join(BASE_DIR, "templates"),
+                    BASE_DIR + '/templates/',
+                    BASE_DIR + '/templates/blog/',
+                    BASE_DIR + '/templates/shop/',
+                    BASE_DIR + '/templates/sport/',
+                    BASE_DIR + '/templates/health/',
+                    BASE_DIR + '/templates/nutrition/',
+                    BASE_DIR + '/templates/registration/',
+                    BASE_DIR + '/templates/awards/',
+                    BASE_DIR + '/templates/statistics/',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,9 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 

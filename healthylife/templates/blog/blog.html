@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% include navbar_blog %}
+{% block blog %}
+  <nav>
+    <p>Categorias del Blog</p>
+    <ul>
+      {% for category in categories %}
+        <li><h1>{{ category.name }}</h1></li>
+      {% endfor %}
+    </ul>
+  </nav>
+  {% for post in posts %}
+    <h1>{{ post.title }}</h1>
+    <h3>{{ post.description }}</h3>
+    <p>{{ post.content }}</p>
+    <h3>{{ post.category }}</h3>
+    <hr>
+  {% endfor %}
+{% endblock %}

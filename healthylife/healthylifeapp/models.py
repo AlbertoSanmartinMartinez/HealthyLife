@@ -137,3 +137,30 @@ class GeneralStatistics(models.Model):
 
 class SpecificStatistics(models.Model):
     pass
+
+# blog models
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.name
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
+    content = models.TextField()
+    category = models.ForeignKey(Category)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    # autor
+
+    def __unicode__(self):
+        return self.title
+
+class Comment(models.Model):
+    pass
+
+# shop models
+class Product(models.Model):
+    pass
