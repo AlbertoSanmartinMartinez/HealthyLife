@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% block content %}
+
+{% block login %}
 <form method="post" action=".">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="{% trans 'Iniciar sesion' %}" />
-    <input type="hidden" name="next" value="{{ next }}" />
+    {{ login_form.as_p }}
+    <input type="submit" value="Acceder" />
 </form>
-<p>{% trans "Has olvidado tu contrasena" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Restablecer" %}</a>!</p>
-<p>{% trans "No tienes cuenta" %}? <a href="{% url 'registration_register' %}">{% trans "Registrarte" %}</a>!</p>
+<p>Has olvidado tu contrasena</p>
+<p>Aún no estas registrado ?</p>
 {% endblock %}

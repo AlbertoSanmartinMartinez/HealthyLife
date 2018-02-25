@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block content %}
+{% block register %}
+<h4>Estas a punto de formar parte de una gran comunidad.</h4>
 <form method="post" action=".">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="{% trans 'Enviar' %}" />
+    {{ register_form.as_p }}
+    <input type="submit" value="Enviar" />
 </form>
 {% endblock %}

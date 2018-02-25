@@ -7,9 +7,9 @@ from healthylifeapp.models import SportSession, SportType
 class RegisterForm(forms.Form):
     # USER_TYPE = (('Owner Shop'), ('Blogger'))
     # USER_BLOGGER = (('Yes'), ('No'))
-    user_name = forms.CharField(max_length=100)
-    age = forms.IntegerField()
-    telephone = forms.IntegerField()
+    # user_name = forms.CharField(max_length=100)
+    # age = forms.IntegerField()
+    # telephone = forms.IntegerField()
     email = forms.EmailField()
     # user_type = forms.ChoiceField(required=True, choices=USER_TYPE)
     # user_blogger = forms.ChoiceField(required=True, choices=USER_BLOGGER)
@@ -47,3 +47,16 @@ class SportTypeForm(ModelForm):
     class Meta:
         model = SportType
         fields = []
+
+# Nutrition forms
+
+# Health forms
+
+# Awards forms
+
+# Blog forms
+"""
+class PostForm(ModelForm):
+    class Meta;
+        model = Post
+"""        

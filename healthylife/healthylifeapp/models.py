@@ -4,15 +4,9 @@ from django.contrib.auth.models import User
 from django.utils.timezone import datetime
 from django.forms import ModelForm
 
-# Create your models here.
-# Entending Model Django User
-"""
-class OwnUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-"""
+# General models
 
-
-# sport models
+# Sport models
 class SportType(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
@@ -39,7 +33,7 @@ class SportSession(models.Model):
         return self.name
 
 
-# nutrition models
+# Nutrition models
 class Food(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
@@ -91,7 +85,7 @@ class Ingredient(models.Model):
         return self.name
 
 
-# awards models
+# Awards models
 class Company(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
@@ -118,7 +112,7 @@ class Award(models.Model):
         return self.name
 
 
-# health models
+# Health models
 class Simpton(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
@@ -130,7 +124,7 @@ class Illnes(models.Model):
     simpton = models.ManyToManyField(Simpton)
 
 
-# statistics models
+# Statistics models
 class GeneralStatistics(models.Model):
     pass
 
@@ -138,7 +132,7 @@ class GeneralStatistics(models.Model):
 class SpecificStatistics(models.Model):
     pass
 
-# blog models
+# Blog models
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
@@ -148,19 +142,25 @@ class Category(models.Model):
         return self.name
 
 class Post(models.Model):
+    Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
+    status = models.IntegerField(choices=Status, default=3)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     content = models.TextField()
     category = models.ForeignKey(Category)
     creation_date = models.DateTimeField(auto_now_add=True)
-    # autor
+    # header_image = models.ImageField(upload_to="photos")
+    # autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.title
 
+    def publishPost(self):
+        pass
+
 class Comment(models.Model):
     pass
 
-# shop models
+# Shop models
 class Product(models.Model):
     pass

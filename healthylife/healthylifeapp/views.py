@@ -1,12 +1,12 @@
 from django.shortcuts import render, render_to_response
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from healthylifeapp.forms import ContactForm, SportTypeForm, \
-    SportSessionForm, WorkWithOurForm
+    SportSessionForm, WorkWithOurForm, LogInForm, RegisterForm
 from healthylifeapp.models import SportSession, SportType, Category, Post, Comment
 from django.utils import timezone
 
 
-# Create your views here.
+# General views
 def inicio(request):
     return render(request, "base.html", {})
 
@@ -17,6 +17,22 @@ def contact(request):
         "contact_form": form,
     }
     return render(request, "contact.html", context)
+
+
+def login(request):
+    form = LogInForm(request.POST or None)
+    context = {
+        "login_form": form,
+    }
+    return render(request, 'login.html', context)
+
+
+def register(request):
+    form = RegisterForm(request.POST or None)
+    context = {
+        "register_form": form,
+    }
+    return render(request, 'registration_form.html', context)
 
 
 def work_with_our(request):
@@ -31,24 +47,33 @@ def legal_information(request):
     return render(request, 'aviso_legal.html', {})
 
 
-def sport(request):
-    return render(request, 'sport.html', {})
+def know_us(request):
+    return render(request, 'conocenos.html', {})
 
 
+# Statistics views
 def statistics(request):
     return render(request, 'statistics.html', {})
 
 
+# Nutrition views
 def nutrition(request):
     return render(request, 'nutrition.html', {})
 
 
+# Health views
 def health(request):
     return render(request, 'health.html', {})
 
 
+# Award views
 def awards(request):
     return render(request, 'awards.html', {})
+
+
+# Sport views
+def sport(request):
+    return render(request, 'sport.html', {})
 
 
 class SportSessionDetail(DetailView):
@@ -83,6 +108,7 @@ class SportSessionCreate(CreateView):
     def form_valid(self, form):
         return super(SportSessionCreate, self).form_valid(form)
 
+
 # Blog views
 def list_post(request):
     posts = Post.objects.order_by("-creation_date")
@@ -94,6 +120,7 @@ def list_post(request):
             "categories":categories
         },
     )
+
 
 def detail_post(request, idpost):
     post = Post.objects.get(id=idpost)

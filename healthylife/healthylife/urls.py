@@ -2,7 +2,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from healthylifeapp.views import inicio, contact, sport, health, awards, \
     statistics, nutrition, work_with_our, legal_information, \
-    SportSessionCreate, SportSessionDetail, list_post, detail_post
+    SportSessionCreate, SportSessionDetail, list_post, detail_post, know_us, \
+    login, register
 from healthylifeapp.models import SportSession
 from django.views.generic import DetailView, ListView, UpdateView
 
@@ -15,12 +16,12 @@ urlpatterns = [
     url(r'^blog/', list_post, name='list_post'),
     # url(r'^post/(?P<idpost>[0-9]+)/$', 'healthylifeapp.views.detail_post', name="detail_post"),
 
-    # url(r'^conocenos/$', views.shop, name='shop')
+    url(r'^conocenos/$', know_us, name='know_us'),
 
     # url(r'^shop/$', views.shop, name='shop')
 
-    # url(r'^register/', register, name='register'),
-    # url(r'^login/', , name='login'),
+    url(r'^registro/', register, name='register'),
+    url(r'^login/', login, name='login'),
 
     url(r'^trabaja_con_nostros/', work_with_our, name='work_with_our'),
     url(r'^informacion_legal/', legal_information, name='legal_information'),
