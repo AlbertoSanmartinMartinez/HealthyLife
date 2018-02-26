@@ -8,7 +8,7 @@
   <p>{{ post.category }}</p>
   <p>{{ post.autor }}</p>
   <p>{{ post.creation_date }}</p>
-  <img src="media/photos/LogoBarbastroSeMueve.jpg">
+  <img src="{{ post.image.url }} ">
   <hr>
 
   {% for comment in comments %}

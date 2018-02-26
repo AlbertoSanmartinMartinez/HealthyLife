@@ -5,7 +5,7 @@ from django.contrib import admin
 from healthylifeapp.views import inicio, contact, sport, health, awards, \
     statistics, nutrition, work_with_our, legal_information, \
     SportSessionCreate, SportSessionDetail, blog, detail_post, know_us, \
-    login, register, shop
+    login, register, shop, user_profile
 from healthylifeapp.models import SportSession
 from django.views.generic import DetailView, ListView, UpdateView
 
@@ -56,6 +56,7 @@ urlpatterns = [
     # url(r'^media/'),
 
     url(r'^mi_cuenta/', include('registration.backends.default.urls')),
+    url(r'^mi_cuenta/(?P<username>\w+)/$', user_profile, name='user_profile'),
 ]
 
 """

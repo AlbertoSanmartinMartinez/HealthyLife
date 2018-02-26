@@ -56,3 +56,9 @@ class PostForm(ModelForm):
     class Meta;
         model = Post
 """
+
+# Profile forms
+class UserInformationForm(ModelForm):
+    class Meta:
+        model = User
+        fields = []

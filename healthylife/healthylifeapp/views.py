@@ -1,8 +1,8 @@
 from django.shortcuts import render, render_to_response
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from healthylifeapp.forms import ContactForm, SportTypeForm, \
-    SportSessionForm, WorkWithOurForm, LogInForm, RegisterForm
-from healthylifeapp.models import SportSession, SportType, Category, Post, Comment
+    SportSessionForm, WorkWithOurForm, LogInForm, RegisterForm, UserInformationForm
+from healthylifeapp.models import SportSession, SportType, Category, Post, Comment, User
 from django.utils import timezone
 
 
@@ -130,6 +130,18 @@ def detail_post(request, slug):
     }
     return render(request, "post.html", context)
 
+
 # Shop views
 def shop(request):
     return render(request, 'shop.html', {})
+
+
+# Profile views
+def user_profile(request, username):
+    user = User.objects.filter(username=username).values()
+    form = UserInformationForm
+    context = {
+        "user": user,
+        "user_information_form": form
+    }
+    return render(request, 'profile.html', context)

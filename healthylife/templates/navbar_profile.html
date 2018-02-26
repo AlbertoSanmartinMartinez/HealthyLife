@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 
   <nav>
-    <a href="{% url 'inicio' %}">Barbastro Se Mueve</a>
-    <p>Menu</p>
+    <ul>
+      <li>
+        <a href="{% url 'sport' %}">Mi Perfil</a>
+      </li>
       <ul>
-        <li>
-          <a><a href="{% url 'know_us' %}">Conocenos</a>
-        </li>
         <li>
           <a href="{% url 'sport' %}">Deporte</a>
         </li>
@@ -22,11 +21,6 @@
         <li>
           <a href="{% url 'awards' %}">Premios</a>
         </li>
-        <li>
-          <a href="{% url 'blog' %}">Blog</a>
-        </li>
-        <li>
-          <a href="{% url 'shop' %}">Tienda</a>
-        </li>
       </ul>
+    </ul>
   </nav>
