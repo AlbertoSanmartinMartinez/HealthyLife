@@ -15,8 +15,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', inicio, name='inicio'),
 
-    url(r'^blog/', blog, name='blog'),
-    # url(r'^blog/(?P<idpost>[0-9]+)/$', 'detail_post', name="detail_post"),
+    url(r'^blog/$', blog, name='blog'),
+    url(r'^blog/(?P<slug>\w+)/$', detail_post, name='detail_post'),
 
     url(r'^conocenos/$', know_us, name='know_us'),
 

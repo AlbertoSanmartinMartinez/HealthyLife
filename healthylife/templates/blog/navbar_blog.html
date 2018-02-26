@@ -1,10 +1,9 @@
 {% block content %}
   <nav>
     <p>Categorias del Blog</p>
-    <p>Categorias del Blog 2</p>
     <ul>
       {% for category in categories %}
-        <li><h1>{{ category.name }}</h1></li>
+        <li><h3>{{ category.name }}</h3></li>
       {% endfor %}
     </ul>
   </nav>

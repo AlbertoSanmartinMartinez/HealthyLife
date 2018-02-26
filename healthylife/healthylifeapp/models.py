@@ -147,12 +147,13 @@ class Post(models.Model):
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=3)
     title = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     content = models.TextField()
     category = models.ForeignKey(Category)
     creation_date = models.DateTimeField(auto_now_add=True)
     # header_image = models.ImageField(upload_to="photos")
-    # autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    autor = models.ForeignKey('auth.User')
 
     def __unicode__(self):
         return self.title
@@ -160,13 +161,19 @@ class Post(models.Model):
     def publishPost(self):
         pass
 
+    def createSlug(self):
+        slug = title.replace(" ", "_")
+        return slug
+
+
 class Comment(models.Model):
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=3)
     title = models.CharField(max_length=100)
     content = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    autor = models.ForeignKey(User)
+    post = models.ForeignKey(Post, default=1)
 
 # Shop models
 class Product(models.Model):

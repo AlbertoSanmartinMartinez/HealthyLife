@@ -1,20 +1,19 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
-{% include navbar_blog %}
 {% block blog %}
-  <nav>
-    <p>Categorias del Blog</p>
-    <ul>
-      {% for category in categories %}
-        <li><h1>{{ category.name }}</h1></li>
-      {% endfor %}
-    </ul>
-  </nav>
+  {% include 'navbar_blog.html' %}
+
+  {% block detail_post %}
+  {% endblock %}
+  
   {% for post in posts %}
-      <h1>{{ post.title }}</h1>
+    <h1><a href="{% url 'detail_post' slug=post.slug %}">{{ post.title }}</a></h1>
     <h3>{{ post.description }}</h3>
-    <p>{{ post.content }}</p>
-    <h3>{{ post.category }}</h3>
+    <p>{{ post.category }}</p>
+    <p>{{ post.autor }}</p>
+    <p>{{ post.creation_date }}</p>
     <hr>
   {% endfor %}
+
 {% endblock %}

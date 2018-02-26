@@ -1,8 +1,18 @@
-{% extends "base.html" %}
+{% extends "blog.html" %}
 
 {% block detail_post %}
-    <h1>{{ post.title }}</h1>
-    <h3>{{ post.description }}</h3>
-    <p>{{ post.content }}</p>
-    <h3>{{ post.category }}</h3>
+  <h1>{{ post.title }}</h1>
+  <h3>{{ post.description }}</h3>
+  <p>{{ post.content }}</p>
+  <p>{{ post.category }}</p>
+  <p>{{ post.autor }}</p>
+  <p>{{ post.creation_date }}</p>
+  <hr>
+
+  {% for comment in comments %}
+    <h1>{{ comment.title }}</h1>
+    <p>{{ comment.content }}</p>
+    <h4>{{ comment.creation_date }}</h4>
+    <h4>{{ comment.autor }}</h4>
+  {% endfor %}
 {% endblock %}

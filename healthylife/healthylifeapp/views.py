@@ -113,23 +113,22 @@ class SportSessionCreate(CreateView):
 def blog(request):
     posts = Post.objects.order_by("-creation_date")
     categories = Category.objects.order_by("name")
-    return render_to_response(
-        "blog.html",
-        {
-            "posts":posts,
-            "categories":categories
-        },
-    )
+    context = {
+        "posts":posts,
+        "categories":categories
+    }
+    return render(request, "blog.html", context)
 
 
-def detail_post(request, idpost):
-    post = Post.objects.get(id=idpost)
-    return render_to_response(
-        "post.html",
-        {
-            "post":post,
-        },
-    )
+def detail_post(request, slug):
+    post = Post.objects.get(slug=slug)
+    # comments = Comment.objects.get(post=post.id)
+    comments = Comment.objects.filter(post=post.id).values()
+    context = {
+        "post":post,
+        "comments":comments,
+    }
+    return render(request, "post.html", context)
 
 # Shop views
 def shop(request):
