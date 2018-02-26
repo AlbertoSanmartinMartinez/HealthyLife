@@ -1,12 +1,17 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.utils.timezone import datetime
 from django.forms import ModelForm
+from tinymce import models as tinymce_models
 
 # General models
-class OwnUser(models.Model):
-    pass
+"""
+class OwnUser(AbstractUser):
+    UserType = ((1, "Subscriptor"), (2, "Borrador"), (3, "Eliminado"))
+    user_type = models.IntegerField(choices=UserType, default=1)
+    image = models.ImageField(upload_to="photos", default=1)
+"""
 
 # Sport models
 class SportType(models.Model):
@@ -149,10 +154,10 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     slug = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
-    content = models.TextField()
+    content = tinymce_models.HTMLField()
     category = models.ForeignKey(Category)
     creation_date = models.DateTimeField(auto_now_add=True)
-    # header_image = models.ImageField(upload_to="photos")
+    image = models.ImageField(upload_to="photos", default=1)
     autor = models.ForeignKey('auth.User')
 
     def __unicode__(self):

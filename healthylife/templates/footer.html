@@ -1,9 +1,10 @@
-<!--{% extends base.html % }
-{% load staticfiles %}-->
+<!doctype html>
 
 {% block content %}
-  <footer>
-    <p><a href="/api/">Show our API -</a><a href="/work_with_our/"> Work with our -</a><a href="/legal_information/"> Legal information</a></p>
-    <p>Creado por: <a href="http://www.preconcebido.com">Preconcebido</a></p>
-  </footer>
+    <footer>
+      <p><a href="{% url 'legal_information' %}">Informacion Legal</a></p>
+      <p><a href="{% url 'work_with_our' %}">Trabaja con Nosotros</a></p>
+      <p>Creado por: <a href="http://www.preconcebido.com">Preconcebido</a>
+      <p><a href="#">Top</a></p>
+    </footer>
 {% endblock %}

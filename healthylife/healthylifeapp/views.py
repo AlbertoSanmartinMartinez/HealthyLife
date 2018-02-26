@@ -111,7 +111,7 @@ class SportSessionCreate(CreateView):
 
 # Blog views
 def blog(request):
-    posts = Post.objects.order_by("-creation_date")
+    posts = Post.objects.filter(status=1).values().order_by("-creation_date")
     categories = Category.objects.order_by("name")
     context = {
         "posts":posts,

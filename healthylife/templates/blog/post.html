@@ -1,12 +1,14 @@
 {% extends "blog.html" %}
+{% load static %}
 
 {% block detail_post %}
   <h1>{{ post.title }}</h1>
   <h3>{{ post.description }}</h3>
-  <p>{{ post.content }}</p>
+  {{ post.content }}
   <p>{{ post.category }}</p>
   <p>{{ post.autor }}</p>
   <p>{{ post.creation_date }}</p>
+  <img src="media/photos/LogoBarbastroSeMueve.jpg">
   <hr>
 
   {% for comment in comments %}

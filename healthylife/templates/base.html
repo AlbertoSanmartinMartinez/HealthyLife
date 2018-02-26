@@ -1,49 +1,67 @@
-<!DOCTYPE html>
-
-{% load staticfiles %}
+{% load static %}
 
 <html lang="es">
   <head>
     <meta charset="utf-8">
     <title>Barbastro Se Mueve </title>
-    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    {% include 'header.html' %}
+    {% include 'navbar.html' %}
 
-    {% block conocenos %}
-    {% endblock %}
+        {% block conocenos %}
+        {% endblock %}
 
-    {% block sport_section %}
-    {% endblock %}
+        {% block sport_section %}
+        {% endblock %}
 
-    {% block nutrition_section %}
-    {% endblock %}
+        {% block nutrition_section %}
+        {% endblock %}
 
-    {% block health_section %}
-    {% endblock %}
+        {% block health_section %}
+        {% endblock %}
 
-    {% block blog %}
-    {% endblock %}
+        {% block blog %}
+        {% endblock %}
 
-    {% block shop %}
-    {% endblock %}
+        {% block shop %}
+        {% endblock %}
 
-    {% block legal_information %}
-    {% endblock %}
+        {% block statistics %}
+        {% endblock %}
 
-    {% block work_with_our %}
-    {% endblock %}
+        {% block awards %}
+        {% endblock %}
 
-    {% block contact %}
-    {% endblock %}
+        {% block legal_information %}
+        {% endblock %}
 
-    {% block register %}
-    {% endblock %}
+        {% block work_with_our %}
+        {% endblock %}
 
-    {% block login %}
-    {% endblock %}
+        {% block contact %}
+        {% endblock %}
+
+        {% block register %}
+        {% endblock %}
+
+        {% block login %}
+        {% endblock %}
+
+        <p>Acceso</p>
+          <nav>
+            <ul>
+              {% if user.is_authenticate %}
+                <li><a href="{% url 'contact' %}">Contacto</a></li>
+                <li><a href="/">Logout</a></li>
+              {% else %}
+                <li><a href="{% url 'contact' %}">Contacto</a></li>
+                <li><a href="/mi_cuenta/register/">Registro</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+              {% endif %}
+            </ul>
+          </nav>
 
     {% include 'footer.html' %}
+
   </body>
 </html>
