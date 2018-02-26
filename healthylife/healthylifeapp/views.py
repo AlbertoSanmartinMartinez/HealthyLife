@@ -110,7 +110,7 @@ class SportSessionCreate(CreateView):
 
 
 # Blog views
-def list_post(request):
+def blog(request):
     posts = Post.objects.order_by("-creation_date")
     categories = Category.objects.order_by("name")
     return render_to_response(
@@ -132,3 +132,5 @@ def detail_post(request, idpost):
     )
 
 # Shop views
+def shop(request):
+    return render(request, 'shop.html', {})

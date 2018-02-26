@@ -3,17 +3,13 @@
       <p>Secciones</p>
       <ul>
         <li><a href="/">Inicio</a></li>
-        <li><a href="/conocenos">Conocenos</a></li>
-          <ul>
-            <li><a href="/proyecto">Proyecto</a></li>
-            <li><a href="/equipo">Equipo</a></li>
-          </ul>
-        <li><a href="/deporte">Deporte</a></li>
-        <li><a href="/nutricion">Nutricion</a></li>
-        <li><a href="/salud">Salud</a></li>
-        <li><a href="/estadisticas">Estadisticas</a></li>
-        <li><a href="/premios">Premios</a></li>
-        <li><a href="/blog">Blog</a></li>
-        <li><a href="/tienda">Tienda</a></li>
+        <li><a href="{% url 'know_us' %}">Conocenos</a></li>
+        <li><a href="{% url 'sport' %}">Deporte</a></li>
+        <li><a href="{% url 'nutrition' %}">Nutricion</a></li>
+        <li><a href="{% url 'health' %}">Salud</a></li>
+        <li><a href="{% url 'statistics' %}">Estadisticas</a></li>
+        <li><a href="{% url 'awards' %}">Premios</a></li>
+        <li><a href="{% url 'blog' %}">Blog</a></li>
+        <li><a href="{% url 'shop' %}">Tienda</a></li>
       </ul>
   </nav>

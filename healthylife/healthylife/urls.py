@@ -1,9 +1,11 @@
 from django.conf.urls import include, url
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from healthylifeapp.views import inicio, contact, sport, health, awards, \
     statistics, nutrition, work_with_our, legal_information, \
-    SportSessionCreate, SportSessionDetail, list_post, detail_post, know_us, \
-    login, register
+    SportSessionCreate, SportSessionDetail, blog, detail_post, know_us, \
+    login, register, shop
 from healthylifeapp.models import SportSession
 from django.views.generic import DetailView, ListView, UpdateView
 
@@ -13,12 +15,12 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', inicio, name='inicio'),
 
-    url(r'^blog/', list_post, name='list_post'),
-    # url(r'^post/(?P<idpost>[0-9]+)/$', 'healthylifeapp.views.detail_post', name="detail_post"),
+    url(r'^blog/', blog, name='blog'),
+    # url(r'^blog/(?P<idpost>[0-9]+)/$', 'detail_post', name="detail_post"),
 
     url(r'^conocenos/$', know_us, name='know_us'),
 
-    # url(r'^shop/$', views.shop, name='shop')
+    url(r'^shop/$', shop, name='shop'),
 
     url(r'^registro/', register, name='register'),
     url(r'^login/', login, name='login'),
@@ -43,12 +45,16 @@ urlpatterns = [
             template_name='sport_session_list.html'),
         name='sport_session_list'),
 
-    url(r'^salud/$', health, name='salud'),
+    url(r'^salud/$', health, name='health'),
     url(r'^nutricion/$', nutrition, name='nutrition'),
 
     url(r'^estadisticas/$', statistics, name='statistics'),
     url(r'^premios/$', awards, name='awards'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URL's
 urlpatterns += [

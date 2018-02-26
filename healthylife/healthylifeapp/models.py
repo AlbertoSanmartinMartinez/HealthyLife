@@ -5,6 +5,8 @@ from django.utils.timezone import datetime
 from django.forms import ModelForm
 
 # General models
+class OwnUser(models.Model):
+    pass
 
 # Sport models
 class SportType(models.Model):
@@ -159,7 +161,12 @@ class Post(models.Model):
         pass
 
 class Comment(models.Model):
-    pass
+    Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
+    status = models.IntegerField(choices=Status, default=3)
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    creation_date = models.DateTimeField(auto_now_add=True)
+    autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
 # Shop models
 class Product(models.Model):
