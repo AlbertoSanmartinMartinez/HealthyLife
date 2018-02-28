@@ -13,6 +13,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_HOST = 'mail.barbastrosemueve.es'
+EMAIL_HOST_USER = 'info@barbastrosemueve.es'
+EMAIL_HOST_PASSWORD = 'Barbastro2017'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = False
 
 # Application definition
 
@@ -25,7 +30,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'healthylifeapp',
-    'registration',
     'tinymce'
 )
 
@@ -151,3 +155,6 @@ TINYMCE_DEFAULT_CONFIG = {
     'paste_text_sticky_default' : True,
     'valid_styles' : 'font-weight,font-style,text-decoration',
 }
+
+LOGIN_REDIRECT_URL = '/blog'
+LOGOUT_REDIRECT_URL = '/'

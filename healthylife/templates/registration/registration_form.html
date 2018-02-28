@@ -1,10 +1,18 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends 'base.html' %}
 
-{% block register %}
-<h4>Estas a punto de formar parte de una gran comunidad.</h4>
-<form method="post" action=".">
+{% block registration %}
+
+  <h4>Estas a punto de formar parte de una gran comunidad.</h4>
+  <form method="post" action=".">
     {% csrf_token %}
+    {{ form.as_p }}
     <input type="submit" value="Enviar" />
-</form>
+  </form>
+
+{% endblock %}
+
+{% block registration_complete %}
+{% endblock %}
+
+{% block registration_closed %}
 {% endblock %}

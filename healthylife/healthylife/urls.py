@@ -2,43 +2,40 @@ from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from healthylifeapp.views import inicio, contact, sport, health, awards, \
-    statistics, nutrition, work_with_our, legal_information, \
-    SportSessionCreate, SportSessionDetail, blog, detail_post, know_us, \
-    login, register, shop, user_profile
 from healthylifeapp.models import SportSession
 from django.views.generic import DetailView, ListView, UpdateView
+from healthylifeapp import views
+from healthylifeapp.views import SportSessionCreate, SportSessionDetail
+from django.contrib.auth import views as auth_views
 
-# General URLS's
 urlpatterns = [
-    # url(r'^', include('healthylifeapp.urls')),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', inicio, name='inicio'),
 
-    url(r'^blog/$', blog, name='blog'),
-    url(r'^blog/(?P<slug>\w+)/$', detail_post, name='detail_post'),
+    # General URLS's
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', views.inicio, name='inicio'),
+
+    # Blog URLS's
+    url(r'^blog/$', views.blog, name='blog'),
+    url(r'^blog/(?P<slug>\w+)/$', views.detail_post, name='detail_post'),
+    url(r'^blog/categorias/(?P<slug>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
+    # url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
     # url(r'^blog/admin/$', admin_blog, name='admin_blog'),
 
-    url(r'^conocenos/$', know_us, name='know_us'),
+    # Shop URLS's
+    url(r'^shop/$', views.shop, name='shop'),
 
-    url(r'^shop/$', shop, name='shop'),
+    # Pages URLS's
+    url(r'^conocenos/$', views.know_us, name='know_us'),
+    url(r'^trabaja_con_nosotros/', views.work_with_our, name='work_with_our'),
+    url(r'^informacion_legal/', views.legal_information, name='legal_information'),
+    url(r'^contacto/', views.contact, name='contact'),
 
-    url(r'^registro/', register, name='register'),
-    url(r'^login/', login, name='login'),
-
-    url(r'^trabaja_con_nosotros/', work_with_our, name='work_with_our'),
-    url(r'^informacion_legal/', legal_information, name='legal_information'),
-    url(r'^contacto/', contact, name='contact'),
-
-    # url general para deporte
-    url(r'^deporte/$', sport, name='sport'),
-    # url para crear sesiones de deporte
+    # Sport URLS's
+    url(r'^deporte/$', views.sport, name='sport'),
     url(r'^sport/sport_session/create/$', SportSessionCreate.as_view(), \
         name='sport_session_create'),
-    # url para ver detalle sesion de deporte
     url(r'^sport_session/(?P<pk>\d+)/$', SportSessionDetail.as_view(), \
         name='sport_session_detail'),
-    # url para ver sesiones de deporte
     url(r'^sport/sport_session/$',
         ListView.as_view(
             queryset=SportSession.objects.all,
@@ -46,28 +43,43 @@ urlpatterns = [
             template_name='sport_session_list.html'),
         name='sport_session_list'),
 
-    url(r'^salud/$', health, name='health'),
-    url(r'^nutricion/$', nutrition, name='nutrition'),
+    # Health URLS's
+    url(r'^salud/$', views.health, name='health'),
 
-    url(r'^estadisticas/$', statistics, name='statistics'),
-    url(r'^premios/$', awards, name='awards'),
+    # Nutrition URLS's
+    url(r'^nutricion/$', views.nutrition, name='nutrition'),
+
+    # Statistics URLS's
+    url(r'^estadisticas/$', views.statistics, name='statistics'),
+
+    # Awards URLS's
+    url(r'^premios/$', views.awards, name='awards'),
 
     url(r'^tinymce/', include('tinymce.urls')),
+
+    # Media URLS's
     # url(r'^media/'),
 
-    url(r'^mi_cuenta/', include('registration.backends.default.urls')),
-    url(r'^mi_cuenta/(?P<username>\w+)/$', user_profile, name='user_profile'),
+    # Registro URLS's
+    url(r'^mi_cuenta/registro/$', views.registration_resgister, name='registration_register'),
+    # url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
+    # url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
+
+    # Login URLS's
+    url(r'^mi_cuenta/login/$', auth_views.login, name='login'),
+    url(r'^mi_cuenta/logout/$', auth_views.logout, name='logout'),
+
+    # Activation URLS's
+    url(r'^mi_cuenta/activate/(?P<activation_key>\w+)/$', views.registration_activate, name='registration_activate'),
+    url(r'^mi_cuenta/complete/$', views.registration_activation_complete, name='registration_activation_complete'),
+    # url(r'^resend/$', views.registration_resend_activation, name='registration_resend_activation'),
+
+    # Account URLS's
+    # url(r'^accounts/profile/$', views.profile, name='profile'),
+    url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
 ]
 
 """
-^mi_cuenta/ ^activate/complete/$ [name='registration_activation_complete']
-^mi_cuenta/ ^activate/resend/$ [name='registration_resend_activation']
-^mi_cuenta/ ^activate/(?P<activation_key>\w+)/$ [name='registration_activate']
-^mi_cuenta/ ^register/complete/$ [name='registration_complete']
-^mi_cuenta/ ^register/closed/$ [name='registration_disallowed']
-^mi_cuenta/ ^register/$ [name='registration_register']
-^mi_cuenta/ ^login/$ [name='auth_login']
-^mi_cuenta/ ^logout/$ [name='auth_logout']
 ^mi_cuenta/ ^password/change/$ [name='auth_password_change']
 ^mi_cuenta/ ^password/change/done/$ [name='auth_password_change_done']
 ^mi_cuenta/ ^password/reset/$ [name='auth_password_reset']

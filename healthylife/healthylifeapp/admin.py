@@ -1,21 +1,17 @@
 from django.contrib import admin
-from healthylifeapp.models import SportType, SportSession, Food, Measure, \
-    Nutrient, Ingredient, Company, Award, Simpton, Illnes, GeneralStatistics, \
-    SpecificStatistics, Category, Post, Comment, Product
+from healthylifeapp import models
 
 # Register your models here.
-admin.site.register(SportType)
-admin.site.register(SportSession)
-admin.site.register(Food)
-admin.site.register(Measure)
-admin.site.register(Nutrient)
-admin.site.register(Ingredient)
-admin.site.register(Company)
-admin.site.register(Award)
-admin.site.register(Simpton)
-admin.site.register(Illnes)
-admin.site.register(GeneralStatistics)
-admin.site.register(SpecificStatistics)
-admin.site.register(Category)
-admin.site.register(Post)
-admin.site.register(Comment)
+admin.site.register(models.SportType)
+admin.site.register(models.SportSession)
+admin.site.register(models.Food)
+admin.site.register(models.Measure)
+admin.site.register(models.Nutrient)
+admin.site.register(models.Ingredient)
+admin.site.register(models.Company)
+admin.site.register(models.Award)
+admin.site.register(models.GeneralStatistics)
+admin.site.register(models.SpecificStatistics)
+admin.site.register(models.Category)
+admin.site.register(models.Post)
+admin.site.register(models.Comment)

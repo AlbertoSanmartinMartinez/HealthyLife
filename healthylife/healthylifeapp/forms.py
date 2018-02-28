@@ -4,13 +4,8 @@ from django.forms import ModelForm
 from .models import SportSession, SportType, User
 
 
-class RegisterForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username']
-    #email = forms.EmailField()
-    #password = forms.CharField(widget=forms.PasswordInput())
-    #password2 = forms.CharField(widget=forms.PasswordInput())
+class RegisterForm(forms.Form):
+    bio = forms.Textarea
 
 
 class LogInForm(forms.Form):
@@ -19,9 +14,9 @@ class LogInForm(forms.Form):
 
 
 class ContactForm(forms.Form):
-    name = forms.CharField(max_length=100)
+    nombre = forms.CharField(max_length=100)
     email = forms.EmailField()
-    topic = forms.CharField(max_length=500)
+    mensaje = forms.CharField(max_length=500)
 
 
 class WorkWithOurForm(forms.Form):

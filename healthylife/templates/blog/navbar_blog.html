@@ -1,9 +1,11 @@
-{% block content %}
+{% load staticfiles %}
+
+{% block navbar_blog %}
   <nav>
     <p>Categorias del Blog</p>
     <ul>
       {% for category in categories %}
-        <li><h3>{{ category.name }}</h3></li>
+      <p><a href="{% url 'blog_category_posts' slug=category.slug %}">{{ category.name }}</a></p>
       {% endfor %}
     </ul>
   </nav>

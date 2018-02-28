@@ -1,17 +1,18 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User, AbstractUser, UserManager
 from django.utils.timezone import datetime
 from django.forms import ModelForm
 from tinymce import models as tinymce_models
 
 # General models
-"""
-class OwnUser(AbstractUser):
-    UserType = ((1, "Subscriptor"), (2, "Borrador"), (3, "Eliminado"))
-    user_type = models.IntegerField(choices=UserType, default=1)
-    image = models.ImageField(upload_to="photos", default=1)
-"""
+class CustomUser(models.Model):
+    user = models.OneToOneField(User)
+    bio = models.TextField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
+
 
 # Sport models
 class SportType(models.Model):
@@ -29,7 +30,7 @@ class SportSession(models.Model):
     name = models.CharField(max_length=100)
     sport_type = models.ForeignKey(SportType)
     date = models.DateField(datetime.today)
-    usuario = models.ForeignKey(User)
+    # usuario = models.ForeignKey(User)
     duration = models.TimeField()
     calories = models.IntegerField()
 
@@ -120,15 +121,6 @@ class Award(models.Model):
 
 
 # Health models
-class Simpton(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-
-
-class Illnes(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-    simpton = models.ManyToManyField(Simpton)
 
 
 # Statistics models
@@ -142,23 +134,25 @@ class SpecificStatistics(models.Model):
 # Blog models
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.name
 
+
 class Post(models.Model):
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=3)
     title = models.CharField(max_length=100)
-    slug = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100, default='prueba')
     description = models.CharField(max_length=200)
     content = tinymce_models.HTMLField()
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey("Category", default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default=1)
-    autor = models.ForeignKey('auth.User')
+    author = models.ForeignKey(CustomUser, default=1)
 
     def __unicode__(self):
         return self.title
@@ -177,7 +171,7 @@ class Comment(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    autor = models.ForeignKey(User)
+    author = models.ForeignKey(CustomUser, default=1)
     post = models.ForeignKey(Post, default=1)
 
 # Shop models

@@ -1,9 +1,10 @@
-<!DOCTYPE html>
 
+<p>Acceso</p>
   <nav>
     <ul>
+      {% if user.is_authenticated %}
       <li>
-        <a href="{% url 'sport' %}">Mi Perfil</a>
+        <a href="{% url 'profile' username=user.username %}">{{ user.username }}</a>
       </li>
       <li>
         <a href="{% url 'sport' %}">Deporte</a>
@@ -20,5 +21,10 @@
       <li>
         <a href="{% url 'awards' %}">Premios</a>
       </li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'registration_register' %}">Registro</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+      {% endif %}
     </ul>
   </nav>

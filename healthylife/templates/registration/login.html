@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
 {% block login %}
-<form method="post" action=".">
+<p>Login</p>
+<form method="post">
     {% csrf_token %}
-    {{ login_form.as_p }}
-    <input type="submit" value="Acceder" />
+    {{ form.as_p }}
+    <button type="submit">Acceder</button>
 </form>
 <p>Has olvidado tu contrasena</p>
 <p>Aún no estas registrado ?</p>

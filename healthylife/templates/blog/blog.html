@@ -2,15 +2,17 @@
 {% load staticfiles %}
 
 {% block blog %}
+
   {% include 'navbar_blog.html' %}
 
   {% block detail_post %}
   {% endblock %}
-  
+
+  <p>Lista de Posts</p>
   {% for post in posts %}
-    <h1><a href="{% url 'detail_post' slug=post.slug %}">{{ post.title }}</a></h1>
-    <h3>{{ post.description }}</h3>
-    <p>{{ post.category }}</p>
+    <a href="{% url 'detail_post' slug=post.slug %}">{{ post.title }}</a>
+    <p>{{ post.description }}</p>
+    <p>{{ post.category.name }}</p>
     <p>{{ post.autor }}</p>
     <p>{{ post.creation_date }}</p>
     <hr>
