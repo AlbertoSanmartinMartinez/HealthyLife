@@ -13,7 +13,7 @@
     <a href="{% url 'detail_post' slug=post.slug %}">{{ post.title }}</a>
     <p>{{ post.description }}</p>
     <p>{{ post.category.name }}</p>
-    <p>{{ post.autor }}</p>
+    <p>{{ post.autor.name }}</p>
     <p>{{ post.creation_date }}</p>
     <hr>
   {% endfor %}

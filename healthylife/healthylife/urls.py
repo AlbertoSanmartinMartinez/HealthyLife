@@ -19,7 +19,6 @@ urlpatterns = [
     url(r'^blog/(?P<slug>\w+)/$', views.detail_post, name='detail_post'),
     url(r'^blog/categorias/(?P<slug>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
     # url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
-    # url(r'^blog/admin/$', admin_blog, name='admin_blog'),
 
     # Shop URLS's
     url(r'^shop/$', views.shop, name='shop'),
@@ -61,31 +60,40 @@ urlpatterns = [
     # url(r'^media/'),
 
     # Registro URLS's
-    url(r'^mi_cuenta/registro/$', views.registration_resgister, name='registration_register'),
-    # url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
-    # url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
+    url(r'^mi_cuenta/', include('django.contrib.auth.urls')),
+    url(r'^mi_cuenta/', include('registration.backends.hmac.urls')),
 
-    # Login URLS's
+    # url(r'^mi_cuenta/registro/$', views.registration_resgister, name='registration_register'),
+    url(r'^mi_cuenta/registro/$', views.RegistrationView.as_view(), name='registration_register'),
+    url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
+    url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
+
+    url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
+    url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
+    url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
+    url(r'^mi_cuenta/(?P<username>\w+)/blog_admin/$', views.blog_admin, name='blog_admin'),
+
     url(r'^mi_cuenta/login/$', auth_views.login, name='login'),
     url(r'^mi_cuenta/logout/$', auth_views.logout, name='logout'),
-
-    # Activation URLS's
-    url(r'^mi_cuenta/activate/(?P<activation_key>\w+)/$', views.registration_activate, name='registration_activate'),
-    url(r'^mi_cuenta/complete/$', views.registration_activation_complete, name='registration_activation_complete'),
-    # url(r'^resend/$', views.registration_resend_activation, name='registration_resend_activation'),
-
-    # Account URLS's
-    # url(r'^accounts/profile/$', views.profile, name='profile'),
-    url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
 ]
 
 """
-^mi_cuenta/ ^password/change/$ [name='auth_password_change']
-^mi_cuenta/ ^password/change/done/$ [name='auth_password_change_done']
-^mi_cuenta/ ^password/reset/$ [name='auth_password_reset']
-^mi_cuenta/ ^password/reset/complete/$ [name='auth_password_reset_complete']
-^mi_cuenta/ ^password/reset/done/$ [name='auth_password_reset_done']
-^mi_cuenta/ ^password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$ [name='auth_password_reset_confirm']
+# Activation URLS's
+url(r'^mi_cuenta/activate/(?P<activation_key>\w+)/$', views.registration_activate, name='registration_activate'),
+url(r'^mi_cuenta/complete/$', views.registration_activation_complete, name='registration_activation_complete'),
+# url(r'^resend/$', views.registration_resend_activation, name='registration_resend_activation'),
+
+# Account URLS's
+# url(r'^accounts/profile/$', views.profile, name='profile'),
+url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
+"""
+"""
+<li><a href="{% url 'password_change' %}">password_change</a></li>
+<li><a href="{% url 'password_change_done' %}">password_change_done</a></li>
+<li><a href="{% url 'password_reset' %}">password_reset</a></li>
+<li><a href="{% url 'password_reset_done' %}">password_reset_done</a></li>
+<li><a href="{% url 'password_reset_confirm' %}">password_reset_confirm</a></li>
+<li><a href="{% url 'password_reset_complete' %}">password_reset_complete</a></li>
 """
 
 if settings.DEBUG:

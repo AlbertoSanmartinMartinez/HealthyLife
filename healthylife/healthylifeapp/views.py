@@ -5,8 +5,8 @@ from healthylifeapp import models
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
-# from django.contrib.auth.views import login, logout
-
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse_lazy
 
 # General views
 def inicio(request):
@@ -19,7 +19,6 @@ def contact(request):
         email_form = form.cleaned_data.get("email")
         message_form = form.cleaned_data.get("mensaje")
         name_form = form.cleaned_data.get("nombre")
-
         asunto = 'Mensaje de contacto'
         email_to = email
         email_from = settings.EMAIL_HOST_USER
@@ -62,12 +61,19 @@ def auth_logout(request):
 """
 
 # Registration views
+"""
 def registration_resgister(request):
-    form = RegisterForm
+    form = RegistrationFormUniqueEmail
     context = {
         "registration_form":form
     }
-    return render(request, 'registration_form.html', context)
+    return render(request, 'registration_register.html', context)
+"""
+class RegistrationView(CreateView):
+    model = User
+    template_name = 'registration/registration_register.html'
+    form_class = forms.RegisterForm
+    success_url = reverse_lazy('blog')
 
 
 def registration_complete(request):
@@ -146,8 +152,8 @@ class SportSessionCreate(CreateView):
 
 # Blog views
 def blog(request):
-    posts = Post.objects.filter(status=1).values().order_by("-creation_date")
-    categories = Category.objects.order_by("name")
+    posts = models.Post.objects.filter(status=1).values().order_by("-creation_date")
+    categories = models.Category.objects.order_by("name")
     context = {
         "posts":posts,
         "categories":categories
@@ -156,9 +162,9 @@ def blog(request):
 
 
 def detail_post(request, slug):
-    post = Post.objects.get(slug=slug)
-    comments = Comment.objects.filter(post=post.id).values()
-    categories = Category.objects.order_by("name")
+    post = models.Post.objects.get(slug=slug)
+    comments = models.Comment.objects.filter(post=post.id).values()
+    categories = models.Category.objects.order_by("name")
     context = {
         "post":post,
         "categories":categories,
@@ -191,15 +197,33 @@ def blog_autor_posts(request, username):
     return render(request, 'blog.html', context)
 
 
+def blog_admin(request):
+    return render(request, 'blog_admin.html', {})
+
+
 # Shop views
 def shop(request):
     return render(request, 'shop.html', {})
 
 
+
 # Profile views
 def profile(request, username):
-    user = CustomUser.objects.get(username=username)
+    user = models.User.objects.get(username=username)
+    custom_user = models.CustomUser.object.get(id=user.id)
+    # informacion de usuario
+    # direccion de enviado
+    # informacion de pago
     context = {
 
     }
     return render(request, 'profile.html', context)
+
+
+# Shop views
+def calendar(request):
+    return render(request, 'calendar.html', {})
+
+
+def ships(request):
+    return render(request, 'ships.html', {})

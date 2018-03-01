@@ -1,17 +1,22 @@
 from django import forms
-# from models import OwnUser
-from django.forms import ModelForm
-from .models import SportSession, SportType, User
+from django import forms
+from healthylifeapp import models
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
-class RegisterForm(forms.Form):
-    bio = forms.Textarea
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        email = forms.EmailField
+        usernmae = forms.CharField
+        fields = ['username', 'email']
 
-
+"""
 class LogInForm(forms.Form):
     user = forms.CharField(max_length=100)
     password = forms.CharField(widget=forms.PasswordInput())
-
+"""
 
 class ContactForm(forms.Form):
     nombre = forms.CharField(max_length=100)
@@ -28,15 +33,15 @@ class WorkWithOurForm(forms.Form):
 
 
 # Sport forms
-class SportSessionForm(ModelForm):
+class SportSessionForm(forms.ModelForm):
     class Meta:
-        model = SportSession
+        model = models.SportSession
         fields = ['name', 'sport_type', 'date', 'duration', 'calories']
 
 
-class SportTypeForm(ModelForm):
+class SportTypeForm(forms.ModelForm):
     class Meta:
-        model = SportType
+        model = models.SportType
         fields = []
 
 # Nutrition forms
@@ -53,7 +58,7 @@ class PostForm(ModelForm):
 """
 
 # Profile forms
-class UserInformationForm(ModelForm):
+class UserInformationForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = models.User
         fields = []

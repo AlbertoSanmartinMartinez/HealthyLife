@@ -2,11 +2,11 @@
 
 {% block registration %}
 
-  <h4>Estas a punto de formar parte de una gran comunidad.</h4>
-  <form method="post" action=".">
+  <p>Estas a punto de formar parte de una gran comunidad.</p>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Enviar" />
+    <button type="submit">Registrarse</button>
   </form>
 
 {% endblock %}
