@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser, UserManager
 from django.utils.timezone import datetime
 from django.forms import ModelForm
-from tinymce import models as tinymce_models
+# from tinymce import models as tinymce_models
 from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.text import slugify
@@ -215,6 +215,7 @@ class Post(models.Model):
     slug = models.CharField(max_length=100, default=' ', blank=True)
     description = models.CharField(max_length=200, blank=False)
     content = models.TextField(default=" ", blank=False)
+    # content = tinymce_models.HTMLField()
     category = models.ForeignKey(Category, default=1, blank=False)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
