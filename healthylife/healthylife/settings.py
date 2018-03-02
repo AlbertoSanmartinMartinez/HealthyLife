@@ -60,6 +60,7 @@ TEMPLATES = [
                     BASE_DIR + '/templates/registration/',
                     BASE_DIR + '/templates/awards/',
                     BASE_DIR + '/templates/statistics/',
+                    BASE_DIR + '/templates/admin/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

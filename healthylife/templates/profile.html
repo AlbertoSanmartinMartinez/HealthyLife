@@ -1,6 +1,27 @@
 {% extends 'base.html' %}
 
 {% block profile %}
+<form method="post">
+  <hr>
   <p>Tu perfil</p>
-  {{ user_information_form }}
+  <p>Nombre de usuario: </p>{{ user.username }}
+  <p>Nombre: </p>{{ user.name }}
+  <p>Apellidos: </p>{{ user.apellidos }}
+  <p>Email: </p>{{ user.email }}
+  <p>Bio: </p>{{ custom_user.bio }}
+
+  <hr>
+  <p>Dirección de Envío</p>
+  <p>Direccion: </p>
+  {{ address_information.street }} {{address_information.number}} {{ address_information.floor }} {{address_information.door}}
+  {{ address_information.postal_code }} {{address_information.country}}
+
+  <hr>
+  <p>Informacion Bancaria</p>
+  <p>Cuenta corriente: </p>
+  {{ bank_information.account }}
+  {{ bank_information.month }} / {{ bank_information.year }}
+  <hr>
+  <button type="submit">Guardar</button>
+</form>
 {% endblock %}

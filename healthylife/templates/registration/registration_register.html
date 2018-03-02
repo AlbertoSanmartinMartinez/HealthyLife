@@ -3,11 +3,15 @@
 {% block registration %}
 
   <p>Estas a punto de formar parte de una gran comunidad.</p>
+  <p>Registro</p>
+
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Registrarse</button>
   </form>
+
+<a href="{% url 'login' %}">Login</a>
 
 {% endblock %}
 

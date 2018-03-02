@@ -8,8 +8,6 @@ from django.contrib.auth.models import User
 class RegisterForm(UserCreationForm):
     class Meta:
         model = User
-        email = forms.EmailField
-        usernmae = forms.CharField
         fields = ['username', 'email']
 
 """
@@ -24,12 +22,8 @@ class ContactForm(forms.Form):
     mensaje = forms.CharField(max_length=500)
 
 
-class WorkWithOurForm(forms.Form):
-    TYPE_WORK = (('Owner Shop'), ('Blogger'))
-    name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    telephone = forms.IntegerField()
-    work_type = forms.ChoiceField(required=True, choices=TYPE_WORK)
+class WorkWithOurForm(RegisterForm):
+    blog = forms.BooleanField(required=False)
 
 
 # Sport forms

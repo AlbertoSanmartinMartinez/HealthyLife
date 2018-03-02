@@ -30,12 +30,12 @@ def contact(request):
     return render(request, "contact.html", context)
 
 
-def work_with_our(request):
-    form = WorkWithOurForm
-    context = {
-        'work_with_our_form': form
-    }
-    return render(request, 'work_with_our.html', context)
+# def work_with_our(request):
+class WorkWithOurView(CreateView):
+    model = User
+    template_name = 'work_with_our.html'
+    form_class = forms.WorkWithOurForm
+    success_url = reverse_lazy('registration_complete')
 
 
 def legal_information(request):
@@ -47,33 +47,17 @@ def know_us(request):
 
 
 # Login views
-"""
-def login(request):
-    # form = LogInForm(request.POST or None)
-    # context = {
-    #     "login_form": form,
-    # }
-    return render(request, 'login.html', {})
-
-
-def auth_logout(request):
-    return render(request, 'logout.html', {})
-"""
+def access(request):
+    return render(request, 'access.html', {})
 
 # Registration views
-"""
-def registration_resgister(request):
-    form = RegistrationFormUniqueEmail
-    context = {
-        "registration_form":form
-    }
-    return render(request, 'registration_register.html', context)
-"""
 class RegistrationView(CreateView):
     model = User
     template_name = 'registration/registration_register.html'
     form_class = forms.RegisterForm
-    success_url = reverse_lazy('blog')
+    success_url = reverse_lazy('registration_complete')
+
+
 
 
 def registration_complete(request):
@@ -152,7 +136,7 @@ class SportSessionCreate(CreateView):
 
 # Blog views
 def blog(request):
-    posts = models.Post.objects.filter(status=1).values().order_by("-creation_date")
+    posts = models.Post.objects.filter(status=1).order_by("-creation_date")
     categories = models.Category.objects.order_by("name")
     context = {
         "posts":posts,
@@ -174,9 +158,9 @@ def detail_post(request, slug):
 
 
 def blog_category_posts(request, slug):
-    category = Category.objects.get(slug=slug)
-    posts = Post.objects.filter(status=1, category=category.id).values()
-    categories = Category.objects.order_by("name")
+    category = models.Category.objects.get(slug=slug)
+    posts = models.Post.objects.filter(status=1, category=category.id).values()
+    categories = models.Category.objects.order_by("name")
     context = {
         "categories":categories,
         "posts":posts,
@@ -185,10 +169,10 @@ def blog_category_posts(request, slug):
     return render(request, 'blog.html', context)
 
 
-def blog_autor_posts(request, username):
+def blog_author_posts(request, username):
     author = User.objects.get(username=username)
-    posts = Post.objects.filter(status=1, author=author.id).values()
-    categories = Category.objects.order_by("name")
+    posts = models.Post.objects.filter(status=1, author=author.id).values()
+    categories = models.Category.objects.order_by("name")
     context = {
         "categories":categories,
         "posts":posts,
@@ -197,8 +181,12 @@ def blog_autor_posts(request, username):
     return render(request, 'blog.html', context)
 
 
-def blog_admin(request):
-    return render(request, 'blog_admin.html', {})
+def blog_admin(request, username):
+    posts = models.Post.objects.filter(username=username)
+    context = {
+        "posts":posts
+    }
+    return render(request, 'blog_admin.html', context)
 
 
 # Shop views
@@ -206,16 +194,25 @@ def shop(request):
     return render(request, 'shop.html', {})
 
 
+def shop_admin(request, username):
+    posts = models.Post.objects.filter(username=username)
+    context = {
+        "posts":posts
+    }
+    return render(request, 'shop_admin.html', context)
+
 
 # Profile views
 def profile(request, username):
-    user = models.User.objects.get(username=username)
-    custom_user = models.CustomUser.object.get(id=user.id)
-    # informacion de usuario
-    # direccion de enviado
-    # informacion de pago
+    user = User.objects.get(username=username)
+    custom_user = models.CustomUser.objects.get(user_id=user.id)
+    bank_information = models.BankInformation.objects.filter(user_id=user.id)
+    address_information = models.Address.objects.filter(user_id=user.id)
     context = {
-
+        "user": user,
+        "custom_user":custom_user,
+        "bank_information": bank_information,
+        "address_information": address_information,
     }
     return render(request, 'profile.html', context)
 
@@ -227,3 +224,13 @@ def calendar(request):
 
 def ships(request):
     return render(request, 'ships.html', {})
+
+
+# Shop views
+def admin(request, username):
+    user = models.User.objects.get(username=username)
+    custom_user = models.CustomUser.objects.get(user_id=user.id)
+    context = {
+        "custom_user": custom_user
+    }
+    return render(request, 'admin.html', context)

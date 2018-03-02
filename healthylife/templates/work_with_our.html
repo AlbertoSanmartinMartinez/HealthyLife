@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
 {% block work_with_our %}
-<p>Aquí va el formulario</p>
+<p>Formualrio de Colaborador</p>
+<form method="post">
+  {% csrf_token %}
+  <p>Nombre de usuario: {{ form.username }}</p>
+  <p>Email: {{ form.email }}</p>
+  <p>Contraseña: {{ form.password1 }}</p>
+  <p>Contraseña (confirmación): {{ form.password2 }}</p>
+  <p>Quieres colaborar en el blog? {{ form.blog }}</p>
+  <button type="submit">Registrarse</button>
+</form>
 {% endblock %}
