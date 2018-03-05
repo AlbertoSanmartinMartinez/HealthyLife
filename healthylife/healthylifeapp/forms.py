@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from django import forms
 from django import forms
 from healthylifeapp import models
@@ -22,8 +25,9 @@ class ContactForm(forms.Form):
     mensaje = forms.CharField(max_length=500)
 
 
-class WorkWithOurForm(RegisterForm):
+class WorkWithOurForm(forms.Form):
     blog = forms.BooleanField(required=False)
+    shop = forms.BooleanField(required=False)
 
 
 # Sport forms
@@ -45,6 +49,9 @@ class SportTypeForm(forms.ModelForm):
 # Awards forms
 
 # Blog forms
+class SearchForm(forms.Form):
+    word = forms.CharField(label='search', widget=forms.TextInput(attrs={'placeholder':'Escribe aquí'}))
+
 """
 class PostForm(ModelForm):
     class Meta;

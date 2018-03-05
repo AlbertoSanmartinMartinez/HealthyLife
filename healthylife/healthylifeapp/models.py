@@ -50,8 +50,6 @@ class BankInformation(models.Model):
 class CustomUser(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100)
-    # address = models.OneToOneField(Address, default=1, blank=True, null=True)
-    # bank_information = models.OneToOneField(BankInformation, default=1, blank=True, null=True)
     is_collaborator_blog = models.BooleanField(default=False, blank=False)
     is_collaborator_shop = models.BooleanField(default=False, blank=False)
 

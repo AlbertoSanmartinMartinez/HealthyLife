@@ -19,13 +19,14 @@ urlpatterns = [
     url(r'^blog/(?P<slug>\w+)/$', views.detail_post, name='detail_post'),
     url(r'^blog/categorias/(?P<slug>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
     url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
+    url(r'^resultado_busqueda/$', views.search, name='search'),
 
     # Shop URLS's
     url(r'^shop/$', views.shop, name='shop'),
 
     # Pages URLS's
     url(r'^conocenos/$', views.know_us, name='know_us'),
-    url(r'^trabaja_con_nosotros/', views.WorkWithOurView.as_view(), name='work_with_our'),
+    url(r'^trabaja_con_nosotros/', views.work_with_our, name='work_with_our'),
     url(r'^informacion_legal/', views.legal_information, name='legal_information'),
     url(r'^contacto/', views.contact, name='contact'),
 

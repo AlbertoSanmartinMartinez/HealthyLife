@@ -1,0 +1,12 @@
+{% load staticfiles %}
+
+{% block buscar %}
+
+  <p>Busca lo que quieras</p>
+  <form method="GET" action="{% url 'search' %}">
+    {% csrf_token %}
+    {{ search_form.word }}
+    <button type="submit">Buscar</button>
+  </form>
+
+{% endblock %}

@@ -2,24 +2,25 @@
 <p>Acceso</p>
   <nav>
     <ul>
-      <li><a href="http://www.facebook.com">Facebook</a></li>
-      <li><a href="http://www.twitter.com">Twitter</a></li>
-      <li><a href="http://www.instagram.com">Instagram</a></li>
+      <li><a href="https://www.facebook.com/BarbastroSeMueve/">Facebook</a></li>
+      <li><a href="https://twitter.com/BarbastroSMueve">Twitter</a></li>
+      <li><a href="https://www.instagram.com/barbastrosemueve/">Instagram</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'profile' username=user.username %}">{{ user.username }}</a></li>
-        <li><a href="{% url 'sport' %}">Deporte</a></li>
-        <li><a href="{% url 'nutrition' %}">Nutricion</a></li>
-        <li><a href="{% url 'health' %}">Salud</a></li>
-        <li><a href="{% url 'statistics' %}">Estadisticas</a></li>
-        <li><a href="{% url 'awards' %}">Premios</a></li>
-        <li><a href="{% url 'ships' username=user.username %}">Pedidos</a></li>
+        <!--<li><a href="{% url 'sport' %}">Deporte</a></li>-->
+        <!--<li><a href="{% url 'nutrition' %}">Nutricion</a></li>-->
+        <!--<li><a href="{% url 'health' %}">Salud</a></li>-->
+        <!--<li><a href="{% url 'statistics' %}">Estadisticas</a></li>-->
+        <!--<li><a href="{% url 'awards' %}">Premios</a></li>-->
+        <!--<li><a href="{% url 'ships' username=user.username %}">Pedidos</a></li>-->
         {% if user.is_staff %}
           <li><a href="{% url 'admin' username=user.username %}">Administracion</a></li>
         {% endif %}
-        <li><a href="{% url 'calendar' username=user.username %}">Calendario</a></li>
+        <!--<li><a href="{% url 'calendar' username=user.username %}">Calendario</a></li>-->
         <li><a href="{% url 'logout' %}">Logout</a></li>
       {% else %}
         <li><a href="{% url 'login' %}">Acceder</a></li>
       {% endif %}
+      <li><a href="{% url 'search' %}">Buscar</a></li>
     </ul>
   </nav>
