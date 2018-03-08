@@ -213,7 +213,7 @@ class Post(models.Model):
     description = models.CharField(max_length=200, blank=False)
     content = models.TextField(default=" ", blank=False)
     # content = tinymce_models.HTMLField()
-    category = models.ForeignKey(Category, default=1)
+    category = models.ForeignKey(Category, default=1, blank=False)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
     author = models.ForeignKey(User, default=1)

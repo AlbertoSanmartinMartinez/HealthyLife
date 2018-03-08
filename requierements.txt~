@@ -1,8 +1,5 @@
-Django==1.8.17
-
+Django==1.10.6
 Pillow==4.0.0 ()
 behave==1.2.5 (tests)
 splinter==0.7.5 ()
-
-django-registration
-django-tinymce
+django-registration 
