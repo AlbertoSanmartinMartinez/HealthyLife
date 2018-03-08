@@ -3,6 +3,8 @@
 
 {% block admin %}
 
+  {% include 'navbar_admin.html' %}
+
   <p>Seccion de administracion</p>
 
   

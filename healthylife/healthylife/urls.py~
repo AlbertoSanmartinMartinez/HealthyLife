@@ -16,7 +16,7 @@ urlpatterns = [
 
     # Blog URLS's
     url(r'^blog/$', views.blog, name='blog'),
-    url(r'^blog/(?P<slug>\w+)/$', views.detail_post, name='detail_post'),
+    url(r'^blog/(?P<post>\w+)/$', views.detail_post, name='detail_post'),
     url(r'^blog/categorias/(?P<category>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
     url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
     url(r'^resultado_busqueda/$', views.search, name='search'),
@@ -72,7 +72,10 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
     url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
 
-    url(r'^administracion/(?P<username>\w+)/', views.admin, name='admin'),
+   # Admin URLS's
+    # url(r'^administracion/(?P<username>\w+)/$', views.admin, name='admin'),
+    url(r'^administracion/blog/$', views.admin_blog, name='admin_blog'),
+    # url(r'^administracion/(?P<username>\w+)/tienda/$', views.admin, name='admin_shop'),
 
     url(r'^mi_cuenta/login/$', auth_views.login, name='login'),
     url(r'^mi_cuenta/logout/$', auth_views.logout, name='logout'),

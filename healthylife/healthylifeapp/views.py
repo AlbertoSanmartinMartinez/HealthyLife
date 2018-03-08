@@ -178,7 +178,6 @@ def blog(request):
 
 
 def detail_post(request, post):
-    print(post)
     post = models.Post.objects.get(slug=post)
     comments = models.Comment.objects.filter(post=post.id)
     context = {
@@ -273,6 +272,15 @@ def admin(request, username):
         "search_form": getSearchForm(),
     }
     return render(request, 'admin.html', context)
+
+def admin_blog(request):
+    posts = models.Post.objects.filter(author=request.user.id).order_by("-creation_date")
+    categories = models.Category.objects.order_by("name")
+    context = {
+	"posts": posts,
+	"categories": categories,
+    }
+    return render(request, 'admin_blog.html', context)
 
 # Funciones Comunes
 

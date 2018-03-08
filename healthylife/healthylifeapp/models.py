@@ -7,9 +7,11 @@ from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.text import slugify
 from healthylifeapp.decorators import autoconnect
+from django.core.validators import URLValidator
 
 # General models
 class Address(models.Model):
+    """modelo para las direcciones postales"""
     name = models.CharField(max_length=50, default='mi direccion')
     city = models.CharField(max_length=50, default=' ', blank=True, null=True)
     postal_code = models.CharField(max_length=5, default='00000')
@@ -30,6 +32,7 @@ class Address(models.Model):
 
 
 class BankInformation(models.Model):
+    """modelo para la informacion bancaria"""
     name = models.CharField(max_length=50, default='mi informacion bancaria')
     account = models.CharField(max_length=20, default=' ', blank=True, null=True)
     month = models.CharField(max_length=2, default=' ', blank=True, null=True)
@@ -47,8 +50,10 @@ class BankInformation(models.Model):
 
 
 class CustomUser(models.Model):
+    """modelo para la informacion de los usuarios"""
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100)
+    phone = models.CharField(max_length=9, default='000000000')
     is_collaborator_blog = models.BooleanField(default=False, blank=False)
     is_collaborator_shop = models.BooleanField(default=False, blank=False)
 
@@ -70,6 +75,7 @@ class CustomUser(models.Model):
 
 # Sport models
 class SportType(models.Model):
+    """puede ser conveniente un campo de eleccion multiple antes que una clase"""
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
 
@@ -112,6 +118,7 @@ class Food(models.Model):
 
 
 class Measure(models.Model):
+    """puede ser conveniente un campo de eleccion multiple antes que una clase"""
     name = models.CharField(max_length=100)
 
     def __unicode__(self):
@@ -147,34 +154,6 @@ class Ingredient(models.Model):
         return self.name
 
 
-# Awards models
-class Company(models.Model):
-    name = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
-    telefone = models.CharField(max_length=100)
-    web = models.CharField(max_length=100)
-    address = models.OneToOneField(Address, default=1)
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):
-        return self.name
-
-
-class Award(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    company = models.ForeignKey(Company)
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):
-        return self.name
-
-
 # Health models
 
 
@@ -190,6 +169,7 @@ class SpecificStatistics(models.Model):
 # Blog models
 @autoconnect
 class Category(models.Model):
+    """modelo para las categorias del blog"""
     name = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=200)
@@ -206,6 +186,7 @@ class Category(models.Model):
 
 @autoconnect
 class Post(models.Model):
+    """modelo para los articulos del blog"""
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=2, blank=False)
     title = models.CharField(max_length=100, blank=False)
@@ -231,6 +212,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    """modelo para los comentarios del blog"""
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=3, blank=True)
     title = models.CharField(max_length=100)
@@ -244,4 +226,43 @@ class Comment(models.Model):
 
 # Shop models
 class Product(models.Model):
+    """modelo para los productos de la tienda"""
     pass
+
+
+class Discount(models.Model):
+    name = models.CharField(max_length=50)
+    DiscountType = ((1, "Cantidad"), (2, "Porcentaje"))
+    discount = models.IntegerField(choices=DiscountType, default=1)
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
+
+
+class Company(models.Model):
+    """modelo para las empresa de la tienda"""
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    phone = models.CharField(max_length=9, default='000000000')
+    web =  models.TextField(validators=[URLValidator()])
+    address = models.OneToOneField(Address, default=1)
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+
+# Awards models
+class Award(models.Model):
+    """modelo para los premios de los usuarios"""
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    # price = models.DecimalField(max_digits=10, decimal_places=2)
+    # discount = models.
+    company = models.ForeignKey(Company)
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name

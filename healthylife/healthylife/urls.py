@@ -72,7 +72,10 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
     url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
 
-    url(r'^administracion/(?P<username>\w+)/', views.admin, name='admin'),
+   # Admin URLS's
+    # url(r'^administracion/(?P<username>\w+)/$', views.admin, name='admin'),
+    url(r'^administracion/blog/$', views.admin_blog, name='admin_blog'),
+    # url(r'^administracion/(?P<username>\w+)/tienda/$', views.admin, name='admin_shop'),
 
     url(r'^mi_cuenta/login/$', auth_views.login, name='login'),
     url(r'^mi_cuenta/logout/$', auth_views.logout, name='logout'),
