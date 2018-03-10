@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
@@ -12,12 +15,12 @@ admin.site.site_header = 'Barbastro Se Mueve BACKEND'
 
 urlpatterns = [
 
-    # General URLS's
+    # Admin URLS's
     url(r'^admin/', include(admin.site.urls)),
+
+    # API URLS's
     url(r'^api/', include('healthylifeapp.urls', namespace='api')),
     url(r'^api/$', views.api, name='api'),
-
-    url(r'^', views.inicio, name='inicio'),
 
     # Blog URLS's
     url(r'^blog/$', views.blog, name='blog'),
@@ -30,6 +33,7 @@ urlpatterns = [
     url(r'^shop/$', views.shop, name='shop'),
 
     # Pages URLS's
+    url(r'^', views.inicio, name='home'),
     url(r'^conocenos/$', views.know_us, name='know_us'),
     url(r'^trabaja_con_nosotros/', views.work_with_our, name='work_with_our'),
     url(r'^informacion_legal/', views.legal_information, name='legal_information'),
@@ -60,6 +64,7 @@ urlpatterns = [
     # Awards URLS's
     url(r'^premios/$', views.awards, name='awards'),
 
+    # Editor de Texto URLS's
     url(r'^tinymce/', include('tinymce.urls')),
 
     # Media URLS's
@@ -67,7 +72,7 @@ urlpatterns = [
 
     # Registro URLS's
     url(r'^mi_cuenta/', include('django.contrib.auth.urls')),
-    url(r'^mi_cuenta/', include('registration.backends.hmac.urls')),
+    # url(r'^mi_cuenta/', include('registration.backends.hmac.urls')),
 
     url(r'^mi_cuenta/registro/$', views.RegistrationView.as_view(), name='registration_register'),
     url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
@@ -77,14 +82,11 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
     url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
 
-   # Admin URLS's
-    # url(r'^administracion/(?P<username>\w+)/$', views.admin, name='admin'),
-    url(r'^administracion/blog/$', views.admin_blog, name='admin_blog'),
-    # url(r'^administracion/(?P<username>\w+)/tienda/$', views.admin, name='admin_shop'),
+    # Admin URLS's
 
+    # Login URLS's
     url(r'^mi_cuenta/login/$', auth_views.login, name='login'),
     url(r'^mi_cuenta/logout/$', auth_views.logout, name='logout'),
-    # url(r'^acceso/$', views.access, name='access'),
 ]
 
 """

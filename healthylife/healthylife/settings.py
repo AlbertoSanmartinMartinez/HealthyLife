@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -140,8 +143,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'valid_styles' : 'font-weight,font-style,text-decoration',
 }
 
-LOGIN_REDIRECT_URL = 'inicio'
-LOGOUT_REDIRECT_URL = 'inicio'
+LOGOUT_REDIRECT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
 
 AUTHENTICATION_BACKENDS = ['healthylifeapp.backend.CustomBackend']
 

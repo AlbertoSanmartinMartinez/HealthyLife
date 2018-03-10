@@ -15,6 +15,7 @@ from rest_framework import permissions, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from healthylifeapp import serializers
 from rest_framework import viewsets
+from django.contrib.auth.views import LoginView
 
 # General views
 def inicio(request):
@@ -87,11 +88,13 @@ def know_us(request):
 
 
 # Login views
+"""
 def access(request):
     context = {
         "search_form":getSearchForm(),
     }
     return render(request, 'access.html', context)
+"""
 
 # Registration views
 class RegistrationView(CreateView):
@@ -273,24 +276,6 @@ def ships(request):
 
 
 # Admin views
-def admin(request, username):
-    user = models.User.objects.get(username=username)
-    custom_user = models.CustomUser.objects.get(user_id=user.id)
-    context = {
-        "custom_user": custom_user,
-        "search_form": getSearchForm(),
-    }
-    return render(request, 'admin.html', context)
-
-def admin_blog(request):
-    posts = models.Post.objects.filter(author=request.user.id).order_by("-creation_date")
-    categories = models.Category.objects.order_by("name")
-    context = {
-	"posts": posts,
-	"categories": categories,
-    }
-    return render(request, 'admin_blog.html', context)
-
 
 ############################## API VIEWS ##############################
 def api(request):
@@ -368,6 +353,12 @@ class APIUserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 """
+
+
+def prueba(request):
+    print("pasa por la vista")
+    return render(request, 'prueba.html', {})
+
 
 # Funciones Comunes
 def obtenerCategorias(request):

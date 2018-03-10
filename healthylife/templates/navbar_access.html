@@ -7,14 +7,9 @@
       <li><a href="https://www.instagram.com/barbastrosemueve/">Instagram</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'profile' username=user.username %}">{{ user.username }}</a></li>
-        <!--<li><a href="{% url 'sport' %}">Deporte</a></li>-->
-        <!--<li><a href="{% url 'nutrition' %}">Nutricion</a></li>-->
-        <!--<li><a href="{% url 'health' %}">Salud</a></li>-->
-        <!--<li><a href="{% url 'statistics' %}">Estadisticas</a></li>-->
-        <!--<li><a href="{% url 'awards' %}">Premios</a></li>-->
-        <!--<li><a href="{% url 'ships' username=user.username %}">Pedidos</a></li>-->
+        {% include 'navbar_profile.html' %}
         {% if user.is_staff %}
-          <li><a href="{% url 'admin_blog' %}">Administracion</a></li>
+          <li><a href="/admin">Administracion</a></li>
         {% endif %}
         <!--<li><a href="{% url 'calendar' username=user.username %}">Calendario</a></li>-->
         <li><a href="{% url 'logout' %}">Logout</a></li>
