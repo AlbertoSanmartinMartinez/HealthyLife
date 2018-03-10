@@ -26,8 +26,10 @@ class ContactForm(forms.Form):
 
 
 class WorkWithOurForm(forms.Form):
-    blog = forms.BooleanField(required=False)
+    # blog = forms.BooleanField(required=False)
     shop = forms.BooleanField(required=False)
+    blog = forms.BooleanField(label='Colaborar en el blog', required=False)
+    # word = forms.CharField(label='search', widget=forms.TextInput(attrs={'placeholder':'Escribe aquí'}))
 
 
 # Sport forms
@@ -52,14 +54,37 @@ class SportTypeForm(forms.ModelForm):
 class SearchForm(forms.Form):
     word = forms.CharField(label='search', widget=forms.TextInput(attrs={'placeholder':'Escribe aquí'}))
 
-"""
-class PostForm(ModelForm):
-    class Meta;
-        model = Post
-"""
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = models.Post
+        fields = []
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = models.Comment
+        fields = []
+
+
+class AuthorForm(forms.ModelForm):
+    pass
+
 
 # Profile forms
 class UserInformationForm(forms.ModelForm):
     class Meta:
         model = models.User
+        fields = []
+
+
+class BankInformationForm(forms.ModelForm):
+    class Meta:
+        model = models.BankInformation
+        fields = []
+
+
+class AddressInformationForm(forms.ModelForm):
+    class Meta:
+        model = models.Address
         fields = []

@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from django.shortcuts import render, render_to_response
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from healthylifeapp import forms
@@ -48,17 +51,19 @@ class WorkWithOurView(CreateView):
 """
 
 def work_with_our(request):
-    if request.POST:
+    context = {}
+    if request.method == 'POST':
         user_form = forms.RegisterForm()
         collaborator_form.WorkWithOurForm()
+        # word = form.cleaned_data['word']
         if user_form.is_valid() and collaborator_form.is_valid():
-            user_form.forms
+            # user_form.forms
             # user =
-    context = {
-        "user_form": user_form,
-        "collaborator_form": collaborator_form,
-        "search_form":getSearchForm(),
-    }
+            context += {
+            # "user_form": user_form,
+                "collaborator_form": collaborator_form,
+                "search_form": getSearchForm(),
+            }
 
     return render(request, 'work_with_our.html', context)
 
