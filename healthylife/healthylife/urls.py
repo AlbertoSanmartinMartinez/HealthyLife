@@ -11,7 +11,7 @@ from healthylifeapp import views
 from healthylifeapp.views import SportSessionCreate, SportSessionDetail
 from django.contrib.auth import views as auth_views
 
-admin.site.site_header = 'Barbastro Se Mueve BACKEND'
+admin.site.site_header = 'Barbastro Se Mueve'
 
 urlpatterns = [
 
@@ -71,36 +71,27 @@ urlpatterns = [
     # url(r'^media/'),
 
     # Registro URLS's
-    url(r'^mi_cuenta/', include('django.contrib.auth.urls')),
-    # url(r'^mi_cuenta/', include('registration.backends.hmac.urls')),
-
+    # url(r'^mi_cuenta/', include('django.contrib.auth.urls')),
     url(r'^mi_cuenta/registro/$', views.RegistrationView.as_view(), name='registration_register'),
     url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
     url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
 
+    # Profile URLS's
     url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
     url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
 
-    # Admin URLS's
-
     # Login URLS's
-    url(r'^mi_cuenta/login/$', auth_views.login, name='login'),
-    url(r'^mi_cuenta/logout/$', auth_views.logout, name='logout'),
+    url(r'^mi_cuenta/login/$', auth_views.LoginView.as_view(), name='login'),
+    url(r'^mi_cuenta/logout/$', auth_views.LoginView.as_view(), name='logout'),
+
+    url(r'^mi_cuenta/password_change/$', auth_views.PasswordChangeView.as_view(), name='password_change'),
+    url(r'^mi_cuenta/password_change_done/$', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
+    url(r'^mi_cuenta/password_reset/$', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    url(r'^mi_cuenta/password_reset_done/$', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    url(r'^mi_cuenta/password_confirm/$', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    url(r'^mi_cuenta/password_reset_complete/$', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
-
-"""
-url(r'^mi_cuenta/activate/(?P<activation_key>\w+)/$', views.registration_activate, name='registration_activate'),
-url(r'^mi_cuenta/complete/$', views.registration_activation_complete, name='registration_activation_complete'),
-url(r'^resend/$', views.registration_resend_activation, name='registration_resend_activation'),
-
-<li><a href="{% url 'password_change' %}">password_change</a></li>
-<li><a href="{% url 'password_change_done' %}">password_change_done</a></li>
-<li><a href="{% url 'password_reset' %}">password_reset</a></li>
-<li><a href="{% url 'password_reset_done' %}">password_reset_done</a></li>
-<li><a href="{% url 'password_reset_confirm' %}">password_reset_confirm</a></li>
-<li><a href="{% url 'password_reset_complete' %}">password_reset_complete</a></li>
-"""
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

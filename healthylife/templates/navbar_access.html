@@ -11,8 +11,7 @@
         {% if user.is_staff %}
           <li><a href="/admin">Administracion</a></li>
         {% endif %}
-        <!--<li><a href="{% url 'calendar' username=user.username %}">Calendario</a></li>-->
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'logout' %}">Desconectar</a></li>
       {% else %}
         <li><a href="{% url 'login' %}">Acceder</a></li>
       {% endif %}

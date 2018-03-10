@@ -15,7 +15,7 @@ from rest_framework import permissions, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from healthylifeapp import serializers
 from rest_framework import viewsets
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import views as auth_views
 
 # General views
 def inicio(request):
@@ -97,11 +97,8 @@ def access(request):
 """
 
 # Registration views
-class RegistrationView(CreateView):
-    model = User
-    template_name = 'registration/registration_register.html'
-    form_class = forms.RegisterForm
-    success_url = reverse_lazy('registration_complete')
+class CustomRegistration(auth_views.RegistrationView):
+    template_name = 'registration_register.html'
 
 
 def registration_complete(request):
@@ -236,7 +233,9 @@ def search(request):
             "categories": obtenerCategorias(request),
             "search_form":getSearchForm(),
         }
-    return render(request, 'blog.html', context)
+        return render(request, 'blog.html', context)
+    else:
+        return render(request, 'blog.html', {})
 
 # Shop views
 def shop(request):
@@ -342,17 +341,6 @@ class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
     # model = models.Category
     queryset = models.Comment.objects.all()
     serializer_class = serializers.CommentSerializer
-
-"""
-class APIUserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-
-
-class APIUserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-"""
 
 
 def prueba(request):

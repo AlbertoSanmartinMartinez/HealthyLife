@@ -143,6 +143,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'valid_styles' : 'font-weight,font-style,text-decoration',
 }
 
+LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 
