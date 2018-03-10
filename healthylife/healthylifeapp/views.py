@@ -11,6 +11,10 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from django.forms.formsets import formset_factory
+from rest_framework import permissions, generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from healthylifeapp import serializers
+from rest_framework import viewsets
 
 # General views
 def inicio(request):
@@ -287,8 +291,85 @@ def admin_blog(request):
     }
     return render(request, 'admin_blog.html', context)
 
-# Funciones Comunes
 
+############################## API VIEWS ##############################
+def api(request):
+    return render(request, 'api.html', {})
+
+
+class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
+    """clase para los permisos de la API∫"""
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # Instance must have an attribute named `owner`.
+        return obj.user == request.user
+
+
+class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = models.CustomUser.objects.all()
+    serializer_class = serializers.CustomUserSerializer
+
+
+# Blog Api Views
+class APIPostList(generics.ListCreateAPIView):
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    # filter_backends = [SearchFilter, OrderingFilter]
+    # search_fields = ['title', 'slug']
+    # model = models.Post
+    queryset = models.Post.objects.all()
+    serializer_class = serializers.PostSerializer
+
+
+class APIPostDetail(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = (IsOwnerOrReadOnly,)
+    # model = models.Post
+    queryset = models.Post.objects.all()
+    serializer_class = serializers.PostSerializer
+
+
+class APICategoryList(generics.ListCreateAPIView):
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    # model = models.Category
+    queryset = models.Category.objects.all()
+    serializer_class = serializers.CategorySerializer
+
+
+class APICategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = (IsOwnerOrReadOnly,)
+    # model = models.Category
+    queryset = models.Category.objects.all()
+    serializer_class = serializers.CategorySerializer
+
+
+class APICommentList(generics.ListCreateAPIView):
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    # model = models.Category
+    queryset = models.Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+
+
+class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = (IsOwnerOrReadOnly,)
+    # model = models.Category
+    queryset = models.Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+
+"""
+class APIUserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
+class APIUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+"""
+
+# Funciones Comunes
 def obtenerCategorias(request):
     return models.Category.objects.order_by("name")
 

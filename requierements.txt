@@ -6,3 +6,4 @@ splinter==0.7.5 ()
 
 django-registration
 django-tinymce
+rest-framework

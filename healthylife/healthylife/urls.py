@@ -8,11 +8,16 @@ from healthylifeapp import views
 from healthylifeapp.views import SportSessionCreate, SportSessionDetail
 from django.contrib.auth import views as auth_views
 
+admin.site.site_header = 'Barbastro Se Mueve BACKEND'
+
 urlpatterns = [
 
     # General URLS's
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.inicio, name='inicio'),
+    url(r'^api/', include('healthylifeapp.urls', namespace='api')),
+    url(r'^api/$', views.api, name='api'),
+
+    url(r'^', views.inicio, name='inicio'),
 
     # Blog URLS's
     url(r'^blog/$', views.blog, name='blog'),
@@ -98,8 +103,3 @@ url(r'^resend/$', views.registration_resend_activation, name='registration_resen
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# API URL's
-urlpatterns += [
-
-]

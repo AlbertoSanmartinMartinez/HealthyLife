@@ -29,6 +29,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'healthylifeapp',
+    'rest_framework',
     # 'tinymce'
 )
 
@@ -142,12 +143,9 @@ TINYMCE_DEFAULT_CONFIG = {
 LOGIN_REDIRECT_URL = 'inicio'
 LOGOUT_REDIRECT_URL = 'inicio'
 
-# AUTH_USER_MODEL = 
 AUTHENTICATION_BACKENDS = ['healthylifeapp.backend.CustomBackend']
 
-
-
-
-
-
-
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
