@@ -118,7 +118,6 @@ class Food(models.Model):
 
 
 class Measure(models.Model):
-    """puede ser conveniente un campo de eleccion multiple antes que una clase"""
     name = models.CharField(max_length=100)
 
     def __unicode__(self):

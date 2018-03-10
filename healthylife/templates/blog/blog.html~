@@ -10,7 +10,7 @@
 
   <p>Lista de Posts</p>
   {% for post in posts %}
-    <p><a href="{% url 'detail_post' post=post.slug %}">{{ post.title }}</a></p>
+    <p><a href="{% url 'detail_post' slug=post.slug %}">{{ post.title }}</a></p>
     <p>{{ post.description }}</p>
     <p><a href="{% url 'blog_category_posts' category=post.category.slug %}">{{ post.category.name }}</a></p>
     <p><a href="{% url 'blog_author_posts' username=post.author.username %}">{{ post.author.username }}</a></p>
