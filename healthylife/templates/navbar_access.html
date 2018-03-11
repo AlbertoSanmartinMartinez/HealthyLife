@@ -13,7 +13,7 @@
         {% endif %}
         <li><a href="{% url 'logout' %}">Desconectar</a></li>
       {% else %}
-        <li><a href="{% url 'login' %}">Acceder</a></li>
+        <li><a href="{% url 'custom_login' %}">Acceder</a></li>
       {% endif %}
       <li><a href="{% url 'search' %}">Buscar</a></li>
     </ul>

@@ -11,7 +11,7 @@ from django.core.validators import URLValidator
 
 # General models
 class Address(models.Model):
-    """modelo para las direcciones postales"""
+    """Modelo para las direcciones postales"""
     name = models.CharField(max_length=50, default='mi direccion')
     city = models.CharField(max_length=50, default=' ', blank=True, null=True)
     postal_code = models.CharField(max_length=5, default='00000')
@@ -49,13 +49,13 @@ class BankInformation(models.Model):
             BankInformation.objects.create(user_id=instance.id)
 
 
-class CustomUser(models.Model):
+class UserProfile(models.Model):
     """modelo para la informacion de los usuarios"""
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100)
     phone = models.CharField(max_length=9, default='000000000')
-    is_collaborator_blog = models.BooleanField(default=False, blank=False)
-    is_collaborator_shop = models.BooleanField(default=False, blank=False)
+    # is_collaborator_blog = models.BooleanField(default=False, blank=False)
+    # is_collaborator_shop = models.BooleanField(default=False, blank=False)
 
 
     def __unicode__(self):

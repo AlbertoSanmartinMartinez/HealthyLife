@@ -16,6 +16,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from healthylifeapp import serializers
 from rest_framework import viewsets
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
+
 
 # General views
 def inicio(request):
@@ -88,17 +90,19 @@ def know_us(request):
 
 
 # Login views
-"""
-def access(request):
-    context = {
-        "search_form":getSearchForm(),
-    }
-    return render(request, 'access.html', context)
-"""
+class CustomLoginView(auth_views.LoginView):
+    authentication_form = forms.CustomAuthenticationForm
+    template_name = 'custom_login.html'
+
+    # "search_form": getSearchForm(),
+
 
 # Registration views
-def registration_register(request):
-    return render(request, 'registration_register.html', {})
+class CustomRegistrationView(CreateView):
+    model = User
+    form_class = forms.CustomRegisterForm
+    template_name = 'custom_register.html'
+    success_url = 'registration_complete'
 
 
 def registration_complete(request):
@@ -251,8 +255,9 @@ def shop_admin(request, username):
 
 
 # Profile views
+@login_required(redirect_field_name='custom_login')
 def profile(request, username):
-    user = User.objects.get(username=username)
+    user = User.objects.get(username = username)
     custom_user = models.CustomUser.objects.get(user_id=user.id)
     bank_information = models.BankInformation.objects.filter(user_id=user.id)
     address_information = models.Address.objects.filter(user_id=user.id)
@@ -293,9 +298,9 @@ class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
         return obj.user == request.user
 
 
-class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = models.CustomUser.objects.all()
-    serializer_class = serializers.CustomUserSerializer
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = models.UserProfile.objects.all()
+    serializer_class = serializers.UserProfileSerializer
 
 
 # Blog Api Views

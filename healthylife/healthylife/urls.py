@@ -69,8 +69,8 @@ urlpatterns = [
     # url(r'^media/'),
 
     # Registro URLS's
-    url(r'^mi_cuenta/', include('django.contrib.auth.urls')),
-    url(r'^mi_cuenta/registro/$', views.registration_register, name='registration_register'),
+    # url(r'^mi_cuenta/$', include('django.contrib.auth.urls')),
+    url(r'^mi_cuenta/registro/$', views.CustomRegistrationView.as_view(), name='custom_register'),
     url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
     url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
 
@@ -80,8 +80,8 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
 
     # Login URLS's
-    url(r'^mi_cuenta/login/$', auth_views.LoginView.as_view(), name='login'),
-    url(r'^mi_cuenta/logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    url(r'^acceso/$', views.CustomLoginView.as_view(), name='custom_login'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
 
     url(r'^mi_cuenta/password_change/$', auth_views.PasswordChangeView.as_view(), name='password_change'),
     url(r'^mi_cuenta/password_change_done/$', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),

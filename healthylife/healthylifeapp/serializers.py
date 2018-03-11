@@ -20,10 +20,10 @@ class UserSerializer(serializers.HyperlinkedIdentityField):
         fields = ('username', 'email')
 """
 
-class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = models.CustomUser
+        model = models.UserProfile
         fields = ('bio', 'phone')
 
 
