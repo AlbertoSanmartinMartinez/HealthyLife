@@ -97,8 +97,8 @@ def access(request):
 """
 
 # Registration views
-class CustomRegistration(auth_views.RegistrationView):
-    template_name = 'registration_register.html'
+def registration_register(request):
+    return render(request, 'registration_register.html', {})
 
 
 def registration_complete(request):

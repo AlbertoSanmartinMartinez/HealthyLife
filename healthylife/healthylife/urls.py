@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^shop/$', views.shop, name='shop'),
 
     # Pages URLS's
-    url(r'^', views.inicio, name='home'),
+    url(r'^$', views.inicio, name='home'),
     url(r'^conocenos/$', views.know_us, name='know_us'),
     url(r'^trabaja_con_nosotros/', views.work_with_our, name='work_with_our'),
     url(r'^informacion_legal/', views.legal_information, name='legal_information'),
@@ -41,10 +41,8 @@ urlpatterns = [
 
     # Sport URLS's
     url(r'^deporte/$', views.sport, name='sport'),
-    url(r'^sport/sport_session/create/$', SportSessionCreate.as_view(), \
-        name='sport_session_create'),
-    url(r'^sport_session/(?P<pk>\d+)/$', SportSessionDetail.as_view(), \
-        name='sport_session_detail'),
+    url(r'^sport/sport_session/create/$', SportSessionCreate.as_view(), name='sport_session_create'),
+    url(r'^sport_session/(?P<pk>\d+)/$', SportSessionDetail.as_view(), name='sport_session_detail'),
     url(r'^sport/sport_session/$',
         ListView.as_view(
             queryset=SportSession.objects.all,
@@ -71,8 +69,8 @@ urlpatterns = [
     # url(r'^media/'),
 
     # Registro URLS's
-    # url(r'^mi_cuenta/', include('django.contrib.auth.urls')),
-    url(r'^mi_cuenta/registro/$', views.RegistrationView.as_view(), name='registration_register'),
+    url(r'^mi_cuenta/', include('django.contrib.auth.urls')),
+    url(r'^mi_cuenta/registro/$', views.registration_register, name='registration_register'),
     url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
     url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
 
@@ -83,7 +81,7 @@ urlpatterns = [
 
     # Login URLS's
     url(r'^mi_cuenta/login/$', auth_views.LoginView.as_view(), name='login'),
-    url(r'^mi_cuenta/logout/$', auth_views.LoginView.as_view(), name='logout'),
+    url(r'^mi_cuenta/logout/$', auth_views.LogoutView.as_view(), name='logout'),
 
     url(r'^mi_cuenta/password_change/$', auth_views.PasswordChangeView.as_view(), name='password_change'),
     url(r'^mi_cuenta/password_change_done/$', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),

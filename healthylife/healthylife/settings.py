@@ -144,7 +144,7 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 
 AUTHENTICATION_BACKENDS = ['healthylifeapp.backend.CustomBackend']
