@@ -10,6 +10,13 @@ from healthylifeapp.decorators import autoconnect
 from django.core.validators import URLValidator
 
 # General models
+"""
+class User(models.Model):
+    Model de Usuario por defecto que trae Django
+    - is_staff : diferencia entre usuario particular y de empresa
+"""
+
+
 class Address(models.Model):
     """Modelo para las direcciones postales"""
     name = models.CharField(max_length=50, default='mi direccion')
@@ -50,7 +57,7 @@ class BankInformation(models.Model):
 
 
 class UserProfile(models.Model):
-    """modelo para la informacion de los usuarios"""
+    """Modelo para el perfil de un usuario"""
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100)
     phone = models.CharField(max_length=9, default='000000000')
@@ -63,15 +70,10 @@ class UserProfile(models.Model):
 
     @receiver(signals.post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
-        """este metodo crea la direccion postal y la informacion bancaria de un usuario"""
+        """Este metodo crea la direccion postal y la informacion bancaria de un usuario"""
         if created:
             CustomUser.objects.create(user_id=instance.id)
 
-    """
-    @receiver(signals.post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.username.save()
-    """
 
 # Sport models
 class SportType(models.Model):
@@ -169,11 +171,12 @@ class SpecificStatistics(models.Model):
 # Blog models
 @autoconnect
 class Category(models.Model):
-    """modelo para las categorias del blog"""
+    """Modelo para las categorias del blog"""
     name = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=200)
     creation_date = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -186,14 +189,13 @@ class Category(models.Model):
 
 @autoconnect
 class Post(models.Model):
-    """modelo para los articulos del blog"""
+    """Modelo para los articulos del blog"""
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=2, blank=False)
     title = models.CharField(max_length=100, blank=False)
     slug = models.CharField(max_length=100, default=' ', blank=True)
     description = models.CharField(max_length=200, blank=False)
     content = models.TextField(default=" ", blank=False)
-    # content = tinymce_models.HTMLField()
     category = models.ForeignKey(Category, default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
@@ -212,7 +214,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    """modelo para los comentarios del blog"""
+    """Modelo para los comentarios del blog"""
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=3, blank=True)
     title = models.CharField(max_length=100)

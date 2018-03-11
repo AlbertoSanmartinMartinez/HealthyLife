@@ -355,7 +355,7 @@ def prueba(request):
 
 # Funciones Comunes
 def obtenerCategorias(request):
-    return models.Category.objects.order_by("name")
+    return models.Category.objects.filter(parent__isnull=True).order_by("name")
 
 def getSearchForm():
     return forms.SearchForm()
