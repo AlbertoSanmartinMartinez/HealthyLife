@@ -205,6 +205,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, default=1)
     # guardar automaticamente el usuario que ha hecho el post
 
+
     def __unicode__(self):
         return self.title
 
@@ -213,7 +214,7 @@ class Post(models.Model):
         pass
 
     def pre_save(self):
-        """metodo de la clase post para para calcular el slug de un post"""
+        """Metodo para aignar el slug y el autor de un post automaticamente al crearlo"""
         self.slug = self.title.replace(" ", "_").lower()
 
 
@@ -266,16 +267,23 @@ class Company(models.Model):
 
 
 # Awards models
+@autoconnect
 class Award(models.Model):
     """modelo para los premios de los usuarios"""
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
-    # price = models.DecimalField(max_digits=10, decimal_places=2)
-    # discount = models.
-    company = models.ForeignKey(Company)
+    AwardType = ((1,'Porcentaje'), (2, 'Cantidad'))
+    award_type = models.IntegerField(choices=AwardType, default=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    author = models.ForeignKey(User, default=1)
+    company = models.ForeignKey(Company, default=1)
 
     def __str__(self):
         return self.name
 
     def __unicode__(self):
         return self.name
+
+    def pre_save(self):
+        """Metodo para asignar el usuario y la empresa automaticamente al crear un premio"""
+        pass

@@ -61,6 +61,7 @@ def work_with_our(request):
             user.save()
             if blog_colaborator == True:
                 blog_colaborator_group.user_set.add(user)
+                # user.groups.add(blog_colaborator_group)
             if shop_colaborator == True:
                 shop_colaborator_group.user_set.add(user)
             if award_colaborator == True:
