@@ -1,32 +1,22 @@
 {% extends 'base.html' %}
 
 {% block profile %}
-<form method="post">
+<form method="POST">
   <hr>
-  <p>Tu perfil</p>
-  <p>Nombre de usuario: </p>{{ user.username }}
-  <p>Nombre: </p>{{ user.first_name }}
-  <p>Apellidos: </p>{{ user.last_name }}
-  <p>Email: </p>{{ user.email }}
-  <p>Bio: </p>{{ custom_user.bio }}
-
-  <hr>
-  <p>Dirección de Envío</p>
-  <p>Direccion: </p>
-  {{ address_information.street }} {{address_information.number}} {{ address_information.floor }} {{address_information.door}}
-  {{ address_information.postal_code }} {{address_information.country}}
-
+  <p>Informacion personal</p>
+  {% csrf_token %}
+  {{ user_form.as_p }}
   <hr>
   <p>Informacion Bancaria</p>
-  <p>Cuenta corriente: </p>
-  {{ bank_information.account }}
-  {{ bank_information.month }} / {{ bank_information.year }}
+  {{ bank_information_form.as_p }}
   <hr>
-  <button type="submit">Guardar</button>
+  <p>Informacion de Envío</p>
+  {{ address_form.as_p }}
+  <button type="submit">Actualizar</button>
 </form>
 
 {% if user.is_staff %}
-  
+
 {% endif %}
 
 {% endblock %}

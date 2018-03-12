@@ -8,7 +8,7 @@ from healthylifeapp import models
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse_lazy
 from django.forms.formsets import formset_factory
 from rest_framework import permissions, generics
@@ -44,35 +44,31 @@ def contact(request):
     }
     return render(request, "contact.html", context)
 
-"""
-class WorkWithOurView(CreateView):
-    model = User
-    template_name = 'work_with_our.html'
-    form_class = forms.WorkWithOurForm
-    success_url = reverse_lazy('registration_complete')
-
-    def validate_form(self):
-        if form.is_valid:
-            instance = form_class.save()
-            print(instance.blog)
-"""
 
 def work_with_our(request):
-    context = {}
-    if request.method == 'POST':
-        user_form = forms.RegisterForm()
-        collaborator_form.WorkWithOurForm()
-        # word = form.cleaned_data['word']
-        if user_form.is_valid() and collaborator_form.is_valid():
-            # user_form.forms
-            # user =
-            context += {
-            # "user_form": user_form,
-                "collaborator_form": collaborator_form,
-                "search_form": getSearchForm(),
-            }
+    blog_colaborator_group = Group.objects.get(name='colaboradores_blog')
+    shop_colaborator_group = Group.objects.get(name='colaboradores_premios')
+    award_colaborator_group = Group.objects.get(name='colaboradores_tienda')
 
-    return render(request, 'work_with_our.html', context)
+    if request.method == 'POST':
+        user_form = forms.CustomRegisterColaboratorForm(data=request.POST)
+        if user_form.is_valid():
+            blog_colaborator = user_form.cleaned_data.get('blog_colaborator')
+            shop_colaborator = user_form.cleaned_data.get('shop_colaborator')
+            award_colaborator = user_form.cleaned_data.get('award_colaborator')
+            user = user_form.save(commit=False)
+            user.is_staff = True
+            user.save()
+            if blog_colaborator == True:
+                blog_colaborator_group.user_set.add(user)
+            if shop_colaborator == True:
+                shop_colaborator_group.user_set.add(user)
+            if award_colaborator == True:
+                award_colaborator_group.user_set.add(user)
+    else:
+        user_form = forms.CustomRegisterColaboratorForm()
+
+    return render(request, 'work_with_our.html', { "user_form": user_form })
 
 
 def legal_information(request):
@@ -102,7 +98,7 @@ class CustomRegistrationView(CreateView):
     model = User
     form_class = forms.CustomRegisterForm
     template_name = 'custom_register.html'
-    success_url = 'registration_complete'
+    success_url = 'completado'
 
 
 def registration_complete(request):
@@ -257,18 +253,32 @@ def shop_admin(request, username):
 # Profile views
 @login_required(redirect_field_name='custom_login')
 def profile(request, username):
+    """
+    Vista que muestra la informacion de un usuario
+    """
     user = User.objects.get(username = username)
-    custom_user = models.CustomUser.objects.get(user_id=user.id)
-    bank_information = models.BankInformation.objects.filter(user_id=user.id)
-    address_information = models.Address.objects.filter(user_id=user.id)
-    context = {
-        "user": user,
-        "custom_user":custom_user,
-        "bank_information": bank_information,
-        "address_information": address_information,
-        "search_form":getSearchForm(),
-    }
-    return render(request, 'profile.html', context)
+    bank_information = models.BankInformation.objects.get(user_id = user.id)
+    address = models.Address.objects.get(user_id = user.id)
+    if request.method == 'POST':
+        user_form = forms.UserForm(data=request.POST, instance = user)
+        bank_information_form = forms.BankInformationForm(data=request.POST, instance = bank_information)
+        address_form = forms.AddressForm(data=request.POST, instance = address)
+        if user_form.is_valid():
+            user_form.save()
+        if bank_information_form.is_valid():
+            bank_information_form.save()
+        if address_form.is_valid():
+            address_form.save()
+    else:
+        user_form = forms.UserForm(instance=user)
+        bank_information_form = forms.BankInformationForm(instance=bank_information)
+        address_form = forms.AddressForm(instance=address)
+
+    return render(request, 'profile.html', {
+        "user_form": user_form,
+        "bank_information_form": bank_information_form,
+        "address_form": address_form
+        })
 
 
 def calendar(request):
@@ -346,11 +356,6 @@ class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
     # model = models.Category
     queryset = models.Comment.objects.all()
     serializer_class = serializers.CommentSerializer
-
-
-def prueba(request):
-    print("pasa por la vista")
-    return render(request, 'prueba.html', {})
 
 
 # Funciones Comunes

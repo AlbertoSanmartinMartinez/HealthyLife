@@ -72,7 +72,7 @@ class UserProfile(models.Model):
     def create_user_profile(sender, instance, created, **kwargs):
         """Este metodo crea la direccion postal y la informacion bancaria de un usuario"""
         if created:
-            CustomUser.objects.create(user_id=instance.id)
+            UserProfile.objects.create(user_id=instance.id)
 
 
 # Sport models
@@ -163,6 +163,9 @@ class Ingredient(models.Model):
 class GeneralStatistics(models.Model):
     pass
 
+    def __unicode__(self):
+        pass
+
 
 class SpecificStatistics(models.Model):
     pass
@@ -200,6 +203,7 @@ class Post(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
     author = models.ForeignKey(User, default=1)
+    # guardar automaticamente el usuario que ha hecho el post
 
     def __unicode__(self):
         return self.title
@@ -222,6 +226,7 @@ class Comment(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, default=1)
     post = models.ForeignKey(Post, default=1)
+    # guardar automaticamente el usuario que ha hecho el comentario
 
     def __unicode__(self):
         return self.title
@@ -231,12 +236,18 @@ class Product(models.Model):
     """modelo para los productos de la tienda"""
     pass
 
+    def __unicode__(self):
+        pass
+
 
 class Discount(models.Model):
     name = models.CharField(max_length=50)
     DiscountType = ((1, "Cantidad"), (2, "Porcentaje"))
     discount = models.IntegerField(choices=DiscountType, default=1)
     amount = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __unicode__(self):
+        pass
 
 
 class Company(models.Model):

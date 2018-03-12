@@ -7,8 +7,13 @@
       {% for category in categories %}
         <li><a href="{% url 'blog_category_posts' category=category.slug %}">{{ category.name }}</a></li>
         <ul>
-          {% for child in category.children.all %}
-          <li><a href="{% url 'blog_category_posts' category=child.slug %}">{{ child.name }}</a></li>
+          {% for subcategory in category.children.all %}
+          <li><a href="{% url 'blog_category_posts' category=subcategory.slug %}">{{ subcategory.name }}</a></li>
+          <ul>
+            {% for subsubcategory in subcategory.children.all %}
+            <li><a href="{% url 'blog_category_posts' category=subsubcategory.slug %}">{{ subsubcategory.name }}</a></li>
+            {% endfor %}
+          </ul>
           {% endfor %}
         </ul>
       {% endfor %}

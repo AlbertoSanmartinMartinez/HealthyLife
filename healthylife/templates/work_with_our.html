@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 
+{% block title %} Registro de colaborador {% endblock %}
+
 {% block work_with_our %}
 
-<p>Formualrio de Colaborador</p>
 <form method="post">
   {% csrf_token %}
-  <p>Nombre de usuario: {{ form.username }}</p>
-  <p>Email: {{ form.email }}</p>
-  <p>Contraseña: {{ form.password1 }}</p>
-  <p>Contraseña (confirmación): {{ form.password2 }}</p>
-  {{ collaborator_form.blog }}
-  <p>Quieres colaborar en la tienda? {{ form.shop }}</p>
+  {{ user_form.as_p }}
   <button type="submit">Registrarse</button>
 </form>
 
+{% endblock %}
+
+{% block registration_complete %}
+{% endblock %}
+
+{% block registration_closed %}
 {% endblock %}

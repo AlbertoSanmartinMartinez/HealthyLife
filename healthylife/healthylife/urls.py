@@ -71,7 +71,7 @@ urlpatterns = [
     # Registro URLS's
     # url(r'^mi_cuenta/$', include('django.contrib.auth.urls')),
     url(r'^mi_cuenta/registro/$', views.CustomRegistrationView.as_view(), name='custom_register'),
-    url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='registration_complete'),
+    url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='custom_register_complete'),
     url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
 
     # Profile URLS's

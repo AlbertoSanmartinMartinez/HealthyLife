@@ -33,30 +33,25 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 # General Forms
-class CompanyForm(forms.Form):
-    # name = forms.CharField
-    # address =
-    # phone =
-    # web =
-    # address =
+class CompanyForm(forms.ModelForm):
 
     class Meta:
         model = models.Company
-        fields = ['name']
+        fields = ['name', 'address', 'phone', 'web']
 
 
 class BankInformationForm(forms.ModelForm):
 
     class Meta:
         model = models.BankInformation
-        fields = []
+        fields = ['name', 'account', 'month', 'year', 'security_code']
 
 
-class AddressForm(forms.Form):
+class AddressForm(forms.ModelForm):
 
     class Meta:
         model = models.Address
-        field = ["name"]
+        fields = ['name', 'city', 'postal_code', 'street', 'number', 'floor', 'door']
 
 
 class ContactForm(forms.Form):
@@ -66,11 +61,20 @@ class ContactForm(forms.Form):
     mensaje = forms.CharField(max_length=500)
 
 
-class WorkWithOurForm(forms.Form):
-    """Formulario de registro para colaboradores"""
-    # blog = forms.BooleanField(required=False)
-    shop = forms.BooleanField(required=False)
-    blog = forms.BooleanField(label='Colaborar en el blog', required=False)
+class CustomRegisterColaboratorForm(UserCreationForm):
+    """
+    Formulario para de registro de colaboradores
+    """
+    username = forms.CharField(label='Nombre de usuario', required=True)
+    email = forms.EmailField(label='Email', widget=forms.EmailInput())
+    password2 = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    blog_colaborator = forms.BooleanField(label='Colaborar en el blog', required=False,)
+    shop_colaborator = forms.BooleanField(label='Colaborar en la tienda', required=False,)
+    award_colaborator = forms.BooleanField(label='Colaborar con premios', required=False,)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
 
 
 # Sport forms
@@ -112,8 +116,9 @@ class CommentForm(forms.ModelForm):
 
 
 # Profile forms
-class UserInformationForm(forms.ModelForm):
-    
+class UserForm(forms.ModelForm):
+    username = forms.CharField(label='Nombre de usuario')
+
     class Meta:
         model = models.User
-        fields = []
+        fields = ['username', 'first_name', 'last_name']
