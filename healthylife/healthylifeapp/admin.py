@@ -1,5 +1,6 @@
 from django.contrib import admin
 from healthylifeapp import models
+from django.contrib.auth.models import Permission
 
 # Register your models here.
 admin.site.register(models.SportType)
@@ -44,3 +45,4 @@ admin.site.register(models.UserProfile)
 admin.site.register(models.Address)
 admin.site.register(models.BankInformation)
 admin.site.register(models.Product)
+admin.site.register(Permission)

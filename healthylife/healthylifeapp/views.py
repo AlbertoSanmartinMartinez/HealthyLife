@@ -17,6 +17,7 @@ from healthylifeapp import serializers
 from rest_framework import viewsets
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Permission
 
 
 # General views
@@ -46,6 +47,10 @@ def contact(request):
 
 
 def work_with_our(request):
+    """
+    Vista que regitra a un cobaorador y le da permisos
+    https://www.programcreek.com/python/example/50077/django.contrib.auth.models.Permission
+    """
     blog_colaborator_group = Group.objects.get(name='colaboradores_blog')
     shop_colaborator_group = Group.objects.get(name='colaboradores_premios')
     award_colaborator_group = Group.objects.get(name='colaboradores_tienda')
@@ -54,7 +59,6 @@ def work_with_our(request):
         user_form = forms.CustomRegisterColaboratorForm(data=request.POST)
         if user_form.is_valid():
             blog_colaborator = user_form.cleaned_data.get('blog_colaborator')
-            print(user_form.cleaned_data.get('blog_colaborator'))
             shop_colaborator = user_form.cleaned_data.get('shop_colaborator')
             award_colaborator = user_form.cleaned_data.get('award_colaborator')
             user = user_form.save(commit=False)
@@ -62,7 +66,6 @@ def work_with_our(request):
             user.save()
             if blog_colaborator == True:
                 blog_colaborator_group.user_set.add(user)
-                # user.groups.add(blog_colaborator_group)
             if shop_colaborator == True:
                 shop_colaborator_group.user_set.add(user)
             if award_colaborator == True:

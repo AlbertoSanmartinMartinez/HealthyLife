@@ -202,7 +202,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
-    author = models.ForeignKey(User, default=1, blank=False, null=True)
+    author = models.ForeignKey(User, default=1, blank=False)
     # guardar automaticamente el usuario que ha hecho el post
 
 
