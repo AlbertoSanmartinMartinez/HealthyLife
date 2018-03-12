@@ -6,10 +6,11 @@
       <li><a href="https://twitter.com/BarbastroSMueve">Twitter</a></li>
       <li><a href="https://www.instagram.com/barbastrosemueve/">Instagram</a></li>
       {% if user.is_authenticated %}
-        <li><a href="{% url 'profile' username=user.username %}">{{ user.username }}</a></li>
-        {% include 'navbar_profile.html' %}
+      <li><a href="{% url 'profile' username=user.username %}">{{ user.username }}</a></li>
         {% if user.is_staff %}
           <li><a href="/admin">Administracion</a></li>
+        {% else %}
+          {% include 'navbar_profile.html' %}
         {% endif %}
         <li><a href="{% url 'logout' %}">Desconectar</a></li>
       {% else %}

@@ -254,11 +254,11 @@ class Discount(models.Model):
 
 class Company(models.Model):
     """modelo para las empresa de la tienda"""
-    name = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
+    name = models.CharField(max_length=50, default='mi empresa')
+    description = models.CharField(max_length=100, default=' ')
     phone = models.CharField(max_length=9, default='000000000')
-    web =  models.TextField(validators=[URLValidator()])
-    address = models.OneToOneField(Address, default=1)
+    web =  models.CharField(max_length=50, validators=[URLValidator()])
+    user = models.ForeignKey(User, default=1)
 
     def __str__(self):
         return self.name

@@ -34,21 +34,34 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 # General Forms
 class CompanyForm(forms.ModelForm):
-
+    name = forms.CharField(label='Nombre')
+    description = forms.CharField(label='Descripcion')
+    phone = forms.CharField(label='Telefono')
+    web = forms.CharField(label='Página web')
     class Meta:
         model = models.Company
-        fields = ['name', 'address', 'phone', 'web']
+        fields = ['name', 'description', 'phone', 'web']
 
 
 class BankInformationForm(forms.ModelForm):
-
+    name = forms.CharField(label='Nombre')
+    account = forms.CharField(label='Número de cuenta')
+    month = forms.CharField(label='Mes de caducidad')
+    year = forms.CharField(label='Año de caducidad')
+    security_code = forms.CharField(label='Código de seguridad')
     class Meta:
         model = models.BankInformation
         fields = ['name', 'account', 'month', 'year', 'security_code']
 
 
 class AddressForm(forms.ModelForm):
-
+    name = forms.CharField(label='Nombre')
+    city = forms.CharField(label='Ciudad')
+    postal_code = forms.CharField(label='Código postal')
+    street = forms.CharField(label='Calle')
+    number = forms.CharField(label='Número')
+    floor = forms.CharField(label='Piso')
+    door = forms.CharField(label='Puerta')
     class Meta:
         model = models.Address
         fields = ['name', 'city', 'postal_code', 'street', 'number', 'floor', 'door']
@@ -70,7 +83,11 @@ class CustomRegisterColaboratorForm(UserCreationForm):
     password2 = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
     blog_colaborator = forms.BooleanField(label='Colaborar en el blog', required=False,)
     shop_colaborator = forms.BooleanField(label='Colaborar en la tienda', required=False,)
-    award_colaborator = forms.BooleanField(label='Colaborar con premios', required=False,)
+    award_colaborator = forms.BooleanField(label='Colaborar en el programa de premios y recompensas', required=False,)
+    sport_colaborator = forms.BooleanField(label='Colaborar en la seccion de deporte', required=False,)
+    nutrition_colaborator = forms.BooleanField(label='Colaborar en la sección de nutricion', required=False,)
+    health_colaborator = forms.BooleanField(label='Colaborar en la seccion de salud', required=False,)
+    company = forms.BooleanField(label='Tienes una empresa o eres autonomo ?', required=False,)
 
     class Meta:
         model = User

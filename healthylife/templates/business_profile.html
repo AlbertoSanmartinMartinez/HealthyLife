@@ -1,24 +1,21 @@
 {% extends 'base.html' %}
 
-{% block profile %}
+{% block business_profile %}
 
 <form method="POST">
   <hr>
-  <p>Informacion personal</p>
+  <p>Informacion de la empresa</p>
   {% csrf_token %}
   {{ user_form.as_p }}
   <hr>
   <p>Informacion Bancaria</p>
   {{ bank_information_form.as_p }}
   <hr>
-  <p>Direccion</p>
+  <p>Dirección</p>
   {{ address_form.as_p }}
-
-  {% if not company is None %}
-    <hr>
-    <p>Informacion de Empresa</p>
-    {{ company_form.as_p }}
-  {% endif %}
+  <hr>
+  <p>Informacion de Empresa</p>
+  {{ company_form.as_p }}
   <button type="submit">Actualizar</button>
 </form>
 

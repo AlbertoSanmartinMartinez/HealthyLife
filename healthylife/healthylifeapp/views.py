@@ -51,25 +51,37 @@ def work_with_our(request):
     Vista que regitra a un cobaorador y le da permisos
     https://www.programcreek.com/python/example/50077/django.contrib.auth.models.Permission
     """
-    blog_colaborator_group = Group.objects.get(name='colaboradores_blog')
-    shop_colaborator_group = Group.objects.get(name='colaboradores_premios')
-    award_colaborator_group = Group.objects.get(name='colaboradores_tienda')
 
     if request.method == 'POST':
         user_form = forms.CustomRegisterColaboratorForm(data=request.POST)
         if user_form.is_valid():
-            blog_colaborator = user_form.cleaned_data.get('blog_colaborator')
-            shop_colaborator = user_form.cleaned_data.get('shop_colaborator')
-            award_colaborator = user_form.cleaned_data.get('award_colaborator')
+            data = user_form.cleaned_data
+            #shop_colaborator = user_form.cleaned_data.get('shop_colaborator')
+            #award_colaborator = user_form.cleaned_data.get('award_colaborator')
             user = user_form.save(commit=False)
             user.is_staff = True
             user.save()
-            if blog_colaborator == True:
+            if data['blog_colaborator'] == True:
+                blog_colaborator_group = Group.objects.get(name='colaboradores_blog')
                 blog_colaborator_group.user_set.add(user)
-            if shop_colaborator == True:
+            if data['shop_colaborator'] == True:
+                shop_colaborator_group = Group.objects.get(name='colaboradores_tienda')
                 shop_colaborator_group.user_set.add(user)
-            if award_colaborator == True:
+            if data['award_colaborator'] == True:
+                award_colaborator_group = Group.objects.get(name='colaboradores_premios')
                 award_colaborator_group.user_set.add(user)
+
+            if data['sport_colaborator'] == True:
+                sport_colaborator_group = Group.objects.get(name='colaboradores_deporte')
+                sport_colaborator_group.user_set.add(user)
+            if data['nutrition_colaborator'] == True:
+                nutrition_colaborator_group = Group.objects.get(name='colaboradores_nutricion')
+                nutrition_colaborator_group.user_set.add(user)
+            if data['health_colaborator'] == True:
+                health_colaborator_group = Group.objects.get(name='colaboradores_premios')
+                health_colaborator_group.user_set.add(user)
+            if data['company'] == True:
+                company = models.Company.objects.create(user_id=user.id)
     else:
         user_form = forms.CustomRegisterColaboratorForm()
 
@@ -259,15 +271,22 @@ def shop_admin(request, username):
 @login_required(redirect_field_name='custom_login')
 def profile(request, username):
     """
-    Vista que muestra la informacion de un usuario
+    Vista que muestra la informacion de un perfil particular
     """
     user = User.objects.get(username = username)
     bank_information = models.BankInformation.objects.get(user_id = user.id)
     address = models.Address.objects.get(user_id = user.id)
+    try:
+        company = models.Company.objects.get(user_id=user.id)
+    except:
+        company = None
     if request.method == 'POST':
         user_form = forms.UserForm(data=request.POST, instance = user)
         bank_information_form = forms.BankInformationForm(data=request.POST, instance = bank_information)
         address_form = forms.AddressForm(data=request.POST, instance = address)
+        company_form = forms.CompanyForm(data=request.POST, instance = company)
+        if company_form.is_valid():
+            company_form.save()
         if user_form.is_valid():
             user_form.save()
         if bank_information_form.is_valid():
@@ -278,13 +297,51 @@ def profile(request, username):
         user_form = forms.UserForm(instance=user)
         bank_information_form = forms.BankInformationForm(instance=bank_information)
         address_form = forms.AddressForm(instance=address)
+        company_form = forms.CompanyForm(instance = company)
 
     return render(request, 'profile.html', {
         "user_form": user_form,
         "bank_information_form": bank_information_form,
-        "address_form": address_form
+        "address_form": address_form,
+        "company_form": company_form,
+        "company": company
         })
 
+
+@login_required(redirect_field_name='custom_login')
+def business_profile(request, username):
+    """
+    Vista que muestra la informacion de un perfil de empresa
+    """
+    user = User.objects.get(username = username)
+    bank_information = models.BankInformation.objects.get(user_id = user.id)
+    address = models.Address.objects.get(user_id = user.id)
+    company = models.Company.objects.get(user_id = user.id)
+    if request.method == 'POST':
+        user_form = forms.UserForm(data=request.POST, instance = user)
+        bank_information_form = forms.BankInformationForm(data=request.POST, instance = bank_information)
+        address_form = forms.AddressForm(data=request.POST, instance = address)
+        company_form = forms.CompanyForm(data=request.POST, instance = company)
+        if user_form.is_valid():
+            user_form.save()
+        if bank_information_form.is_valid():
+            bank_information_form.save()
+        if address_form.is_valid():
+            address_form.save()
+        if company_form.is_valid():
+            company_form.save()
+    else:
+        user_form = forms.UserForm(instance=user)
+        bank_information_form = forms.BankInformationForm(instance=bank_information)
+        address_form = forms.AddressForm(instance=address)
+        company_form = forms.CompanyForm(instance=company)
+
+    return render(request, 'business_profile.html', {
+        "user_form": user_form,
+        "bank_information_form": bank_information_form,
+        "address_form": address_form,
+        "company_form": company_form,
+        })
 
 def calendar(request):
     return render(request, 'calendar.html', {})

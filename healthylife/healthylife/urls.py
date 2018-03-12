@@ -76,6 +76,7 @@ urlpatterns = [
 
     # Profile URLS's
     url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
+    # url(r'^mi_cuenta/(?P<username>\w+)/$', views.business_profile, name='business_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
     url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
 
