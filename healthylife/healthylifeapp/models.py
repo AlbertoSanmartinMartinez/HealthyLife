@@ -11,6 +11,7 @@ from django.utils.text import slugify
 from healthylifeapp.decorators import autoconnect
 from django.core.validators import URLValidator
 from guardian.shortcuts import assign_perm
+from ckeditor.fields import RichTextField
 
 
 # General models
@@ -200,11 +201,11 @@ class Post(models.Model):
     title = models.CharField(max_length=100, blank=False)
     slug = models.CharField(max_length=100, default=' ', blank=True)
     description = models.CharField(max_length=200, blank=False)
-    content = models.TextField(default=" ", blank=False)
+    content = RichTextField(default=" ", blank=False)
     category = models.ForeignKey(Category, default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
-    author = models.ForeignKey(User, default=1, blank=True)
+    author = models.ForeignKey(User, default=31, blank=True)
 
 
     def __unicode__(self):
@@ -325,7 +326,7 @@ class Event(models.Model):
     def pre_save(self):
         """Metodo para aignar el slug y el autor de un post automaticamente al crearlo"""
         self.slug = self.title.replace(" ", "_").lower()
-        self.owner = instance.username
+        # self.owner = instance.username
 
     def inviteParticipants(self):
         """

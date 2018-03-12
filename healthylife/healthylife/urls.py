@@ -55,8 +55,9 @@ urlpatterns = [
     # Awards URLS's
     url(r'^premios/$', views.awards, name='awards'),
 
-    # Editor de Texto URLS's
-    url(r'^tinymce/', include('tinymce.urls')),
+    # Editor de Texto HTML URL's
+    # url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
     # Media URLS's
     # url(r'^media/'),

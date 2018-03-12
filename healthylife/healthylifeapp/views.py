@@ -18,7 +18,6 @@ from rest_framework import viewsets
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
-from guardian.shortcuts import assign_perm
 
 
 # General views
