@@ -54,7 +54,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
                     os.path.join(BASE_DIR, "templates"),
-                    BASE_DIR + '/templates/',
                     BASE_DIR + '/templates/blog/',
                     BASE_DIR + '/templates/shop/',
                     BASE_DIR + '/templates/sport/',
@@ -62,8 +61,7 @@ TEMPLATES = [
                     BASE_DIR + '/templates/nutrition/',
                     BASE_DIR + '/templates/registration/',
                     BASE_DIR + '/templates/awards/',
-                    BASE_DIR + '/templates/statistics/',
-                    BASE_DIR + '/templates/admin/',
+                    BASE_DIR + '/templates/calendar/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

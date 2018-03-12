@@ -45,4 +45,12 @@ admin.site.register(models.UserProfile)
 admin.site.register(models.Address)
 admin.site.register(models.BankInformation)
 admin.site.register(models.Product)
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
+    list_filter = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
+    search_fields = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
+
+admin.site.register(models.Event, EventAdmin)
+
 admin.site.register(Permission)

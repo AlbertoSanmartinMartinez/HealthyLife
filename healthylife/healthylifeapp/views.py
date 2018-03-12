@@ -23,7 +23,7 @@ from django.contrib.auth.models import Permission
 # General views
 def inicio(request):
     context = {
-        "search_form":getSearchForm(),
+        "search_form": getSearchForm(),
     }
     return render(request, "base.html", context)
 
@@ -49,15 +49,11 @@ def contact(request):
 def work_with_our(request):
     """
     Vista que regitra a un cobaorador y le da permisos
-    https://www.programcreek.com/python/example/50077/django.contrib.auth.models.Permission
     """
-
     if request.method == 'POST':
         user_form = forms.CustomRegisterColaboratorForm(data=request.POST)
         if user_form.is_valid():
             data = user_form.cleaned_data
-            #shop_colaborator = user_form.cleaned_data.get('shop_colaborator')
-            #award_colaborator = user_form.cleaned_data.get('award_colaborator')
             user = user_form.save(commit=False)
             user.is_staff = True
             user.save()
@@ -70,7 +66,6 @@ def work_with_our(request):
             if data['award_colaborator'] == True:
                 award_colaborator_group = Group.objects.get(name='colaboradores_premios')
                 award_colaborator_group.user_set.add(user)
-
             if data['sport_colaborator'] == True:
                 sport_colaborator_group = Group.objects.get(name='colaboradores_deporte')
                 sport_colaborator_group.user_set.add(user)
@@ -159,39 +154,6 @@ def sport(request):
     return render(request, 'sport.html', {})
 
 
-class SportSessionDetail(DetailView):
-    model = models.SportSession
-    template_name = 'sport_session_detail.html'
-
-    def get_context(self, **kwargs):
-        context = super(SportSessionDetail. self).get_context(*+kwargs)
-        return context
-
-
-class SportSessionList(ListView):
-    model = models.SportSession
-    template_name = 'sport_session_list.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(SportSessionList, self).get_context_data(**kwargs)
-        context['now'] = timezone.now()
-        return context
-
-
-class SportSessionUpdate(UpdateView):
-    template_name = 'form.html'
-
-
-class SportSessionCreate(CreateView):
-    model = models.SportSession
-    form_class = forms.SportSessionForm
-    template = 'form.html'
-    succes_url = '/'
-
-    def form_valid(self, form):
-        return super(SportSessionCreate, self).form_valid(form)
-
-
 # Blog views
 def blog(request):
     posts = models.Post.objects.filter(status=1).order_by("-creation_date")
@@ -227,7 +189,6 @@ def blog_category_posts(request, category):
 
 
 def blog_author_posts(request, username):
-    print(username)
     author = User.objects.get(username=username)
     posts = models.Post.objects.filter(status=1, author=author.id)
     categories = models.Category.objects.order_by("name")
@@ -239,6 +200,7 @@ def blog_author_posts(request, username):
     }
     return render(request, 'blog.html', context)
 
+# Search views
 def search(request):
     form = forms.SearchForm(request.GET or None)
     if form.is_valid():
@@ -257,14 +219,6 @@ def search(request):
 # Shop views
 def shop(request):
     return render(request, 'shop.html', {})
-
-
-def shop_admin(request, username):
-    posts = models.Post.objects.filter(username=username)
-    context = {
-        "posts":posts
-    }
-    return render(request, 'shop_admin.html', context)
 
 
 # Profile views
@@ -308,46 +262,27 @@ def profile(request, username):
         })
 
 
-@login_required(redirect_field_name='custom_login')
-def business_profile(request, username):
-    """
-    Vista que muestra la informacion de un perfil de empresa
-    """
-    user = User.objects.get(username = username)
-    bank_information = models.BankInformation.objects.get(user_id = user.id)
-    address = models.Address.objects.get(user_id = user.id)
-    company = models.Company.objects.get(user_id = user.id)
-    if request.method == 'POST':
-        user_form = forms.UserForm(data=request.POST, instance = user)
-        bank_information_form = forms.BankInformationForm(data=request.POST, instance = bank_information)
-        address_form = forms.AddressForm(data=request.POST, instance = address)
-        company_form = forms.CompanyForm(data=request.POST, instance = company)
-        if user_form.is_valid():
-            user_form.save()
-        if bank_information_form.is_valid():
-            bank_information_form.save()
-        if address_form.is_valid():
-            address_form.save()
-        if company_form.is_valid():
-            company_form.save()
-    else:
-        user_form = forms.UserForm(instance=user)
-        bank_information_form = forms.BankInformationForm(instance=bank_information)
-        address_form = forms.AddressForm(instance=address)
-        company_form = forms.CompanyForm(instance=company)
+def sport_profile(request, username):
+    return render(request, 'sport_profile.html', {})
 
-    return render(request, 'business_profile.html', {
-        "user_form": user_form,
-        "bank_information_form": bank_information_form,
-        "address_form": address_form,
-        "company_form": company_form,
-        })
 
-def calendar(request):
+def nutrition_profile(request, username):
+    return render(request, 'nutrition_profile.html', {})
+
+
+def health_profile(request, username):
+    return render(request, 'health_profile.html', {})
+
+
+def awards_profile(request, username):
+    return render(request, 'awards_profile.html', {})
+
+
+def calendar(request, username):
     return render(request, 'calendar.html', {})
 
 
-def ships(request):
+def ships(request, username):
     return render(request, 'ships.html', {})
 
 

@@ -2,20 +2,11 @@
 
   <nav>
     <ul>
-      <li>
-        <a href="{% url 'sport' %}">Deporte</a>
-      </li>
-      <li>
-        <a href="{% url 'nutrition' %}">Nutricion</a>
-      </li>
-      <li>
-        <a href="{% url 'health' %}">Salud</a>
-      </li>
-      <li>
-        <a href="{% url 'statistics' %}">Estadisticas</a>
-      </li>
-      <li>
-        <a href="{% url 'awards' %}">Premios</a>
-      </li>
+      <li><a href="{% url 'sport_profile' username=user.username %}">Deporte</a></li>
+      <li><a href="{% url 'nutrition_profile' username=user.username %}">Nutricion</a></li>
+      <li><a href="{% url 'health_profile' username=user.username %}">Salud</a></li>
+      <li><a href="{% url 'awards_profile' username=user.username %}">Premios</a></li>
+      <li><a href="{% url 'ships' username=user.username %}">Pedidos</a></li>
+      <li><a href="{% url 'calendar' username=user.username %}">Calendario</a></li>
     </ul>
   </nav>

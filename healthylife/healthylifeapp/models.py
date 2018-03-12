@@ -1,8 +1,10 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser, UserManager
 from django.utils.timezone import datetime
 from django.forms import ModelForm
-# from tinymce import models as tinymce_models
 from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.text import slugify
@@ -61,8 +63,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100)
     phone = models.CharField(max_length=9, default='000000000')
-    # is_collaborator_blog = models.BooleanField(default=False, blank=False)
-    # is_collaborator_shop = models.BooleanField(default=False, blank=False)
 
 
     def __unicode__(self):
@@ -287,4 +287,33 @@ class Award(models.Model):
 
     def pre_save(self):
         """Metodo para asignar el usuario y la empresa automaticamente al crear un premio"""
+        pass
+
+
+@autoconnect
+class Event(models.Model):
+    """Modelo para los eventos"""
+    title = models.CharField(max_length=50)
+    slug = models.CharField(max_length=50, default=' ', blank=True)
+    description = models.TextField()
+    PrivacityType = ((1, 'Público'), (2, 'Privado'))
+    privacity = models.IntegerField(choices=PrivacityType, default=1)
+    owner = models.ForeignKey(User)
+    participant = models.ManyToManyField(User, related_name='event_participants')
+    init_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    address = models.ForeignKey(Address, default=1)
+
+    def __unicode__(self):
+        return self.name
+
+    def pre_save(self):
+        """Metodo para aignar el slug y el autor de un post automaticamente al crearlo"""
+        self.slug = self.title.replace(" ", "_").lower()
+        self.owner = instance.username
+
+    def inviteParticipants(self):
+        """
+        Metodo que envia un correo a un usuario para que se una al evento
+        """
         pass

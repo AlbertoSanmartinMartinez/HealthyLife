@@ -81,12 +81,12 @@ class CustomRegisterColaboratorForm(UserCreationForm):
     username = forms.CharField(label='Nombre de usuario', required=True)
     email = forms.EmailField(label='Email', widget=forms.EmailInput())
     password2 = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
-    blog_colaborator = forms.BooleanField(label='Colaborar en el blog', required=False,)
-    shop_colaborator = forms.BooleanField(label='Colaborar en la tienda', required=False,)
-    award_colaborator = forms.BooleanField(label='Colaborar en el programa de premios y recompensas', required=False,)
-    sport_colaborator = forms.BooleanField(label='Colaborar en la seccion de deporte', required=False,)
-    nutrition_colaborator = forms.BooleanField(label='Colaborar en la sección de nutricion', required=False,)
-    health_colaborator = forms.BooleanField(label='Colaborar en la seccion de salud', required=False,)
+    blog_colaborator = forms.BooleanField(label='Quieres colaborar en el blog', required=False,)
+    shop_colaborator = forms.BooleanField(label='Quieres colaborar en la tienda', required=False,)
+    award_colaborator = forms.BooleanField(label='Quieres colaborar en el programa de premios y recompensas', required=False,)
+    sport_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de deporte', required=False,)
+    nutrition_colaborator = forms.BooleanField(label='Quieres colaborar en la sección de nutricion', required=False,)
+    health_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de salud', required=False,)
     company = forms.BooleanField(label='Tienes una empresa o eres autonomo ?', required=False,)
 
     class Meta:

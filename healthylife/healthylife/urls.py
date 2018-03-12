@@ -8,7 +8,6 @@ from django.contrib import admin
 from healthylifeapp.models import SportSession
 from django.views.generic import DetailView, ListView, UpdateView
 from healthylifeapp import views
-from healthylifeapp.views import SportSessionCreate, SportSessionDetail
 from django.contrib.auth import views as auth_views
 
 admin.site.site_header = 'Barbastro Se Mueve'
@@ -27,6 +26,8 @@ urlpatterns = [
     url(r'^blog/(?P<post>\w+)/$', views.detail_post, name='detail_post'),
     url(r'^blog/categorias/(?P<category>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
     url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
+
+    # Search URLS's
     url(r'^resultado_busqueda/$', views.search, name='search'),
 
     # Shop URLS's
@@ -41,14 +42,6 @@ urlpatterns = [
 
     # Sport URLS's
     url(r'^deporte/$', views.sport, name='sport'),
-    url(r'^sport/sport_session/create/$', SportSessionCreate.as_view(), name='sport_session_create'),
-    url(r'^sport_session/(?P<pk>\d+)/$', SportSessionDetail.as_view(), name='sport_session_detail'),
-    url(r'^sport/sport_session/$',
-        ListView.as_view(
-            queryset=SportSession.objects.all,
-            context_object_name='sport_session_list',
-            template_name='sport_session_list.html'),
-        name='sport_session_list'),
 
     # Health URLS's
     url(r'^salud/$', views.health, name='health'),
@@ -76,9 +69,12 @@ urlpatterns = [
 
     # Profile URLS's
     url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
-    # url(r'^mi_cuenta/(?P<username>\w+)/$', views.business_profile, name='business_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
     url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
+    url(r'^mi_cuenta/(?P<username>\w+)/deporte/$', views.sport_profile, name='sport_profile'),
+    url(r'^mi_cuenta/(?P<username>\w+)/nutricion/$', views.nutrition_profile, name='nutrition_profile'),
+    url(r'^mi_cuenta/(?P<username>\w+)/salud/$', views.health_profile, name='health_profile'),
+    url(r'^mi_cuenta/(?P<username>\w+)/premios/$', views.awards_profile, name='awards_profile'),
 
     # Login URLS's
     url(r'^acceso/$', views.CustomLoginView.as_view(), name='custom_login'),
