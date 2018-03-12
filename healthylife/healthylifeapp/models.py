@@ -10,6 +10,8 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 from healthylifeapp.decorators import autoconnect
 from django.core.validators import URLValidator
+from guardian.shortcuts import assign_perm
+
 
 # General models
 """
@@ -194,7 +196,7 @@ class Category(models.Model):
 class Post(models.Model):
     """Modelo para los articulos del blog"""
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
-    status = models.IntegerField(choices=Status, default=2, blank=False)
+    status = models.IntegerField(choices=Status, default=2, blank=True)
     title = models.CharField(max_length=100, blank=False)
     slug = models.CharField(max_length=100, default=' ', blank=True)
     description = models.CharField(max_length=200, blank=False)
@@ -202,28 +204,33 @@ class Post(models.Model):
     category = models.ForeignKey(Category, default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
-    author = models.ForeignKey(User, default=1, blank=False)
-    # guardar automaticamente el usuario que ha hecho el post
+    author = models.ForeignKey(User, default=1, blank=True)
 
 
     def __unicode__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        """metodo de la clase post para calcular el slug de un post"""
+        self.slug = self.title.replace(" ", "_").lower()
+        super(Post, self).save(*args, **kwargs)
+
     def publishPost(self):
         """metodo de la clase post para publicar en redes sociles un post"""
         pass
 
-    def pre_save(self):
-        """Metodo para aignar el slug y el autor de un post automaticamente al crearlo"""
-        self.slug = self.title.replace(" ", "_").lower()
-        self.author = instance.username
+    """
+    @receiver(signals.post_save)
+    def asignPermissions(sender, **kwargs):
+        assign_perm('view_post', post.author, post)
+    """
 
-
+@autoconnect
 class Comment(models.Model):
     """Modelo para los comentarios del blog"""
     Status = ((1, "Publicado"), (2, "Pendiente de Revision"), (3, "Eliminado"))
-    status = models.IntegerField(choices=Status, default=3, blank=True)
-    title = models.CharField(max_length=100)
+    status = models.IntegerField(choices=Status, default=2, blank=True)
+    title = models.CharField(max_length=50)
     content = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, default=1)
@@ -232,6 +239,10 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def notifyNewComment(self):
+        """Metodo que avisa de un nuevo comentario en el blog"""
+        pass
 
 # Shop models
 class Product(models.Model):
@@ -292,7 +303,11 @@ class Award(models.Model):
 
 @autoconnect
 class Event(models.Model):
-    """Modelo para los eventos"""
+    """
+    Modelo para los eventos
+    https://williambert.online/2011/06/django-event-calendar-for-a-django-beginner/
+    https://djangosnippets.org/snippets/2464/
+    """
     title = models.CharField(max_length=50)
     slug = models.CharField(max_length=50, default=' ', blank=True)
     description = models.TextField()

@@ -1,6 +1,14 @@
+#!/usr/local/bin/python
+# coding: utf-8
+"""
+https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.save_model
+"""
+
 from django.contrib import admin
 from healthylifeapp import models
 from django.contrib.auth.models import Permission
+from guardian.admin import GuardedModelAdmin
+from guardian.models import UserObjectPermission
 
 # Register your models here.
 admin.site.register(models.SportType)
@@ -11,7 +19,7 @@ admin.site.register(models.Nutrient)
 admin.site.register(models.Ingredient)
 admin.site.register(models.Company)
 
-class AwardAdmin(admin.ModelAdmin):
+class AwardAdmin(GuardedModelAdmin):
     list_display = ('name', 'description', 'award_type', 'amount', 'company', 'author')
     list_filter = ('name', 'description', 'award_type', 'amount', 'company', 'author')
     search_fields = ('name', 'description', 'award_type', 'amount', 'company', 'author')
@@ -21,21 +29,32 @@ admin.site.register(models.Award, AwardAdmin)
 admin.site.register(models.GeneralStatistics)
 admin.site.register(models.SpecificStatistics)
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(GuardedModelAdmin):
     list_display = ('name', 'parent')
     list_filter = ('name', 'parent')
     search_fields = ('name', 'parent')
 
 admin.site.register(models.Category, CategoryAdmin)
 
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(GuardedModelAdmin):
+    """
+    Modelo de administracion para los posts
+    """
     list_display = ('status', 'title', 'slug', 'category', 'author')
     list_filter = ('status', 'title', 'slug', 'category', 'author')
     search_fields = ('status', 'title', 'slug', 'category', 'author')
+    readonly_fields = ('status', 'author', 'slug')
+
+    def save_model(self, request, obj, form, change):
+        """
+        Metodo que modifica el author del post
+        """
+        obj.author = request.user
+        super(PostAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(models.Post, PostAdmin)
 
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(GuardedModelAdmin):
     list_display = ('status', 'title', 'author', 'post')
     list_filter = ('status', 'title', 'author', 'post')
     search_fields = ('status', 'title', 'author', 'post')
@@ -46,7 +65,7 @@ admin.site.register(models.Address)
 admin.site.register(models.BankInformation)
 admin.site.register(models.Product)
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(GuardedModelAdmin):
     list_display = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
     list_filter = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
     search_fields = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
@@ -54,3 +73,5 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(models.Event, EventAdmin)
 
 admin.site.register(Permission)
+
+admin.site.register(UserObjectPermission)

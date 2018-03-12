@@ -5,9 +5,6 @@
 
   {% include 'navbar_blog.html' %}
 
-  {% block detail_post %}
-  {% endblock %}
-
   <p>Lista de Posts</p>
   {% for post in posts %}
     <p><a href="{% url 'detail_post' post=post.slug %}">{{ post.title }}</a></p>
@@ -17,5 +14,8 @@
     <p>{{ post.creation_date }}</p>
     <hr>
   {% endfor %}
+
+  {% block detail_post %}
+  {% endblock %}
 
 {% endblock %}

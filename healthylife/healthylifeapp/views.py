@@ -18,6 +18,7 @@ from rest_framework import viewsets
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
+from guardian.shortcuts import assign_perm
 
 
 # General views
@@ -168,13 +169,28 @@ def blog(request):
 def detail_post(request, post):
     post = models.Post.objects.get(slug=post)
     comments = models.Comment.objects.filter(post=post.id)
-    context = {
-        "post":post,
+
+    if request.method == 'POST':
+        comment_form = forms.CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            data = comment_form.cleaned_data
+            print(data)
+            comment = models.Comment.objects.create(
+                author_id=request.user.id,
+                post_id=post.id,
+                title = data['title'],
+                content = data['content'])
+            comment_form.save()
+    else:
+        comment_form = forms.CommentForm()
+
+    return render(request, "post.html", {
+        "post": post,
         "categories": obtenerCategorias(request),
         "comments":comments,
-        "search_form":getSearchForm(),
-    }
-    return render(request, "post.html", context)
+        "comment_form": comment_form,
+        "search_form": getSearchForm(),
+    })
 
 
 def blog_category_posts(request, category):
@@ -206,7 +222,7 @@ def search(request):
     if form.is_valid():
         word = form.cleaned_data['word']
         posts = models.Post.objects.filter(status=1, title__contains=word).order_by("-creation_date")
-        categories =  obtenerCategorias()
+        categories =  obtenerCategorias(request)
         context = {
             "posts": posts,
             "categories": obtenerCategorias(request),

@@ -49,6 +49,7 @@ class BankInformationForm(forms.ModelForm):
     month = forms.CharField(label='Mes de caducidad')
     year = forms.CharField(label='Año de caducidad')
     security_code = forms.CharField(label='Código de seguridad')
+
     class Meta:
         model = models.BankInformation
         fields = ['name', 'account', 'month', 'year', 'security_code']
@@ -127,9 +128,12 @@ class PostForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    title = forms.CharField(label='Título del comentario', widget=forms.TextInput(attrs={'placeholder':'Título del comentario'}))
+    content = forms.CharField(label='Contenido del comentario', widget=forms.TextInput(attrs={'placeholder':'Contenido del comentario'}))
+
     class Meta:
         model = models.Comment
-        fields = []
+        fields = ['title', 'content']
 
 
 # Profile forms

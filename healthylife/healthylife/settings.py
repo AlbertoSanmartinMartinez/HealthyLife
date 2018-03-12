@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'healthylifeapp',
     'rest_framework',
+    'guardian',
     # 'tinymce'
 )
 
@@ -145,7 +146,11 @@ LOGIN_URL = 'custom_login'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 
-AUTHENTICATION_BACKENDS = ['healthylifeapp.backend.CustomBackend', 'django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = [
+    'healthylifeapp.backend.CustomBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
