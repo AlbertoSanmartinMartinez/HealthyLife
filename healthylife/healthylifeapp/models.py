@@ -202,7 +202,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
-    author = models.ForeignKey(User, default=1)
+    author = models.ForeignKey(User, default=1, blank=False, null=True)
     # guardar automaticamente el usuario que ha hecho el post
 
 
@@ -216,11 +216,12 @@ class Post(models.Model):
     def pre_save(self):
         """Metodo para aignar el slug y el autor de un post automaticamente al crearlo"""
         self.slug = self.title.replace(" ", "_").lower()
+        self.author = instance.username
 
 
 class Comment(models.Model):
     """Modelo para los comentarios del blog"""
-    Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
+    Status = ((1, "Publicado"), (2, "Pendiente de Revision"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=3, blank=True)
     title = models.CharField(max_length=100)
     content = models.TextField()
@@ -274,7 +275,7 @@ class Award(models.Model):
     description = models.CharField(max_length=100)
     AwardType = ((1,'Porcentaje'), (2, 'Cantidad'))
     award_type = models.IntegerField(choices=AwardType, default=2)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
     author = models.ForeignKey(User, default=1)
     company = models.ForeignKey(Company, default=1)
 

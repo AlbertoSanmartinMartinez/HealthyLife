@@ -54,6 +54,7 @@ def work_with_our(request):
         user_form = forms.CustomRegisterColaboratorForm(data=request.POST)
         if user_form.is_valid():
             blog_colaborator = user_form.cleaned_data.get('blog_colaborator')
+            print(user_form.cleaned_data.get('blog_colaborator'))
             shop_colaborator = user_form.cleaned_data.get('shop_colaborator')
             award_colaborator = user_form.cleaned_data.get('award_colaborator')
             user = user_form.save(commit=False)
