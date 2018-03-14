@@ -168,6 +168,7 @@ def blog(request):
 def detail_post(request, post):
     post = models.Post.objects.get(slug=post)
     comments = models.Comment.objects.filter(post=post.id)
+    # images = models.
 
     if request.method == 'POST':
         comment_form = forms.CommentForm(data=request.POST)

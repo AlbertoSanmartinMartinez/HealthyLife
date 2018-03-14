@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import os
+# from collections import OrderedDict as SortedDict
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -35,7 +36,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'guardian',
     'ckeditor',
-    # 'tinymce'
+    # 'rollyourown.seo',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -83,17 +84,23 @@ WSGI_APPLICATION = 'healthylife.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': os.path.join(BASE_DIR, 'db.mysql'),
-        # 'USER': 'DB_USER',
-        # 'PASSWORD': 'DB_PASSWORD',
-        # 'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
-        # 'PORT': '3306',
     }
+}
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'healthylifedb',
+        'USER': 'dbadminuser',
+        'PASSWORD': 'Barbastro2017',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
 }
 
 ACCOUNT_ACTIVATION_DAYS = 1

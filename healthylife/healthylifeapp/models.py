@@ -12,6 +12,7 @@ from healthylifeapp.decorators import autoconnect
 from django.core.validators import URLValidator
 from guardian.shortcuts import assign_perm
 from ckeditor.fields import RichTextField
+# from collections import OrderedDict as SortedDict
 
 
 # General models
@@ -174,6 +175,21 @@ class SpecificStatistics(models.Model):
     pass
 
 
+# Gallery models
+@autoconnect
+class Album(models.Model):
+    name = models.CharField(max_length=50, default='album')
+    slug = models.CharField(max_length=100, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        """metodo de la clase Category para calcular el slug de una categoria"""
+        self.slug = self.name.replace(" ", "_").lower()
+        super(Album, self).save(*args, **kwargs)
+
+
 # Blog models
 @autoconnect
 class Category(models.Model):
@@ -190,7 +206,6 @@ class Category(models.Model):
     def pre_save(self):
         """metodo de la clase Category para calcular el slug de una categoria"""
         self.slug = self.name.replace(" ", "_").lower()
-        print(self.slug)
 
 
 @autoconnect
@@ -198,22 +213,28 @@ class Post(models.Model):
     """Modelo para los articulos del blog"""
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=2, blank=True)
+    # controlar el estatus
     title = models.CharField(max_length=100, blank=False)
     slug = models.CharField(max_length=100, default=' ', blank=True)
     description = models.CharField(max_length=200, blank=False)
     content = RichTextField(default=" ", blank=False)
     category = models.ForeignKey(Category, default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
     author = models.ForeignKey(User, default=31, blank=True)
+    album = models.ForeignKey(Album, default=1, blank=True, null=True)
 
 
     def __unicode__(self):
         return self.title
 
+    def pre_save(self):
+        pass
+
     def save(self, *args, **kwargs):
-        """metodo de la clase post para calcular el slug de un post"""
+        """metodo de la clase post para calcular el slug de un post y crear un album asociado a ese post"""
         self.slug = self.title.replace(" ", "_").lower()
+        album = Album.objects.create(name='album '+self.title)
+        self.album = album
         super(Post, self).save(*args, **kwargs)
 
     def publishPost(self):
@@ -333,3 +354,26 @@ class Event(models.Model):
         Metodo que envia un correo a un usuario para que se una al evento
         """
         pass
+
+
+# SEO models
+class MetaData(models.Model):
+    pass
+
+
+class Image(models.Model):
+    """
+    Modelo para la foto
+    https://stackoverflow.com/questions/765396/exif-manipulation-library-for-python
+    """
+    album = models.ForeignKey(Album, default=1)
+    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
+    description = models.CharField(max_length=20)
+    alt = models.CharField(max_length=20) # texto alternativo alt=""
+    # post = models.ForeignKey(Post, default=1, related_name='image')
+    # tamaño (jpeg)
+    # datos exif
+    # sitemap de imagenes
+
+    def __unicode__(self):
+        return self.image

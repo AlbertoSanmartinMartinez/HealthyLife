@@ -9,6 +9,9 @@ from healthylifeapp import models
 from django.contrib.auth.models import Permission
 from guardian.admin import GuardedModelAdmin
 from guardian.models import UserObjectPermission
+# from rollyourown.seo.admin import register_seo_admin
+# from myapp.seo import MyMetadata
+# from collections import OrderedDict as SortedDict
 
 # Register your models here.
 admin.site.register(models.SportType)
@@ -43,7 +46,7 @@ class PostAdmin(GuardedModelAdmin):
     list_display = ('status', 'title', 'slug', 'category', 'author')
     list_filter = ('status', 'title', 'slug', 'category', 'author')
     search_fields = ('status', 'title', 'slug', 'category', 'author')
-    readonly_fields = ('status', 'author', 'slug')
+    readonly_fields = ('author', 'slug', 'album')
 
     def save_model(self, request, obj, form, change):
         """
@@ -75,3 +78,15 @@ admin.site.register(models.Event, EventAdmin)
 admin.site.register(Permission)
 
 admin.site.register(UserObjectPermission)
+
+
+class ImageAdmin(GuardedModelAdmin):
+    list_display = ('image', 'description', 'alt')
+
+admin.site.register(models.Image, ImageAdmin)
+
+
+class AlbumAdmin(GuardedModelAdmin):
+    list_display = ('name', 'slug')
+
+admin.site.register(models.Album, AlbumAdmin)

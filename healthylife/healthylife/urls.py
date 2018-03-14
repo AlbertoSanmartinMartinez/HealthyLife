@@ -9,6 +9,12 @@ from healthylifeapp.models import SportSession
 from django.views.generic import DetailView, ListView, UpdateView
 from healthylifeapp import views
 from django.contrib.auth import views as auth_views
+# from rollyourown.seo.admin import register_seo_admin
+from django.contrib import admin
+# from myapp.seo import MyMetadata
+# from collections import OrderedDict as SortedDict
+
+# register_seo_admin(admin.site, MyMetadata)
 
 admin.site.site_header = 'Barbastro Se Mueve'
 
