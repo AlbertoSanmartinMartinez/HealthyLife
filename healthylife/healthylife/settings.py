@@ -136,19 +136,14 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+"""
+MEDIAFILES_DIRS = [
+    os.path.join(BASE_DIR, "media"),
+    BASE_DIR + '/photos/',
+]
+"""
 
-TINYMCE_DEFAULT_CONFIG = {
-    'theme' : 'advanced',
-    'theme_advanced_buttons1' : 'bold,italic,underline,separator,bullist,numlist,separator,link,unlink',
-    'theme_advanced_buttons2' : '',
-    'theme_advanced_buttons3' : '',
-    'theme_advanced_toolbar_location' : 'top',
-    'theme_advanced_toolbar_align': 'left',
-    'paste_text_sticky': True,
-    'paste_text_sticky_default' : True,
-    'valid_styles' : 'font-weight,font-style,text-decoration',
-}
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 LOGIN_URL = 'custom_login'
 LOGOUT_REDIRECT_URL = 'home'
@@ -168,6 +163,7 @@ REST_FRAMEWORK = {
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': None
+        # 'toolbar': None
+        'toolbar': 'Full'
     }
 }

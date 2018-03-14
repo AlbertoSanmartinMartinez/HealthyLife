@@ -66,7 +66,11 @@ urlpatterns = [
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
     # Media URLS's
-    # url(r'^media/'),
+    # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+    #         'document_root': settings.MEDIA_ROOT,
+    #     }),
+
+    # Static URLS's
 
     # Registro URLS's
     # url(r'^mi_cuenta/$', include('django.contrib.auth.urls')),

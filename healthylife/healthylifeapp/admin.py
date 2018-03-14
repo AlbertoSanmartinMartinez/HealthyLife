@@ -81,12 +81,20 @@ admin.site.register(UserObjectPermission)
 
 
 class ImageAdmin(GuardedModelAdmin):
-    list_display = ('image', 'description', 'alt')
+    list_display = ('id', 'image', 'description', 'alt', 'album')
+
+#StackedInline
+#TabularInline
+class ImageInLine(admin.TabularInline):
+    model = models.Image
+    list_display = ('id', 'image', 'description', 'alt')
+    extra = 1
 
 admin.site.register(models.Image, ImageAdmin)
 
 
 class AlbumAdmin(GuardedModelAdmin):
     list_display = ('name', 'slug')
+    inlines = [ImageInLine,]
 
 admin.site.register(models.Album, AlbumAdmin)

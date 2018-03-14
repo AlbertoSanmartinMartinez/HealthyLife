@@ -12,17 +12,10 @@ from healthylifeapp.decorators import autoconnect
 from django.core.validators import URLValidator
 from guardian.shortcuts import assign_perm
 from ckeditor.fields import RichTextField
-# from collections import OrderedDict as SortedDict
-
+# from imagekit.models import ProcessedImageField
+# from imagekit.processors import ResizeToFit
 
 # General models
-"""
-class User(models.Model):
-    Model de Usuario por defecto que trae Django
-    - is_staff : diferencia entre usuario particular y de empresa
-"""
-
-
 class Address(models.Model):
     """Modelo para las direcciones postales"""
     name = models.CharField(max_length=50, default='mi direccion')
@@ -67,6 +60,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100)
     phone = models.CharField(max_length=9, default='000000000')
+    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
 
 
     def __unicode__(self):
@@ -86,9 +80,6 @@ class SportType(models.Model):
     description = models.CharField(max_length=500)
 
     def __unicode__(self):  # python 2
-        return self.name
-
-    def __str__(self):  # python 3
         return self.name
 
 
@@ -180,14 +171,34 @@ class SpecificStatistics(models.Model):
 class Album(models.Model):
     name = models.CharField(max_length=50, default='album')
     slug = models.CharField(max_length=100, blank=True)
+    # image_header = models.IntegerField()
 
     def __unicode__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        """metodo de la clase Category para calcular el slug de una categoria"""
+        """metodo de la clase Album para calcular el slug"""
         self.slug = self.name.replace(" ", "_").lower()
         super(Album, self).save(*args, **kwargs)
+
+
+class Image(models.Model):
+    """
+    Modelo para las fotos
+    https://stackoverflow.com/questions/765396/exif-manipulation-library-for-python
+    """
+    album = models.ForeignKey(Album, default=1)
+    header_image = models.BooleanField(default=False)
+    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
+    # image = ProcessedImageField(upload_to='albums', processors=[ResizeToFit(300)], format='JPEG', options={'quality': 90})
+    description = models.CharField(max_length=20, blank=True)
+    alt = models.CharField(max_length=20, blank=True) # texto alternativo alt=""
+    # tamaño (jpeg)
+    # datos exif
+    # sitemap de imagenes
+
+    def __unicode__(self):
+        return unicode(self.image)
 
 
 # Blog models
@@ -213,7 +224,6 @@ class Post(models.Model):
     """Modelo para los articulos del blog"""
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=2, blank=True)
-    # controlar el estatus
     title = models.CharField(max_length=100, blank=False)
     slug = models.CharField(max_length=100, default=' ', blank=True)
     description = models.CharField(max_length=200, blank=False)
@@ -359,21 +369,3 @@ class Event(models.Model):
 # SEO models
 class MetaData(models.Model):
     pass
-
-
-class Image(models.Model):
-    """
-    Modelo para la foto
-    https://stackoverflow.com/questions/765396/exif-manipulation-library-for-python
-    """
-    album = models.ForeignKey(Album, default=1)
-    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
-    description = models.CharField(max_length=20)
-    alt = models.CharField(max_length=20) # texto alternativo alt=""
-    # post = models.ForeignKey(Post, default=1, related_name='image')
-    # tamaño (jpeg)
-    # datos exif
-    # sitemap de imagenes
-
-    def __unicode__(self):
-        return self.image

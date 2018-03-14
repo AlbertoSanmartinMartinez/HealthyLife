@@ -137,9 +137,21 @@ class CommentForm(forms.ModelForm):
 
 
 # Profile forms
-class UserForm(forms.ModelForm):
-    username = forms.CharField(label='Nombre de usuario')
+class UserProfileForm(forms.ModelForm):
+    bio = forms.CharField(label='Bio')
+    phone = forms.CharField(label='Teléfono')
+    # image = forms.ImageField()
 
     class Meta:
-        model = models.User
+        model = models.UserProfile
+        fields = ['bio', 'phone', 'image']
+
+
+class UserForm(forms.ModelForm):
+    username = forms.CharField(label='Nombre de usuario')
+    #first_name = forms.CharField(label='Nombre')
+    #last_name = forms.CharField(label='Apellidos')
+
+    class Meta:
+        model = User
         fields = ['username', 'first_name', 'last_name']

@@ -157,6 +157,7 @@ def sport(request):
 # Blog views
 def blog(request):
     posts = models.Post.objects.filter(status=1).order_by("-creation_date")
+
     context = {
         "posts":posts,
         "categories": obtenerCategorias(request),
@@ -168,7 +169,7 @@ def blog(request):
 def detail_post(request, post):
     post = models.Post.objects.get(slug=post)
     comments = models.Comment.objects.filter(post=post.id)
-    # images = models.
+    images = models.Image.objects.filter(album=post.album)
 
     if request.method == 'POST':
         comment_form = forms.CommentForm(data=request.POST)
@@ -186,6 +187,7 @@ def detail_post(request, post):
 
     return render(request, "post.html", {
         "post": post,
+        "images": images,
         "categories": obtenerCategorias(request),
         "comments":comments,
         "comment_form": comment_form,
@@ -243,18 +245,20 @@ def profile(request, username):
     """
     Vista que muestra la informacion de un perfil particular
     """
-    user = User.objects.get(username = username)
-    bank_information = models.BankInformation.objects.get(user_id = user.id)
-    address = models.Address.objects.get(user_id = user.id)
+    user = User.objects.get(username=username)
+    user_profile = models.UserProfile.objects.filter(user_id=user.id)
+    bank_information = models.BankInformation.objects.get(user_id=user.id)
+    address = models.Address.objects.get(user_id=user.id)
     try:
         company = models.Company.objects.get(user_id=user.id)
     except:
         company = None
     if request.method == 'POST':
-        user_form = forms.UserForm(data=request.POST, instance = user)
-        bank_information_form = forms.BankInformationForm(data=request.POST, instance = bank_information)
-        address_form = forms.AddressForm(data=request.POST, instance = address)
-        company_form = forms.CompanyForm(data=request.POST, instance = company)
+        user_form = forms.UserForm(data=request.POST, instance=user)
+        user_profile_form = forms.UserProfileForm(data=request.POST, instance=user)
+        bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
+        address_form = forms.AddressForm(data=request.POST, instance=address)
+        company_form = forms.CompanyForm(data=request.POST, instance=company)
         if company_form.is_valid():
             company_form.save()
         if user_form.is_valid():
@@ -263,18 +267,23 @@ def profile(request, username):
             bank_information_form.save()
         if address_form.is_valid():
             address_form.save()
+        if user_profile_form.is_valid():
+            user_profile_form.save()
     else:
         user_form = forms.UserForm(instance=user)
         bank_information_form = forms.BankInformationForm(instance=bank_information)
         address_form = forms.AddressForm(instance=address)
         company_form = forms.CompanyForm(instance = company)
+        user_profile_form = forms.UserProfileForm(instance=user)
 
     return render(request, 'profile.html', {
         "user_form": user_form,
         "bank_information_form": bank_information_form,
         "address_form": address_form,
         "company_form": company_form,
-        "company": company
+        "company": company,
+        "user_profile_form": user_profile_form,
+        "search_form": getSearchForm(),
         })
 
 
@@ -303,6 +312,7 @@ def ships(request, username):
 
 
 # Admin views
+
 
 ############################## API VIEWS ##############################
 def api(request):
