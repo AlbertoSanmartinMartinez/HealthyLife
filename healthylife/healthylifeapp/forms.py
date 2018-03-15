@@ -35,20 +35,20 @@ class CustomAuthenticationForm(AuthenticationForm):
 # General Forms
 class CompanyForm(forms.ModelForm):
     name = forms.CharField(label='Nombre')
-    description = forms.CharField(label='Descripcion')
+    description = forms.CharField(label='Descripcion', required=False)
     phone = forms.CharField(label='Telefono')
-    web = forms.CharField(label='Página web')
+    web = forms.CharField(label='Página web', required=False)
     class Meta:
         model = models.Company
         fields = ['name', 'description', 'phone', 'web']
 
 
 class BankInformationForm(forms.ModelForm):
-    name = forms.CharField(label='Nombre')
-    account = forms.CharField(label='Número de cuenta')
-    month = forms.CharField(label='Mes de caducidad')
-    year = forms.CharField(label='Año de caducidad')
-    security_code = forms.CharField(label='Código de seguridad')
+    name = forms.CharField(label='Nombre', required=False)
+    account = forms.CharField(label='Número de cuenta', required=False)
+    month = forms.CharField(label='Mes de caducidad', required=False)
+    year = forms.CharField(label='Año de caducidad', required=False)
+    security_code = forms.CharField(label='Código de seguridad', required=False)
 
     class Meta:
         model = models.BankInformation
@@ -57,12 +57,12 @@ class BankInformationForm(forms.ModelForm):
 
 class AddressForm(forms.ModelForm):
     name = forms.CharField(label='Nombre')
-    city = forms.CharField(label='Ciudad')
-    postal_code = forms.CharField(label='Código postal')
-    street = forms.CharField(label='Calle')
-    number = forms.CharField(label='Número')
-    floor = forms.CharField(label='Piso')
-    door = forms.CharField(label='Puerta')
+    city = forms.CharField(label='Ciudad', required=False)
+    postal_code = forms.CharField(label='Código postal', required=False)
+    street = forms.CharField(label='Calle', required=False)
+    number = forms.CharField(label='Número', required=False)
+    floor = forms.CharField(label='Piso', required=False)
+    door = forms.CharField(label='Puerta', required=False)
     class Meta:
         model = models.Address
         fields = ['name', 'city', 'postal_code', 'street', 'number', 'floor', 'door']
@@ -88,7 +88,7 @@ class CustomRegisterColaboratorForm(UserCreationForm):
     sport_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de deporte', required=False,)
     nutrition_colaborator = forms.BooleanField(label='Quieres colaborar en la sección de nutricion', required=False,)
     health_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de salud', required=False,)
-    company = forms.BooleanField(label='Tienes una empresa o eres autonomo ?', required=False,)
+    # company = forms.BooleanField(label='Tienes una empresa o eres autonomo ?', required=False,)
 
     class Meta:
         model = User
@@ -139,7 +139,7 @@ class CommentForm(forms.ModelForm):
 # Profile forms
 class UserProfileForm(forms.ModelForm):
     bio = forms.CharField(label='Bio')
-    phone = forms.CharField(label='Teléfono')
+    phone = forms.CharField(label='Teléfono', required=False)
     # image = forms.ImageField()
 
     class Meta:

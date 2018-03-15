@@ -17,10 +17,17 @@
   <p>Direccion</p>
   {{ address_form.as_p }}
 
-  {% if not company is None %}
+  {% if user.is_staff %}
     <hr>
-    <p>Informacion de Empresa</p>
-    {{ company_form.as_p }}
+    {% if company is None %}
+      <input type="button" value="Añadir Tu Empresa" onClick="document.getElementById('company_form').style.visibility='visible'">
+      <div id="company_form" style="visibility:hidden">
+        {{ company_form.as_p }}
+      </div>
+    {% else %}
+      <p>Informacion de Empresa</p>
+      {{ company_form.as_p }}
+    {% endif %}
   {% endif %}
   <button type="submit">Actualizar</button>
 </form>

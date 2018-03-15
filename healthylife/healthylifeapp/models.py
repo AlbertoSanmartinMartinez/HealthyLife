@@ -305,7 +305,7 @@ class Company(models.Model):
     name = models.CharField(max_length=50, default='mi empresa')
     description = models.CharField(max_length=100, default=' ', blank=True)
     phone = models.CharField(max_length=9, default='000000000', blank=True)
-    web =  models.CharField(max_length=50, validators=[URLValidator()], blank=True)
+    web =  models.CharField(max_length=50, blank=True)
     user = models.ForeignKey(User, default=1)
 
     def __str__(self):

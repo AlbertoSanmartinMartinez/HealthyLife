@@ -75,8 +75,6 @@ def work_with_our(request):
             if data['health_colaborator'] == True:
                 health_colaborator_group = Group.objects.get(name='colaboradores_salud')
                 health_colaborator_group.user_set.add(user)
-            if data['company'] == True:
-                company = models.Company.objects.create(user_id=user.id)
     else:
         user_form = forms.CustomRegisterColaboratorForm()
 
@@ -151,12 +149,16 @@ def statistics(request):
 
 # Nutrition views
 def nutrition(request):
-    return render(request, 'nutrition.html', {})
+    return render(request, 'nutrition.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 # Health views
 def health(request):
-    return render(request, 'health.html', {})
+    return render(request, 'health.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 # Award views
@@ -166,7 +168,9 @@ def awards(request):
 
 # Sport views
 def sport(request):
-    return render(request, 'sport.html', {})
+    return render(request, 'sport.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 # Blog views
@@ -251,14 +255,16 @@ def search(request):
 
 # Shop views
 def shop(request):
-    return render(request, 'shop.html', {})
+    return render(request, 'shop.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 # Profile views
 @login_required(redirect_field_name='custom_login')
 def profile(request, username):
     """
-    Vista que muestra la informacion de un perfil particular
+    Vista que muestra la informacion del perfil
     """
     user = User.objects.get(username=username)
     user_profile = models.UserProfile.objects.filter(user_id=user.id)
@@ -273,9 +279,17 @@ def profile(request, username):
         user_profile_form = forms.UserProfileForm(data=request.POST, instance=user)
         bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
         address_form = forms.AddressForm(data=request.POST, instance=address)
-        company_form = forms.CompanyForm(data=request.POST, instance=company)
-        if company_form.is_valid():
-            company_form.save()
+        if company is None:
+            company_form = forms.CompanyForm(data=request.POST)
+            if company_form.is_valid():
+                data = company_form.cleaned_data
+                company = models.Company.objects.create(user_id=user.id, name=data['name'], descripction=data['description'], phone=data['phone'], web=data['web'])
+                company.save()
+        else:
+            company_form = forms.CompanyForm(data=request.POST, instance=company)
+            if company_form.is_valid():
+                company_form.save()
+
         if user_form.is_valid():
             user_form.save(commit=False)
             if user_profile_form.is_valid():
@@ -289,8 +303,12 @@ def profile(request, username):
         user_form = forms.UserForm(instance=user)
         bank_information_form = forms.BankInformationForm(instance=bank_information)
         address_form = forms.AddressForm(instance=address)
-        company_form = forms.CompanyForm(instance = company)
         user_profile_form = forms.UserProfileForm(instance=user)
+
+        if company is None:
+            company_form = forms.CompanyForm()
+        else:
+            company_form = forms.CompanyForm(instance = company)
 
     return render(request, 'profile.html', {
         "user_form": user_form,
@@ -301,7 +319,6 @@ def profile(request, username):
         "user_profile_form": user_profile_form,
         "search_form": getSearchForm(),
         })
-
 
 def sport_profile(request, username):
     return render(request, 'sport_profile.html', {})
