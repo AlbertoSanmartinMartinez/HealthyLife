@@ -88,7 +88,6 @@ class CustomRegisterColaboratorForm(UserCreationForm):
     sport_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de deporte', required=False,)
     nutrition_colaborator = forms.BooleanField(label='Quieres colaborar en la sección de nutricion', required=False,)
     health_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de salud', required=False,)
-    # company = forms.BooleanField(label='Tienes una empresa o eres autonomo ?', required=False,)
 
     class Meta:
         model = User
@@ -138,9 +137,9 @@ class CommentForm(forms.ModelForm):
 
 # Profile forms
 class UserProfileForm(forms.ModelForm):
-    bio = forms.CharField(label='Bio')
+    bio = forms.CharField(label='Bio', required=False)
     phone = forms.CharField(label='Teléfono', required=False)
-    # image = forms.ImageField()
+    image = forms.ImageField(required=False)
 
     class Meta:
         model = models.UserProfile

@@ -275,10 +275,11 @@ def profile(request, username):
     except:
         company = None
     if request.method == 'POST':
-        user_form = forms.UserForm(data=request.POST, instance=user)
-        user_profile_form = forms.UserProfileForm(data=request.POST, instance=user)
+        user_form = forms.UserForm(data=request.POST, instance=request.user)
+        user_profile_form = forms.UserProfileForm(data=request.POST, instance=request.user.userprofile)
         bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
         address_form = forms.AddressForm(data=request.POST, instance=address)
+
         if company is None:
             company_form = forms.CompanyForm(data=request.POST)
             if company_form.is_valid():
@@ -291,19 +292,19 @@ def profile(request, username):
                 company_form.save()
 
         if user_form.is_valid():
-            user_form.save(commit=False)
-            if user_profile_form.is_valid():
-                user_profile_form.save()
-                user_form.save()
+            user_form.save()
+            # data = user_profile_form.cleaned_data
+        if user_profile_form.is_valid():
+            user_profile_form.save()
         if bank_information_form.is_valid():
             bank_information_form.save()
         if address_form.is_valid():
             address_form.save()
     else:
-        user_form = forms.UserForm(instance=user)
+        user_form = forms.UserForm(instance=request.user)
         bank_information_form = forms.BankInformationForm(instance=bank_information)
         address_form = forms.AddressForm(instance=address)
-        user_profile_form = forms.UserProfileForm(instance=user)
+        user_profile_form = forms.UserProfileForm(instance=request.user.userprofile)
 
         if company is None:
             company_form = forms.CompanyForm()
@@ -318,6 +319,7 @@ def profile(request, username):
         "company": company,
         "user_profile_form": user_profile_form,
         "search_form": getSearchForm(),
+        "user_profile": user_profile,
         })
 
 def sport_profile(request, username):

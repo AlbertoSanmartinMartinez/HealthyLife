@@ -5,9 +5,11 @@
 <img src="{{ user_profile.image.url }}">
 
 <form method="POST">
+  {{ user__bio }}
   <hr>
   <p>Informacion personal</p>
   {% csrf_token %}
+
   {{ user_form.as_p }}
   {{ user_profile_form.as_p }}
   <hr>

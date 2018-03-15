@@ -60,14 +60,14 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100, blank=True)
     phone = models.CharField(max_length=9, default='000000000', blank=True)
-    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
+    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=True)
 
 
     def __unicode__(self):
         return str(self.user.username)
 
     @receiver(signals.post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_or_update_user_profile(sender, instance, created, **kwargs):
         """Este metodo crea la direccion postal y la informacion bancaria de un usuario"""
         if created:
             UserProfile.objects.create(user_id=instance.id)
