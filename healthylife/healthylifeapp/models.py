@@ -19,12 +19,12 @@ from ckeditor.fields import RichTextField
 class Address(models.Model):
     """Modelo para las direcciones postales"""
     name = models.CharField(max_length=50, default='mi direccion')
-    city = models.CharField(max_length=50, default=' ', blank=True, null=True)
-    postal_code = models.CharField(max_length=5, default='00000')
-    street = models.CharField(max_length=50, default=' ', blank=True, null=True)
-    number = models.CharField(max_length=4, default=' ', blank=True, null=True)
-    floor = models.CharField(max_length=3, default=' ', blank=True, null=True)
-    door = models.CharField(max_length=3, default=' ', blank=True, null=True)
+    city = models.CharField(max_length=50, default=' ', blank=True)
+    postal_code = models.CharField(max_length=5, default='00000', blank=True)
+    street = models.CharField(max_length=50, default=' ', blank=True)
+    number = models.CharField(max_length=4, default=' ', blank=True)
+    floor = models.CharField(max_length=3, default=' ', blank=True)
+    door = models.CharField(max_length=3, default=' ', blank=True)
     user = models.ForeignKey(User, default=1)
 
     def __unicode__(self):
@@ -40,10 +40,10 @@ class Address(models.Model):
 class BankInformation(models.Model):
     """modelo para la informacion bancaria"""
     name = models.CharField(max_length=50, default='mi informacion bancaria')
-    account = models.CharField(max_length=20, default=' ', blank=True, null=True)
-    month = models.CharField(max_length=2, default=' ', blank=True, null=True)
-    year = models.CharField(max_length=4, default=' ', blank=True, null=True)
-    security_code = models.CharField(max_length=3, default=' ', blank=True, null=True)
+    account = models.CharField(max_length=20, default=' ', blank=True)
+    month = models.CharField(max_length=2, default=' ', blank=True)
+    year = models.CharField(max_length=4, default=' ', blank=True)
+    security_code = models.CharField(max_length=3, default=' ', blank=True)
     user = models.ForeignKey(User, default=1)
 
     def __unicode__(self):
@@ -58,8 +58,8 @@ class BankInformation(models.Model):
 class UserProfile(models.Model):
     """Modelo para el perfil de un usuario"""
     user = models.OneToOneField(User)
-    bio = models.TextField(max_length=100)
-    phone = models.CharField(max_length=9, default='000000000')
+    bio = models.TextField(max_length=100, blank=True)
+    phone = models.CharField(max_length=9, default='000000000', blank=True)
     image = models.ImageField(upload_to="photos", default='/image.jpg', blank=False)
 
 
@@ -152,6 +152,11 @@ class Ingredient(models.Model):
 
 
 # Health models
+class Illnes(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
 
 
 # Statistics models
@@ -298,9 +303,9 @@ class Discount(models.Model):
 class Company(models.Model):
     """modelo para las empresa de la tienda"""
     name = models.CharField(max_length=50, default='mi empresa')
-    description = models.CharField(max_length=100, default=' ')
-    phone = models.CharField(max_length=9, default='000000000')
-    web =  models.CharField(max_length=50, validators=[URLValidator()])
+    description = models.CharField(max_length=100, default=' ', blank=True)
+    phone = models.CharField(max_length=9, default='000000000', blank=True)
+    web =  models.CharField(max_length=50, validators=[URLValidator()], blank=True)
     user = models.ForeignKey(User, default=1)
 
     def __str__(self):

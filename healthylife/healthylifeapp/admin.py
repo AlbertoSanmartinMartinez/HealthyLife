@@ -13,15 +13,21 @@ from guardian.models import UserObjectPermission
 # from myapp.seo import MyMetadata
 # from collections import OrderedDict as SortedDict
 
-# Register your models here.
+# Admin Health Models
 admin.site.register(models.SportType)
-admin.site.register(models.SportSession)
+
+class SportSessionAdmin(GuardedModelAdmin):
+    model = models.SportSession
+
+admin.site.register(models.SportSession, SportSessionAdmin)
+
+# Admin Nutrition Models
 admin.site.register(models.Food)
 admin.site.register(models.Measure)
 admin.site.register(models.Nutrient)
 admin.site.register(models.Ingredient)
-admin.site.register(models.Company)
 
+# Admin Awards Models
 class AwardAdmin(GuardedModelAdmin):
     list_display = ('name', 'description', 'award_type', 'amount', 'company', 'author')
     list_filter = ('name', 'description', 'award_type', 'amount', 'company', 'author')
@@ -29,9 +35,11 @@ class AwardAdmin(GuardedModelAdmin):
 
 admin.site.register(models.Award, AwardAdmin)
 
+# Admin Statistics Models
 admin.site.register(models.GeneralStatistics)
 admin.site.register(models.SpecificStatistics)
 
+# Admin Blog Models
 class CategoryAdmin(GuardedModelAdmin):
     list_display = ('name', 'parent')
     list_filter = ('name', 'parent')
@@ -63,28 +71,10 @@ class CommentAdmin(GuardedModelAdmin):
     search_fields = ('status', 'title', 'author', 'post')
 
 admin.site.register(models.Comment, CommentAdmin)
-admin.site.register(models.UserProfile)
-admin.site.register(models.Address)
-admin.site.register(models.BankInformation)
-admin.site.register(models.Product)
-
-class EventAdmin(GuardedModelAdmin):
-    list_display = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
-    list_filter = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
-    search_fields = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
-
-admin.site.register(models.Event, EventAdmin)
-
-admin.site.register(Permission)
-
-admin.site.register(UserObjectPermission)
-
 
 class ImageAdmin(GuardedModelAdmin):
     list_display = ('id', 'image', 'description', 'alt', 'album')
 
-#StackedInline
-#TabularInline
 class ImageInLine(admin.TabularInline):
     model = models.Image
     list_display = ('id', 'image', 'description', 'alt')
@@ -92,9 +82,38 @@ class ImageInLine(admin.TabularInline):
 
 admin.site.register(models.Image, ImageAdmin)
 
-
 class AlbumAdmin(GuardedModelAdmin):
     list_display = ('name', 'slug')
     inlines = [ImageInLine,]
 
 admin.site.register(models.Album, AlbumAdmin)
+
+# Admin Profile Models
+admin.site.register(models.UserProfile)
+admin.site.register(models.Address)
+admin.site.register(models.BankInformation)
+admin.site.register(models.Company)
+
+# Admin Shop Models
+class ProductAdmin(GuardedModelAdmin):
+    model = models.Product
+
+admin.site.register(models.Product)
+
+# Admin Events Models
+class EventAdmin(GuardedModelAdmin):
+    list_display = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
+    list_filter = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
+    search_fields = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
+
+admin.site.register(models.Event, EventAdmin)
+
+# Admin Permissions Models
+admin.site.register(Permission)
+admin.site.register(UserObjectPermission)
+
+# Admin Health Models
+class IllnesAdmin(GuardedModelAdmin):
+    model = models.Illnes
+
+admin.site.register(models.Illnes, IllnesAdmin)

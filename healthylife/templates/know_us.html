@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block conocenos %}
+  <p>Seccion del Proyecto</p>
+  <hr>
+  <p>Seccion del Equipo</p>
+    {% for item in team %}
+      {{ item.username }}
+      {{ item.first_name }}
+      {{ item.last_name }}
+      <hr>
+    {% endfor %}
+  <hr>
+  <p>Seccion de los Colaboradores</p>
+    {% for item in colaborators %}
+      {{ item.username }}
+      <hr>
+    {% endfor %}
+  <hr>
+  <p>Seccion de las Empresas</p>
+    {% for item in companies %}
+      {{ item.name }}
+      <hr>
+    {% endfor %}
+  <hr>
+{% endblock %}

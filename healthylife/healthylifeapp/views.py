@@ -73,14 +73,16 @@ def work_with_our(request):
                 nutrition_colaborator_group = Group.objects.get(name='colaboradores_nutricion')
                 nutrition_colaborator_group.user_set.add(user)
             if data['health_colaborator'] == True:
-                health_colaborator_group = Group.objects.get(name='colaboradores_premios')
+                health_colaborator_group = Group.objects.get(name='colaboradores_salud')
                 health_colaborator_group.user_set.add(user)
             if data['company'] == True:
                 company = models.Company.objects.create(user_id=user.id)
     else:
         user_form = forms.CustomRegisterColaboratorForm()
 
-    return render(request, 'work_with_our.html', { "user_form": user_form })
+    return render(request, 'work_with_our.html', {
+        "user_form": user_form
+    })
 
 
 def legal_information(request):
@@ -90,11 +92,24 @@ def legal_information(request):
     return render(request, 'aviso_legal.html', context)
 
 
+# optimizar la estructura de datos de los colaboradores y las empresas
 def know_us(request):
+    users = User.objects.filter(is_staff=True).order_by("date_joined")
+    team = []
+    colaborators = []
+    companies = models.Company.objects.all()
+    for user in users:
+        if user.username == 'alberto':
+            team.append(user)
+        else:
+            colaborators.append(user)
     context = {
         "search_form":getSearchForm(),
+        "companies": companies,
+        "colaborators": colaborators,
+        "team": team,
     }
-    return render(request, 'conocenos.html', context)
+    return render(request, 'know_us.html', context)
 
 
 # Login views
@@ -262,13 +277,14 @@ def profile(request, username):
         if company_form.is_valid():
             company_form.save()
         if user_form.is_valid():
-            user_form.save()
+            user_form.save(commit=False)
+            if user_profile_form.is_valid():
+                user_profile_form.save()
+                user_form.save()
         if bank_information_form.is_valid():
             bank_information_form.save()
         if address_form.is_valid():
             address_form.save()
-        if user_profile_form.is_valid():
-            user_profile_form.save()
     else:
         user_form = forms.UserForm(instance=user)
         bank_information_form = forms.BankInformationForm(instance=bank_information)
