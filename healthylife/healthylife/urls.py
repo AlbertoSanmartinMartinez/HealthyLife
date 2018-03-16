@@ -21,7 +21,7 @@ admin.site.site_header = 'Barbastro Se Mueve'
 urlpatterns = [
 
     # Admin URLS's
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^administracion/', include(admin.site.urls)),
 
     # API URLS's
     url(r'^api/', include('healthylifeapp.urls', namespace='api')),

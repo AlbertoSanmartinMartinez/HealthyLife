@@ -3,14 +3,21 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
     <title>Barbastro Se Mueve </title>
-    <script type="text/javascript" src="{% static 'js/functions.js' %}"></script>
+
+    <lik rel="stylesheet" href="{% static 'css/bootstrap-grid.css' %}">
+    <lik rel="stylesheet" href="{% static 'css/bootstrap-reboot.css' %}">
+    <lik rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
   </head>
   <body>
 
     {% include 'navbar.html' %}
-    {% include 'navbar_access.html' %}
-    {% include 'search.html' %}
+    <div class="container">
 
         {% block conocenos %}
         {% endblock %}
@@ -62,8 +69,18 @@
 
         {% block api %}
         {% endblock %}
-
+    </div>
     {% include 'footer.html' %}
 
+    <!--GENERICO BOOSTRAP-->
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/functions.js' %}"></script>
+
+    <!--BARRA DE NAVEGACION-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
   </body>
+
 </html>

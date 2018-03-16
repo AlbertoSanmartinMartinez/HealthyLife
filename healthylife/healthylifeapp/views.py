@@ -22,10 +22,9 @@ from django.contrib.auth.models import Permission
 
 # General views
 def inicio(request):
-    context = {
-        "search_form": getSearchForm(),
-    }
-    return render(request, "base.html", context)
+    return render(request, "base.html", {
+        "search_form":getSearchForm(),
+    })
 
 
 def contact(request):
@@ -112,11 +111,9 @@ def know_us(request):
 
 # Login views
 class CustomLoginView(auth_views.LoginView):
-    authentication_form = forms.CustomAuthenticationForm
+    form_classes = forms.CustomAuthenticationForm,
+    # "search_form": getSearchForm()
     template_name = 'custom_login.html'
-
-    # "search_form": getSearchForm(),
-
 
 # Registration views
 class CustomRegistrationView(CreateView):
@@ -239,19 +236,19 @@ def blog_author_posts(request, username):
 
 # Search views
 def search(request):
-    form = forms.SearchForm(request.GET or None)
+    form = forms.SearchForm(request.POST)
     if form.is_valid():
         word = form.cleaned_data['word']
         posts = models.Post.objects.filter(status=1, title__contains=word).order_by("-creation_date")
         categories =  obtenerCategorias(request)
-        context = {
-            "posts": posts,
-            "categories": obtenerCategorias(request),
-            "search_form":getSearchForm(),
-        }
-        return render(request, 'blog.html', context)
     else:
-        return render(request, 'blog.html', {})
+        form = forms.SearchForm()
+        posts = None
+    return render(request, 'blog.html', {
+        "posts": posts,
+        "categories": obtenerCategorias(request),
+        "search_form": getSearchForm(),
+    })
 
 # Shop views
 def shop(request):
@@ -323,27 +320,39 @@ def profile(request, username):
         })
 
 def sport_profile(request, username):
-    return render(request, 'sport_profile.html', {})
+    return render(request, 'sport_profile.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 def nutrition_profile(request, username):
-    return render(request, 'nutrition_profile.html', {})
+    return render(request, 'nutrition_profile.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 def health_profile(request, username):
-    return render(request, 'health_profile.html', {})
+    return render(request, 'health_profile.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 def awards_profile(request, username):
-    return render(request, 'awards_profile.html', {})
+    return render(request, 'awards_profile.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 def calendar(request, username):
-    return render(request, 'calendar.html', {})
+    return render(request, 'calendar.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 def ships(request, username):
-    return render(request, 'ships.html', {})
+    return render(request, 'ships.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 # Admin views

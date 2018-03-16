@@ -1,3 +1,4 @@
+{% load staticfiles %}
 
 <p>Acceso</p>
   <nav>
@@ -5,17 +6,5 @@
       <li><a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank">Facebook</a></li>
       <li><a href="https://twitter.com/BarbastroSMueve" target="_blank">Twitter</a></li>
       <li><a href="https://www.instagram.com/barbastrosemueve/" target="_blank">Instagram</a></li>
-      {% if user.is_authenticated %}
-        <li><a href="{% url 'profile' username=user.username %}">{{ user.username }}</a></li>
-        {% if user.is_staff %}
-          <li><a href="/admin" target="_blank">Administracion</a></li>
-        {% else %}
-          {% include 'navbar_profile.html' %}
-        {% endif %}
-        <li><a href="{% url 'logout' %}">Desconectar</a></li>
-      {% else %}
-        <li><a href="{% url 'custom_login' %}">Acceder</a></li>
-      {% endif %}
-      <li><a href="{% url 'search' %}">Buscar</a></li>
     </ul>
   </nav>
