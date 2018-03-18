@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'guardian',
     'ckeditor',
-    # 'rollyourown.seo',
+    'taggit',
 )
 
 MIDDLEWARE_CLASSES = (

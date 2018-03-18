@@ -21,9 +21,11 @@ from django.contrib.auth.models import Permission
 
 
 # General views
-def inicio(request):
+def home(request):
+    last_posts = models.Post.objects.filter(status=1).order_by("-creation_date")[:6]
     return render(request, "base.html", {
         "search_form":getSearchForm(),
+        "last_posts": last_posts,
     })
 
 
@@ -112,7 +114,6 @@ def know_us(request):
 # Login views
 class CustomLoginView(auth_views.LoginView):
     form_classes = forms.CustomAuthenticationForm,
-    # "search_form": getSearchForm()
     template_name = 'custom_login.html'
 
 # Registration views
@@ -173,7 +174,6 @@ def sport(request):
 # Blog views
 def blog(request):
     posts = models.Post.objects.filter(status=1).order_by("-creation_date")
-
     context = {
         "posts":posts,
         "categories": obtenerCategorias(request),
@@ -191,7 +191,6 @@ def detail_post(request, post):
         comment_form = forms.CommentForm(data=request.POST)
         if comment_form.is_valid():
             data = comment_form.cleaned_data
-            print(data)
             comment = models.Comment.objects.create(
                 author_id=request.user.id,
                 post_id=post.id,
@@ -233,6 +232,21 @@ def blog_author_posts(request, username):
         "search_form":getSearchForm(),
     }
     return render(request, 'blog.html', context)
+
+
+"""
+def blog_tag_posts(request, tag):
+    posts = models.Post.objects.filter(status=1, tags__name=tag.name)
+    categories = models.Category.objects.order_by("name")
+    context = {
+        "categories":categories,
+        "posts":posts,
+        "categories": obtenerCategorias(request),
+        "search_form":getSearchForm(),
+    }
+    return render(request, 'blog.html', context)
+"""
+
 
 # Search views
 def search(request):

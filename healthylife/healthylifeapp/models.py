@@ -12,10 +12,14 @@ from healthylifeapp.decorators import autoconnect
 from django.core.validators import URLValidator
 from guardian.shortcuts import assign_perm
 from ckeditor.fields import RichTextField
+from taggit.managers import TaggableManager
+#from taggit.models import TagBase
+
 # from imagekit.models import ProcessedImageField
 # from imagekit.processors import ResizeToFit
 
 # General models
+@autoconnect
 class Address(models.Model):
     """Modelo para las direcciones postales"""
     name = models.CharField(max_length=50, default='mi direccion')
@@ -35,6 +39,13 @@ class Address(models.Model):
         """este metodo crea la direccion postal y la informacion bancaria de un usuario"""
         if created:
             Address.objects.create(user_id=instance.id)
+
+    def pre_save(self):
+        """metodo de la clase Address para estandarizar los atributos"""
+        self.name = self.name.capitalize()
+        self.city = self.city.title()
+        self.street = self.street.title()
+        self.door = self.door.upper()
 
 
 class BankInformation(models.Model):
@@ -207,6 +218,26 @@ class Image(models.Model):
 
 
 # Blog models
+"""
+@autoconnect
+class Tag(TagBase):
+    name = models.CharField(max_length=50)
+    #description = models.TextField(blank=True)
+    #slug = models.CharField(max_length=50, blank=True)
+    class Meta:
+        verbose_name = ("Tag")
+        verbose_name_plural = ("Tags")
+
+    def __unicode__(self):
+        return self.name
+
+    def pre_save(self):
+        pass
+        #self.slug = self.name.replace(" ", "_").lower()
+        #self.name = self.name.title()
+"""
+
+
 @autoconnect
 class Category(models.Model):
     """Modelo para las categorias del blog"""
@@ -238,6 +269,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, default=31, blank=True)
     album = models.ForeignKey(Album, default=1, blank=True, null=True)
 
+    tags = TaggableManager()
+
 
     def __unicode__(self):
         return self.title
@@ -261,6 +294,7 @@ class Post(models.Model):
     def asignPermissions(sender, **kwargs):
         assign_perm('view_post', post.author, post)
     """
+
 
 @autoconnect
 class Comment(models.Model):

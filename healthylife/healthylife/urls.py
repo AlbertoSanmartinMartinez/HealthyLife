@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^blog/(?P<post>\w+)/$', views.detail_post, name='detail_post'),
     url(r'^blog/categorias/(?P<category>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
     url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
+    # url(r'^blog/etiquetas/(?P<tag>\w+)/$', views.blog_tag_posts, name='blog_tag_posts'),
 
     # Search URLS's
     url(r'^resultado_busqueda/$', views.search, name='search'),
@@ -40,7 +41,7 @@ urlpatterns = [
     url(r'^shop/$', views.shop, name='shop'),
 
     # Pages URLS's
-    url(r'^$', views.inicio, name='home'),
+    url(r'^$', views.home, name='home'),
     url(r'^conocenos/$', views.know_us, name='know_us'),
     url(r'^trabaja_con_nosotros/', views.work_with_our, name='work_with_our'),
     url(r'^informacion_legal/', views.legal_information, name='legal_information'),

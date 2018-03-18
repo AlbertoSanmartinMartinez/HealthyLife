@@ -9,6 +9,7 @@ from healthylifeapp import models
 from django.contrib.auth.models import Permission
 from guardian.admin import GuardedModelAdmin
 from guardian.models import UserObjectPermission
+from taggit.managers import TaggableManager
 # from rollyourown.seo.admin import register_seo_admin
 # from myapp.seo import MyMetadata
 # from collections import OrderedDict as SortedDict
@@ -40,6 +41,13 @@ admin.site.register(models.GeneralStatistics)
 admin.site.register(models.SpecificStatistics)
 
 # Admin Blog Models
+"""
+class TagAdmin(GuardedModelAdmin):
+    list_display = ('name', 'slug')
+
+admin.site.register(models.Tag, TagAdmin)
+"""
+
 class CategoryAdmin(GuardedModelAdmin):
     list_display = ('name', 'parent')
     list_filter = ('name', 'parent')
@@ -64,6 +72,13 @@ class PostAdmin(GuardedModelAdmin):
         super(PostAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(models.Post, PostAdmin)
+
+"""
+class PostTagsAdmin(GuardedModelAdmin):
+    list_display = ('name', 'description')
+
+admin.site.register(models.PosTags, PostTagsAdmin)
+"""
 
 class CommentAdmin(GuardedModelAdmin):
     list_display = ('status', 'title', 'author', 'post')
