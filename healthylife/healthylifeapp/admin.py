@@ -105,6 +105,12 @@ admin.site.register(models.Album, AlbumAdmin)
 
 # Admin Profile Models
 admin.site.register(models.UserProfile)
+
+class CollaboratorProfileAdmin(GuardedModelAdmin):
+    list_display = ('user', 'position', 'company', 'education', 'extract')
+
+admin.site.register(models.CollaboratorProfile, CollaboratorProfileAdmin)
+
 admin.site.register(models.Address)
 admin.site.register(models.BankInformation)
 admin.site.register(models.Company)

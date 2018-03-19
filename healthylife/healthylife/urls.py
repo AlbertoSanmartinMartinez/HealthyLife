@@ -63,7 +63,6 @@ urlpatterns = [
     url(r'^premios/$', views.awards, name='awards'),
 
     # Editor de Texto HTML URL's
-    # url(r'^tinymce/', include('tinymce.urls')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
     # Media URLS's
@@ -87,9 +86,13 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/nutricion/$', views.nutrition_profile, name='nutrition_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/salud/$', views.health_profile, name='health_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/premios/$', views.awards_profile, name='awards_profile'),
+    url(r'^mi_cuenta/(?P<username>\w+)/colaborador/$', views.collaborator, name='collaborator_profile'),
 
     # Company URLS's
-    url(r'^mi_cuenta/(?P<username>\w+)/empresa/$', views.company, name='company'),
+    #url(r'^empresas/(?P<company>\w+)/empresa/$', views.company, name='company'),
+
+    # Collaborators URLS's
+    #url(r'^colaboradores/(?P<username>\w+)/$', views.company, name='collaborators'),
 
     # Login URLS's
     url(r'^acceso/$', views.custom_login, name='custom_login'),

@@ -14,7 +14,7 @@
       </li>
       {% if user.is_staff %}
         <li>
-          <a href="{% url 'company' username=user.username %}">Empresa</a>
+          <a href="{% url 'collaborator_profile' username=user.username %}">Colaborador</a>
         </li>
         <li>
           <a href="/administracion" target="_blank">Administracion</a>

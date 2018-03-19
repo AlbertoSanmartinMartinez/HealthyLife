@@ -5,22 +5,30 @@
   <hr>
   <p>Seccion del Equipo</p>
     {% for item in team %}
+      <hr>
       {{ item.username }}
       {{ item.first_name }}
       {{ item.last_name }}
-      <hr>
     {% endfor %}
   <hr>
   <p>Seccion de los Colaboradores</p>
-    {% for item in colaborators %}
-      {{ item.username }}
+    {% for collaborator in collaborators %}
       <hr>
+      {{ collaborator.position }}<br>
+      {{ collaborator.company }}<br>
+      {{ collaborator.education }}<br>
+      {{ collaborator.extract }}<br>
+      <img src="{{ collaborator.collaborator_image.url }}">
     {% endfor %}
   <hr>
   <p>Seccion de las Empresas</p>
-    {% for item in companies %}
-      {{ item.name }}
+    {% for company in companies %}
       <hr>
+      {{ company.company_name }}<br>
+      {{ company.description }}<br>
+      {{ company.phone }}<br>
+      {{ company.web }}<br>
+      <img src="{{ company.company_image.url }}">
     {% endfor %}
   <hr>
 {% endblock %}

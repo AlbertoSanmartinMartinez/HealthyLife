@@ -8,14 +8,8 @@
   <p>Informacion personal</p>
   {% csrf_token %}
   {{ user_form.as_p }}
-  {{ user_profile_form.bio }}<br>
-  {{ user_profile_form.phone }}<br>
-
-  {% for item in user_profile %}
-    <img src="{{ item.profile_image.url }}">
-    {{ user_profile_form.profile_image }}
-  {% endfor %}
-
+  {{ user_profile_form.as_p }}<br>
+  <img src="{{ user_profile.profile_image.url }}">
   <hr>
   <p>Informacion Bancaria</p>
   {{ bank_information_form.as_p }}

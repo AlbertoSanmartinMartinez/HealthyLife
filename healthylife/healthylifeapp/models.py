@@ -22,9 +22,9 @@ from taggit.managers import TaggableManager
 @autoconnect
 class Address(models.Model):
     """Modelo para las direcciones postales"""
-    name = models.CharField(max_length=50, default='mi direccion')
+    address_name = models.CharField(max_length=50, default='mi direccion')
     city = models.CharField(max_length=50, default=' ', blank=True)
-    postal_code = models.CharField(max_length=5, default='00000', blank=True)
+    postal_code = models.CharField(max_length=5, default='     ', blank=True)
     street = models.CharField(max_length=50, default=' ', blank=True)
     number = models.CharField(max_length=4, default=' ', blank=True)
     floor = models.CharField(max_length=3, default=' ', blank=True)
@@ -33,7 +33,7 @@ class Address(models.Model):
     is_company = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return str(self.name)
+        return self.address_name
 
     @receiver(signals.post_save, sender=User)
     def create_user_address(sender, instance, created, **kwargs):
@@ -43,7 +43,7 @@ class Address(models.Model):
 
     def pre_save(self):
         """metodo de la clase Address para estandarizar los atributos"""
-        self.name = self.name.capitalize()
+        self.address_name = self.address_name.capitalize()
         self.city = self.city.title()
         self.street = self.street.title()
         self.door = self.door.upper()
@@ -51,7 +51,7 @@ class Address(models.Model):
 
 class BankInformation(models.Model):
     """modelo para la informacion bancaria"""
-    name = models.CharField(max_length=50, default='mi informacion bancaria')
+    bank_name = models.CharField(max_length=50, default='mi informacion bancaria')
     account = models.CharField(max_length=20, default=' ', blank=True)
     month = models.CharField(max_length=2, default=' ', blank=True)
     year = models.CharField(max_length=4, default=' ', blank=True)
@@ -60,7 +60,11 @@ class BankInformation(models.Model):
     is_company = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return str(self.name)
+        return str(self.bank_name)
+
+    def pre_save(self):
+        """metodo de la clase BankInformation para estandarizar los atributos"""
+        self.bank_name = self.bank_name.capitalize()
 
     @receiver(signals.post_save, sender=User)
     def create_user_bank_information(sender, instance, created, **kwargs):
@@ -83,6 +87,19 @@ class UserProfile(models.Model):
         """Este metodo crea la direccion postal y la informacion bancaria de un usuario"""
         if created:
             UserProfile.objects.create(user_id=instance.id)
+
+
+class CollaboratorProfile(models.Model):
+    """Modelo para el perfil de un colaborador"""
+    user = models.ForeignKey(User)
+    position = models.CharField(max_length=50, default=' ', blank=True)
+    company = models.CharField(max_length=50, default=' ', blank=True)
+    education = models.CharField(max_length=50, default=' ', blank=True)
+    extract = models.TextField(default=' ', blank=True)
+    collaborator_image = models.ImageField(upload_to="photos", default='photos/perfil.jpg', blank=True)
+
+    def __unicode__(self):
+        return self.user.username
 
 
 # Sport models
@@ -318,19 +335,24 @@ class Discount(models.Model):
         pass
 
 
+@autoconnect
 class Company(models.Model):
     """modelo para las empresa de la tienda"""
-    name = models.CharField(max_length=50, default='mi empresa')
+    company_name = models.CharField(max_length=50, default='mi empresa')
+    slug = models.CharField(max_length=100, default=' ', blank=True)
     description = models.CharField(max_length=100, default=' ', blank=True)
     phone = models.CharField(max_length=9, default='000000000', blank=True)
     web =  models.CharField(max_length=50, blank=True)
     user = models.ForeignKey(User, default=1)
-
-    def __str__(self):
-        return self.name
+    company_image = models.ImageField(upload_to="photos", default='photos/perfil.jpg', blank=True)
 
     def __unicode__(self):
-        return self.name
+        return self.company_name
+
+    def save(self, *args, **kwargs):
+        """metodo de la clase company para calcular el slug"""
+        self.slug = self.company_name.replace(" ", "_").lower()
+        super(Company, self).save(*args, **kwargs)
 
 
 # Awards models
@@ -344,9 +366,6 @@ class Award(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
     author = models.ForeignKey(User, default=1)
     company = models.ForeignKey(Company, default=1)
-
-    def __str__(self):
-        return self.name
 
     def __unicode__(self):
         return self.name

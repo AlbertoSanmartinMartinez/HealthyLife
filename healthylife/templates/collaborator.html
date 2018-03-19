@@ -21,6 +21,9 @@
           <hr>
           <p>Informacion de Empresa</p>
           {{ company_form.as_p }}
+
+          <img src="{{ company.company_image.url }}">
+
           <hr>
           <p>Informacion Bancaria</p>
           {{ bank_information_form.as_p }}
@@ -28,6 +31,10 @@
           <p>Direccion de la Empresa</p>
           {{ address_form.as_p }}
         {% endif %}
+        <hr>
+        <p>Informacion de colaborador</p>
+        {{ collaborator_profile_form.as_p }}
+        <img src="{{ collaborator_profile.collaborator_image.url }}">
       {% endif %}
       <button type="submit">Actualizar</button>
   </form>

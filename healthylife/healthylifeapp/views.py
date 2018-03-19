@@ -50,15 +50,17 @@ def contact(request):
 
 def work_with_our(request):
     """
-    Vista que regitra a un cobaorador y le da permisos
+    Vista que regitra a un colaborador y le da permisos
     """
     if request.method == 'POST':
+        # perfil colaborador
         user_form = forms.CustomRegisterColaboratorForm(data=request.POST)
         if user_form.is_valid():
             data = user_form.cleaned_data
             user = user_form.save(commit=False)
             user.is_staff = True
             user.save()
+            collaborator = models.CollaboratorProfile.objects.create(user_id = user.id)
             if data['blog_colaborator'] == True:
                 blog_colaborator_group = Group.objects.get(name='colaboradores_blog')
                 blog_colaborator_group.user_set.add(user)
@@ -77,6 +79,7 @@ def work_with_our(request):
             if data['health_colaborator'] == True:
                 health_colaborator_group = Group.objects.get(name='colaboradores_salud')
                 health_colaborator_group.user_set.add(user)
+            return redirect('home')
     else:
         user_form = forms.CustomRegisterColaboratorForm()
 
@@ -94,21 +97,16 @@ def legal_information(request):
 
 def know_us(request):
     users = User.objects.filter(is_staff=True).order_by("date_joined")
-    team = []
-    colaborators = []
+    # team = []
+    collaborators = models.CollaboratorProfile.objects.all()
     companies = models.Company.objects.all()
-    for user in users:
-        if user.username == 'alberto':
-            team.append(user)
-        else:
-            colaborators.append(user)
-    context = {
+
+    return render(request, 'know_us.html', {
         "search_form":getSearchForm(),
         "companies": companies,
-        "colaborators": colaborators,
-        "team": team,
-    }
-    return render(request, 'know_us.html', context)
+        "collaborators": collaborators,
+        # "team": team,
+    })
 
 
 # Login views
@@ -196,7 +194,7 @@ def sport(request):
 # Blog views
 def blog(request):
     posts = models.Post.objects.filter(status=1).order_by("-creation_date")
-    
+
     return render(request, "blog.html", {
         "posts": posts,
         "categories": obtenerCategorias(request),
@@ -256,20 +254,6 @@ def blog_author_posts(request, username):
     return render(request, 'blog.html', context)
 
 
-"""
-def blog_tag_posts(request, tag):
-    posts = models.Post.objects.filter(status=1, tags__name=tag.name)
-    categories = models.Category.objects.order_by("name")
-    context = {
-        "categories":categories,
-        "posts":posts,
-        "categories": obtenerCategorias(request),
-        "search_form":getSearchForm(),
-    }
-    return render(request, 'blog.html', context)
-"""
-
-
 # Search views
 def search(request):
     form = forms.SearchForm(request.POST)
@@ -297,13 +281,12 @@ def shop(request):
 @login_required(redirect_field_name='custom_login')
 def profile(request, username):
     """
-    Vista que muestra la informacion del perfil
+    Vista que muestra la informacion del perfil de usuario
     """
     user = User.objects.get(username=username)
-    user_profile = models.UserProfile.objects.filter(user_id=user.id)
-    # error filter various bank information and address
+    user_profile = models.UserProfile.objects.get(user_id=user.id)
     bank_information = models.BankInformation.objects.get(user_id=user.id, is_company=False)
-    address = models.Address.objects.get(user_id=user.id)
+    address = models.Address.objects.get(user_id=user.id, is_company=False)
 
     if request.method == 'POST':
         user_form = forms.UserForm(data=request.POST, instance=request.user)
@@ -319,6 +302,7 @@ def profile(request, username):
             bank_information_form.save()
         if address_form.is_valid():
             address_form.save()
+
     else:
         user_form = forms.UserForm(instance=request.user)
         bank_information_form = forms.BankInformationForm(instance=bank_information)
@@ -332,12 +316,16 @@ def profile(request, username):
         "user_profile_form": user_profile_form,
         "search_form": getSearchForm(),
         "user_profile": user_profile,
-        })
+    })
 
 
 @login_required(redirect_field_name='custom_login')
-def company(request, username):
+def collaborator(request, username):
+    """
+    Vista que muestra la informacion del perfil de colaborador
+    """
     user = User.objects.get(username=username)
+    collaborator_profile = models.CollaboratorProfile.objects.get(user_id=user.id)
     try:
         company = models.Company.objects.get(user_id=user.id)
     except:
@@ -350,22 +338,22 @@ def company(request, username):
         address = models.Address.objects.get(user_id=user.id, is_company=True)
     except:
         address = None
-
     if request.method == 'POST':
+        collaborator_profile_form = forms.CollaboratorProfileForm(data=request.POST, instance=collaborator_profile)
         if user.is_staff:
             if company is None:
-                company_form = forms.CompanyForm(data=request.POST)
+                company_form = forms.CompanyForm(request.POST, request.FILES)
                 if company_form.is_valid():
                     data = company_form.cleaned_data
                     company = models.Company.objects.create(
                         user_id=user.id,
-                        name=data['name'],
+                        company_name=data['company_name'],
                         description=data['description'],
                         phone=data['phone'],
                         web=data['web'])
                     company.save()
             else:
-                company_form = forms.CompanyForm(data=request.POST, instance=company)
+                company_form = forms.CompanyForm(request.POST, request.FILES, instance=company)
                 if company_form.is_valid():
                     company_form.save()
 
@@ -375,7 +363,7 @@ def company(request, username):
                     data_bank_information = bank_information_form.cleaned_data
                     # bank_information_form.save()
                     data_bank_information = models.BankInformation.objects.create(
-                        name = data_bank_information['name'],
+                        bank_name = data_bank_information['bank_name'],
                         account = data_bank_information['account'],
                         month = data_bank_information['month'],
                         year = data_bank_information['year'],
@@ -383,7 +371,7 @@ def company(request, username):
                         user_id = user.id,
                         is_company = True)
             else:
-                bank_information_form = forms.BankInformationForm(data=request.PSOT, instance=bank_information)
+                bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
                 if bank_information_form.is_valid():
                     bank_information_form.save()
 
@@ -393,7 +381,7 @@ def company(request, username):
                     data = address_form.cleaned_data
                     address = models.Address.objects.create(
                         user_id=user.id,
-                        name=data['name'],
+                        address_name=data['address_name'],
                         city=data['city'],
                         postal_code=data['postal_code'],
                         street = data['street'],
@@ -406,27 +394,32 @@ def company(request, username):
                 address_form = forms.AddressForm(data=request.POST, instance=address)
                 if address_form.is_valid():
                     address_form.save()
+        if collaborator_profile_form.is_valid():
+            collaborator_profile_form.save()
 
     else:
-            if company is None:
-                company_form = forms.CompanyForm()
-            else:
-                company_form = forms.CompanyForm(instance=company)
-            if bank_information is None:
-                bank_information_form = forms.BankInformationForm()
-            else:
-                bank_information_form = forms.BankInformationForm(instance=bank_information)
-            if address is None:
-                address_form = forms.AddressForm()
-            else:
-                address_form = forms.AddressForm(instance=address)
+        if company is None:
+            company_form = forms.CompanyForm()
+        else:
+            company_form = forms.CompanyForm(instance=company)
+        if bank_information is None:
+            bank_information_form = forms.BankInformationForm()
+        else:
+            bank_information_form = forms.BankInformationForm(instance=bank_information)
+        if address is None:
+            address_form = forms.AddressForm()
+        else:
+            address_form = forms.AddressForm(instance=address)
+        collaborator_profile_form = forms.CollaboratorProfileForm(instance=collaborator_profile)
 
-    return render(request, 'company.html', {
+    return render(request, 'collaborator.html', {
         "bank_information_form": bank_information_form,
         "address_form": address_form,
         "company_form": company_form,
         "company": company,
         "search_form": getSearchForm(),
+        "collaborator_profile_form": collaborator_profile_form,
+        "collaborator_profile": collaborator_profile,
         })
 
 
@@ -540,12 +533,12 @@ class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
 def obtenerCategorias(request):
     return models.Category.objects.filter(parent__isnull=True).order_by("name")
 
+
 def getSearchForm():
     return forms.SearchForm()
 
 
 # Error Views
-
 def handler404(request):
     response = render_to_response('404.html', {}, context_instance=RequestContext(request))
     response.status_code = 404
