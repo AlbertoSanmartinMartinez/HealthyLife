@@ -92,7 +92,6 @@ def legal_information(request):
     return render(request, 'aviso_legal.html', context)
 
 
-# optimizar la estructura de datos de los colaboradores y las empresas
 def know_us(request):
     users = User.objects.filter(is_staff=True).order_by("date_joined")
     team = []
@@ -197,12 +196,12 @@ def sport(request):
 # Blog views
 def blog(request):
     posts = models.Post.objects.filter(status=1).order_by("-creation_date")
-    context = {
-        "posts":posts,
+    
+    return render(request, "blog.html", {
+        "posts": posts,
         "categories": obtenerCategorias(request),
         "search_form": getSearchForm(),
-    }
-    return render(request, "blog.html", context)
+    })
 
 
 def detail_post(request, post):
@@ -308,13 +307,12 @@ def profile(request, username):
 
     if request.method == 'POST':
         user_form = forms.UserForm(data=request.POST, instance=request.user)
-        user_profile_form = forms.UserProfileForm(data=request.POST, instance=request.user.userprofile)
+        user_profile_form = forms.UserProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
         address_form = forms.AddressForm(data=request.POST, instance=address)
         bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
 
         if user_form.is_valid():
             user_form.save()
-            data = user_profile_form.cleaned_data
         if user_profile_form.is_valid():
             user_profile_form.save()
         if bank_information_form.is_valid():
@@ -348,9 +346,12 @@ def company(request, username):
         bank_information = models.BankInformation.objects.get(user_id=user.id, is_company=True)
     except:
         bank_information = None
-    print(bank_information)
+    try:
+        address = models.Address.objects.get(user_id=user.id, is_company=True)
+    except:
+        address = None
+
     if request.method == 'POST':
-        bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
         if user.is_staff:
             if company is None:
                 company_form = forms.CompanyForm(data=request.POST)
@@ -360,7 +361,8 @@ def company(request, username):
                         user_id=user.id,
                         name=data['name'],
                         description=data['description'],
-                        phone=data['phone'], web=data['web'])
+                        phone=data['phone'],
+                        web=data['web'])
                     company.save()
             else:
                 company_form = forms.CompanyForm(data=request.POST, instance=company)
@@ -385,6 +387,26 @@ def company(request, username):
                 if bank_information_form.is_valid():
                     bank_information_form.save()
 
+            if address is None:
+                address_form = forms.AddressForm(data=request.POST)
+                if address_form.is_valid():
+                    data = address_form.cleaned_data
+                    address = models.Address.objects.create(
+                        user_id=user.id,
+                        name=data['name'],
+                        city=data['city'],
+                        postal_code=data['postal_code'],
+                        street = data['street'],
+                        number = data['number'],
+                        floor = data['floor'],
+                        door = data['door'],
+                        is_company = True)
+                    address.save()
+            else:
+                address_form = forms.AddressForm(data=request.POST, instance=address)
+                if address_form.is_valid():
+                    address_form.save()
+
     else:
             if company is None:
                 company_form = forms.CompanyForm()
@@ -394,10 +416,14 @@ def company(request, username):
                 bank_information_form = forms.BankInformationForm()
             else:
                 bank_information_form = forms.BankInformationForm(instance=bank_information)
+            if address is None:
+                address_form = forms.AddressForm()
+            else:
+                address_form = forms.AddressForm(instance=address)
 
     return render(request, 'company.html', {
         "bank_information_form": bank_information_form,
-        #"address_form": address_form,
+        "address_form": address_form,
         "company_form": company_form,
         "company": company,
         "search_form": getSearchForm(),

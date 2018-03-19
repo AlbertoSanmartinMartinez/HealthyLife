@@ -30,6 +30,7 @@ class Address(models.Model):
     floor = models.CharField(max_length=3, default=' ', blank=True)
     door = models.CharField(max_length=3, default=' ', blank=True)
     user = models.ForeignKey(User, default=1)
+    is_company = models.BooleanField(default=False)
 
     def __unicode__(self):
         return str(self.name)
@@ -71,9 +72,8 @@ class UserProfile(models.Model):
     """Modelo para el perfil de un usuario"""
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100, blank=True)
-    phone = models.CharField(max_length=9, default='000000000', blank=True)
-    image = models.ImageField(upload_to="photos", default='/perfil.jpg', blank=True)
-
+    phone = models.CharField(max_length=9, default='         ', blank=True)
+    profile_image = models.ImageField(upload_to="photos", default='photos/perfil.jpg', blank=True)
 
     def __unicode__(self):
         return str(self.user.username)
@@ -188,7 +188,7 @@ class SpecificStatistics(models.Model):
 class Album(models.Model):
     name = models.CharField(max_length=50, default='album')
     slug = models.CharField(max_length=100, blank=True)
-    # image_header = models.IntegerField()
+    # image_header = models.IntegerField(Image)
 
     def __unicode__(self):
         return self.name
@@ -219,24 +219,6 @@ class Image(models.Model):
 
 
 # Blog models
-"""
-@autoconnect
-class Tag(TagBase):
-    name = models.CharField(max_length=50)
-    #description = models.TextField(blank=True)
-    #slug = models.CharField(max_length=50, blank=True)
-    class Meta:
-        verbose_name = ("Tag")
-        verbose_name_plural = ("Tags")
-
-    def __unicode__(self):
-        return self.name
-
-    def pre_save(self):
-        pass
-        #self.slug = self.name.replace(" ", "_").lower()
-        #self.name = self.name.title()
-"""
 
 
 @autoconnect

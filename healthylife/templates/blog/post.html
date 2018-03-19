@@ -2,6 +2,12 @@
 {% load staticfiles %}
 
 {% block detail_post %}
+
+  {% for item in images %}
+    {% if item.header_image %}
+      <img src="{{ item.image.url }}">
+    {% endif %}
+  {% endfor %}
   <hr>
   <p>{{ post.title }}</p>
   <p>{{ post.description }}</p>
@@ -13,7 +19,7 @@
     {{tag.name}}
   {% endfor %}
   {% for item in images %}
-    <img src="{{item.image.url}}">
+    <img src="{{ item.image.url }}">
   {% endfor %}
 
   <form method="POST">

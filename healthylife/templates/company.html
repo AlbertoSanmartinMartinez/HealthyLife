@@ -11,15 +11,22 @@
             <p>Informacion de Empresa</p>
             {{ company_form.as_p }}
             <hr>
-            <p>Informacion Bancaria</p>
+            <p>Informacion Bancaria de la Empresa</p>
             {{ bank_information_form.as_p }}
+            <hr>
+            <p>Direccion de la Empresa</p>
+            {{ address_form.as_p }}
           </div>
         {% else %}
+          <hr>
           <p>Informacion de Empresa</p>
           {{ company_form.as_p }}
           <hr>
           <p>Informacion Bancaria</p>
           {{ bank_information_form.as_p }}
+          <hr>
+          <p>Direccion de la Empresa</p>
+          {{ address_form.as_p }}
         {% endif %}
       {% endif %}
       <button type="submit">Actualizar</button>

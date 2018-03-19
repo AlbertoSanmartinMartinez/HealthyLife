@@ -19,7 +19,7 @@
         <li>
           <a href="/administracion" target="_blank">Administracion</a>
         </li>
-      {% else %}
+      {% endif %}
         <li>
           <a href="{% url 'sport_profile' username=user.username %}">Deporte</a>
         </li>
@@ -38,7 +38,6 @@
         <li>
           <a href="{% url 'calendar' username=user.username %}">Calendario</a>
         </li>
-      {% endif %}
         <li>
           <a href="{% url 'logout' %}">Desconectar</a>
         </li>

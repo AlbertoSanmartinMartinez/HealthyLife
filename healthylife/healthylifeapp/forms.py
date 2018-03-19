@@ -137,13 +137,13 @@ class CommentForm(forms.ModelForm):
 
 # Profile forms
 class UserProfileForm(forms.ModelForm):
-    bio = forms.CharField(label='Bio', required=False)
-    phone = forms.CharField(label='Teléfono', required=False)
-    image = forms.ImageField(required=False)
+    bio = forms.CharField(label='Bio', required=False, widget=forms.TextInput(attrs={'placeholder':'Bio de tu perfil'}))
+    phone = forms.CharField(label='Teléfono', required=False, widget=forms.TextInput(attrs={'placeholder':'Teléfono'}))
+    profile_image = forms.ImageField(required=False)
 
     class Meta:
         model = models.UserProfile
-        fields = ['bio', 'phone', 'image']
+        fields = ['bio', 'phone', 'profile_image']
 
 
 class UserForm(forms.ModelForm):
