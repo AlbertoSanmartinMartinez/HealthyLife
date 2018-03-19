@@ -302,32 +302,19 @@ def profile(request, username):
     """
     user = User.objects.get(username=username)
     user_profile = models.UserProfile.objects.filter(user_id=user.id)
-    bank_information = models.BankInformation.objects.get(user_id=user.id)
+    # error filter various bank information and address
+    bank_information = models.BankInformation.objects.get(user_id=user.id, is_company=False)
     address = models.Address.objects.get(user_id=user.id)
-    try:
-        company = models.Company.objects.get(user_id=user.id)
-    except:
-        company = None
+
     if request.method == 'POST':
         user_form = forms.UserForm(data=request.POST, instance=request.user)
         user_profile_form = forms.UserProfileForm(data=request.POST, instance=request.user.userprofile)
-        bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
         address_form = forms.AddressForm(data=request.POST, instance=address)
-
-        if company is None:
-            company_form = forms.CompanyForm(data=request.POST)
-            if company_form.is_valid():
-                data = company_form.cleaned_data
-                company = models.Company.objects.create(user_id=user.id, name=data['name'], descripction=data['description'], phone=data['phone'], web=data['web'])
-                company.save()
-        else:
-            company_form = forms.CompanyForm(data=request.POST, instance=company)
-            if company_form.is_valid():
-                company_form.save()
+        bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
 
         if user_form.is_valid():
             user_form.save()
-            # data = user_profile_form.cleaned_data
+            data = user_profile_form.cleaned_data
         if user_profile_form.is_valid():
             user_profile_form.save()
         if bank_information_form.is_valid():
@@ -340,21 +327,82 @@ def profile(request, username):
         address_form = forms.AddressForm(instance=address)
         user_profile_form = forms.UserProfileForm(instance=request.user.userprofile)
 
-        if company is None:
-            company_form = forms.CompanyForm()
-        else:
-            company_form = forms.CompanyForm(instance = company)
-
     return render(request, 'profile.html', {
         "user_form": user_form,
         "bank_information_form": bank_information_form,
         "address_form": address_form,
-        "company_form": company_form,
-        "company": company,
         "user_profile_form": user_profile_form,
         "search_form": getSearchForm(),
         "user_profile": user_profile,
         })
+
+
+@login_required(redirect_field_name='custom_login')
+def company(request, username):
+    user = User.objects.get(username=username)
+    try:
+        company = models.Company.objects.get(user_id=user.id)
+    except:
+        company = None
+    try:
+        bank_information = models.BankInformation.objects.get(user_id=user.id, is_company=True)
+    except:
+        bank_information = None
+    print(bank_information)
+    if request.method == 'POST':
+        bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
+        if user.is_staff:
+            if company is None:
+                company_form = forms.CompanyForm(data=request.POST)
+                if company_form.is_valid():
+                    data = company_form.cleaned_data
+                    company = models.Company.objects.create(
+                        user_id=user.id,
+                        name=data['name'],
+                        description=data['description'],
+                        phone=data['phone'], web=data['web'])
+                    company.save()
+            else:
+                company_form = forms.CompanyForm(data=request.POST, instance=company)
+                if company_form.is_valid():
+                    company_form.save()
+
+            if bank_information is None:
+                bank_information_form = forms.BankInformationForm(data=request.POST)
+                if bank_information_form.is_valid():
+                    data_bank_information = bank_information_form.cleaned_data
+                    # bank_information_form.save()
+                    data_bank_information = models.BankInformation.objects.create(
+                        name = data_bank_information['name'],
+                        account = data_bank_information['account'],
+                        month = data_bank_information['month'],
+                        year = data_bank_information['year'],
+                        security_code = data_bank_information['security_code'],
+                        user_id = user.id,
+                        is_company = True)
+            else:
+                bank_information_form = forms.BankInformationForm(data=request.PSOT, instance=bank_information)
+                if bank_information_form.is_valid():
+                    bank_information_form.save()
+
+    else:
+            if company is None:
+                company_form = forms.CompanyForm()
+            else:
+                company_form = forms.CompanyForm(instance=company)
+            if bank_information is None:
+                bank_information_form = forms.BankInformationForm()
+            else:
+                bank_information_form = forms.BankInformationForm(instance=bank_information)
+
+    return render(request, 'company.html', {
+        "bank_information_form": bank_information_form,
+        #"address_form": address_form,
+        "company_form": company_form,
+        "company": company,
+        "search_form": getSearchForm(),
+        })
+
 
 def sport_profile(request, username):
     return render(request, 'sport_profile.html', {

@@ -88,6 +88,9 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/salud/$', views.health_profile, name='health_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/premios/$', views.awards_profile, name='awards_profile'),
 
+    # Company URLS's
+    url(r'^mi_cuenta/(?P<username>\w+)/empresa/$', views.company, name='company'),
+
     # Login URLS's
     url(r'^acceso/$', views.custom_login, name='custom_login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),

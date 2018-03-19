@@ -36,7 +36,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 class CompanyForm(forms.ModelForm):
     name = forms.CharField(label='Nombre')
     description = forms.CharField(label='Descripcion', required=False)
-    phone = forms.CharField(label='Telefono')
+    phone = forms.CharField(label='Telefono', required=False)
     web = forms.CharField(label='Página web', required=False)
     class Meta:
         model = models.Company

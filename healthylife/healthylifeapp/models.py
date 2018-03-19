@@ -56,6 +56,7 @@ class BankInformation(models.Model):
     year = models.CharField(max_length=4, default=' ', blank=True)
     security_code = models.CharField(max_length=3, default=' ', blank=True)
     user = models.ForeignKey(User, default=1)
+    is_company = models.BooleanField(default=False)
 
     def __unicode__(self):
         return str(self.name)
@@ -71,7 +72,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100, blank=True)
     phone = models.CharField(max_length=9, default='000000000', blank=True)
-    image = models.ImageField(upload_to="photos", default='/image.jpg', blank=True)
+    image = models.ImageField(upload_to="photos", default='/perfil.jpg', blank=True)
 
 
     def __unicode__(self):
