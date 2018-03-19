@@ -281,8 +281,9 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         """metodo de la clase post para calcular el slug de un post y crear un album asociado a ese post"""
         self.slug = self.title.replace(" ", "_").lower()
-        album = Album.objects.create(name='album '+self.title)
-        self.album = album
+        if not self.pk:
+            album = Album.objects.create(name='album '+self.title)
+            self.album = album
         super(Post, self).save(*args, **kwargs)
 
     def publishPost(self):

@@ -75,7 +75,7 @@ urlpatterns = [
 
     # Registro URLS's
     # url(r'^mi_cuenta/$', include('django.contrib.auth.urls')),
-    url(r'^mi_cuenta/registro/$', views.CustomRegistrationView.as_view(), name='custom_register'),
+    url(r'^mi_cuenta/registro/$', views.cutom_registration, name='custom_register'),
     url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='custom_register_complete'),
     url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
 
@@ -89,7 +89,7 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/premios/$', views.awards_profile, name='awards_profile'),
 
     # Login URLS's
-    url(r'^acceso/$', views.CustomLoginView.as_view(), name='custom_login'),
+    url(r'^acceso/$', views.custom_login, name='custom_login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
 
     url(r'^mi_cuenta/password_change/$', auth_views.PasswordChangeView.as_view(), name='password_change'),

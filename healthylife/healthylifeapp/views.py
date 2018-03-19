@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # coding: utf-8
 
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from healthylifeapp import forms
 from healthylifeapp import models
@@ -15,9 +15,10 @@ from rest_framework import permissions, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from healthylifeapp import serializers
 from rest_framework import viewsets
-from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
+from django.contrib.auth import authenticate, login
+# from django.http import HttpResponseRedirect
 
 
 # General views
@@ -112,16 +113,38 @@ def know_us(request):
 
 
 # Login views
-class CustomLoginView(auth_views.LoginView):
-    form_classes = forms.CustomAuthenticationForm,
-    template_name = 'custom_login.html'
+def custom_login(request):
+    if request.method == 'POST':
+        form = forms.CustomAuthenticationForm(data=request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = authenticate(username=data['username'], password=data['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('home')
+    else:
+        form = forms.CustomAuthenticationForm()
+
+    return render(request, 'custom_login.html', {
+        "search_form": getSearchForm,
+        "form": form,
+    })
+
 
 # Registration views
-class CustomRegistrationView(CreateView):
-    model = User
-    form_class = forms.CustomRegisterForm
-    template_name = 'custom_register.html'
-    success_url = 'completado'
+def cutom_registration(request):
+    if request.method == 'POST':
+        form = forms.CustomRegisterForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = forms.CustomRegisterForm()
+    return render(request, 'custom_register.html', {
+        "search_form": getSearchForm,
+        "form": form,
+    })
 
 
 def registration_complete(request):
@@ -445,3 +468,17 @@ def obtenerCategorias(request):
 
 def getSearchForm():
     return forms.SearchForm()
+
+
+# Error Views
+
+def handler404(request):
+    response = render_to_response('404.html', {}, context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+
+def handler500(request):
+    response = render_to_response('500.html', {}, context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
