@@ -19,7 +19,9 @@ urlpatterns = [
     url(r'^comments/$', views.APICommentList.as_view(), name='comment-list'),
     url(r'^comment(?P<pk>\d+)/$', views.APICommentDetail.as_view(), name='comment-detail'),
 
-    # url(r'^users/$', views.APIUserList.as_view(), name='user-list'),
+    # url(r'^user/login$', views.APIUserLogin.as_view(), name='user-login'),
+    # url(r'^user/registration$', views.APIUserRegistration.as_view(), name='user-register'),
+
     # url(r'^user(?P<pk>\w+)/$', views.APIUserDetail.as_view(), name='user-detail'),
 ]
 

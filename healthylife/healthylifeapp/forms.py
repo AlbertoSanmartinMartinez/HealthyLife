@@ -15,7 +15,7 @@ class CustomRegisterForm(UserCreationForm):
     """
     username = forms.CharField(label='Nombre de usuario')
     email = forms.EmailField(label='Email', widget=forms.EmailInput())
-    password2 = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    password2 = forms.CharField(label='Contraseña (confirmación)', widget=forms.PasswordInput())
 
     class Meta:
         model = User

@@ -9,16 +9,38 @@ from django.contrib.auth.models import User
 from rest_framework import fields
 
 # General Serializers
-"""
-class UserSerializer(serializers.HyperlinkedIdentityField):
-    uri = HyperlinkedIdentityField(
-        view_name= 'api:user-detail',
-    )
+class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email')
-"""
+        fields = ('username', 'email', 'password1', 'password2')
+        write_only_fields = ('password')
+        read_only_fields = ('id')
+
+    def create(self, data):
+        user = User.objects.create(
+            username = data['username'],
+            password1 = data['password1'],
+            password2 = data['password2'],
+            email = data['email'])
+        user.set_password(data['password'])
+        user.save()
+
+        return user
+
+
+class UserLoginSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+
+    def authenticate(self, data):
+        user = User.objects.authenticate(
+            username=data['username'],
+            password=data['password'])
+
+        return user
+
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 

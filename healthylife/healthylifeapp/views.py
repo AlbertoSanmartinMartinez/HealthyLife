@@ -138,6 +138,7 @@ def cutom_registration(request):
             return redirect('home')
     else:
         form = forms.CustomRegisterForm()
+
     return render(request, 'custom_register.html', {
         "search_form": getSearchForm,
         "form": form,
@@ -485,6 +486,14 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 
 # Blog Api Views
+class APIUserLogin(generics.RetrieveUpdateDestroyAPIView):
+    pass
+
+
+class APIUserRegistration(generics.RetrieveUpdateDestroyAPIView):
+    pass
+    
+
 class APIPostList(generics.ListCreateAPIView):
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     # filter_backends = [SearchFilter, OrderingFilter]
