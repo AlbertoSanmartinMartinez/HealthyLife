@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from rest_framework import fields
 
 # General Serializers
+"""
 class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -40,6 +41,13 @@ class UserLoginSerializer(serializers.ModelSerializer):
             password=data['password'])
 
         return user
+"""
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        field = ('username', 'mail', 'password')
 
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):

@@ -18,8 +18,11 @@ from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
 from django.contrib.auth import authenticate, login
-# from django.http import HttpResponseRedirect
 
+# API imports
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 # General views
 def home(request):
@@ -480,20 +483,35 @@ class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
         return obj.user == request.user
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+# General Api Views
+"""
+class APIUserProfile(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     serializer_class = serializers.UserProfileSerializer
+"""
 
+@api_view(['POST'])
+def userRegistrationAPI(request):
+    """metodo de la api para registrar a un usuario"""
+    if request.method == 'POST':
+        print('metodo post django')
+        serializer = User(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            user = User.objects.create(
+                username = serializer['username'],
+                mail = serializer['email'],
+                password = serializer['password']
+            )
+            return response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'GET':
+        print('metodo get')
+    else:
+        print('otro metodo')
 
 # Blog Api Views
-class APIUserLogin(generics.RetrieveUpdateDestroyAPIView):
-    pass
-
-
-class APIUserRegistration(generics.RetrieveUpdateDestroyAPIView):
-    pass
-    
-
 class APIPostList(generics.ListCreateAPIView):
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     # filter_backends = [SearchFilter, OrderingFilter]

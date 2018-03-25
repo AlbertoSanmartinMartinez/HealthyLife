@@ -17,6 +17,7 @@ from django.contrib import admin
 # register_seo_admin(admin.site, MyMetadata)
 
 admin.site.site_header = 'Barbastro Se Mueve'
+admin.autodiscover()
 
 urlpatterns = [
 

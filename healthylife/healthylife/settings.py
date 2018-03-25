@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'guardian',
     'ckeditor',
     'taggit',
+    'corsheaders'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
 
 ROOT_URLCONF = 'healthylife.urls'
@@ -167,3 +169,17 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'Full'
     }
 }
+
+# CORS, to allow all origin to the api during development
+# https://github.com/zestedesavoir/django-cors-middleware
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1',
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_URLS_ALLOW_ALL_REGEX = (
+
+)
+
+CORS_URLS_ALLOW_ALL = True
