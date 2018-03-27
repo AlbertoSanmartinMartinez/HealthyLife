@@ -2,7 +2,8 @@
 
 {% block api %}
   <p>Sección de la API</p>
-  <p><a href="{% url 'api:post-list' %}">Post</a></p>
-  <p><a href="{% url 'api:category-list' %}">Categorias</a></p>
-  <p><a href="{% url 'api:comment-list' %}">Comentarios</a></p>
+  <p><a href="{% url 'api:post-list' %}" target="_blank">Post</a></p>
+  <p><a href="{% url 'api:category-list' %} target="_blank">Categorias</a></p>
+  <p><a href="{% url 'api:comment-list' %}" target="_blank">Comentarios</a></p>
+  <p><a href="{% url 'api:user-list' %}" target="_blank">Usuarios</a></p>
 {% endblock %}

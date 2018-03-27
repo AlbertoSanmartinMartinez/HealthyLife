@@ -15,7 +15,7 @@ from rest_framework import permissions, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from healthylifeapp import serializers
 from rest_framework import viewsets
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Permission
 from django.contrib.auth import authenticate, login
 
@@ -468,7 +468,9 @@ def ships(request, username):
 
 ############################## API VIEWS ##############################
 def api(request):
-    return render(request, 'api.html', {})
+    return render(request, 'api.html', {
+        "search_form": getSearchForm(),
+    })
 
 
 class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
@@ -484,11 +486,9 @@ class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
 
 
 # General Api Views
-"""
-class APIUserProfile(viewsets.ModelViewSet):
-    queryset = models.UserProfile.objects.all()
-    serializer_class = serializers.UserProfileSerializer
-"""
+def userLoginAPI(request):
+    pass
+
 
 @api_view(['POST'])
 def userRegistrationAPI(request):
@@ -511,22 +511,43 @@ def userRegistrationAPI(request):
     else:
         print('otro metodo')
 
+
+#@user_passes_test(lambda u: u.is_superuser)
+class APIUserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
+#@user_passes_test(lambda u: u.is_superuser)
+class APIUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
 # Blog Api Views
-class APIPostList(generics.ListCreateAPIView):
+class APIPostList(generics.ListAPIView):
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     # filter_backends = [SearchFilter, OrderingFilter]
     # search_fields = ['title', 'slug']
-    # model = models.Post
-    queryset = models.Post.objects.all()
+    model = models.Post
     serializer_class = serializers.PostSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        data = self.request.query_params
+        return models.Post.objects.filter(status=data['status'])
 
 
 class APIPostDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = (IsOwnerOrReadOnly,)
-    # model = models.Post
-    queryset = models.Post.objects.all()
     serializer_class = serializers.PostSerializer
-
+    model = models.Post
+    """
+    def get_queryset(self, *args, **kwargs):
+        status = self.request.query_params.get('status', None)
+        if status:
+            queryset = models.Post.objects.filter(status=status)
+            return queryset
+    """
 
 class APICategoryList(generics.ListCreateAPIView):
     #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -541,12 +562,19 @@ class APICategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Category.objects.all()
     serializer_class = serializers.CategorySerializer
 
+    def get_queryset(self):
+        queryset = models.Category.objects.all()
+        queryset = queryset.filter(name=self.request.query_params.get('category_id'))
+
 
 class APICommentList(generics.ListCreateAPIView):
     #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    # model = models.Category
-    queryset = models.Comment.objects.all()
+    model = models.Category
     serializer_class = serializers.CommentSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        data = self.request.query_params
+        return models.Comment.objects.filter(post_id=data['post_id'])
 
 
 class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):

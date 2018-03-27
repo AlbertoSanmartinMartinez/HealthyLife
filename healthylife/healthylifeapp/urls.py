@@ -11,18 +11,19 @@ urlpatterns = [
 
     # Blog URL's
     url(r'^posts/$', views.APIPostList.as_view(), name='post-list'),
-    url(r'^post(?P<pk>\d+)/$', views.APIPostDetail.as_view(), name='post-detail'),
+    url(r'^posts/(?P<pk>\d+)/$', views.APIPostDetail.as_view(), name='post-detail'),
 
     url(r'^categories/$', views.APICategoryList.as_view(), name='category-list'),
-    url(r'^category(?P<pk>\d+)/$', views.APICategoryDetail.as_view(), name='category-detail'),
+    url(r'^categories/(?P<pk>\d+)/$', views.APICategoryDetail.as_view(), name='category-detail'),
 
     url(r'^comments/$', views.APICommentList.as_view(), name='comment-list'),
-    url(r'^comment(?P<pk>\d+)/$', views.APICommentDetail.as_view(), name='comment-detail'),
+    url(r'^comments/(?P<pk>\d+)/$', views.APICommentDetail.as_view(), name='comment-detail'),
 
-    #url(r'^user/login$', views.APIUserLogin.as_view(), name='user-login'),
-    url(r'^user/register/$', views.userRegistrationAPI, name='user-register-api'),
+    url(r'^users/$', views.APIUserList.as_view(), name='user-list'),
+    url(r'^users/(?P<pk>\d+)/$', views.APIUserDetail.as_view(), name='user-detail'),
 
-    # url(r'^user(?P<pk>\w+)/$', views.APIUserDetail.as_view(), name='user-detail'),
+    url(r'^users/login$', views.userLoginAPI, name='user-login-api'),
+    url(r'^users/register/$', views.userRegistrationAPI, name='user-register-api'),
 ]
 
 # Format suffixes
