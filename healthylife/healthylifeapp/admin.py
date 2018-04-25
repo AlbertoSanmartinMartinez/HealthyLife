@@ -123,9 +123,9 @@ admin.site.register(models.Product)
 
 # Admin Events Models
 class EventAdmin(GuardedModelAdmin):
-    list_display = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
-    list_filter = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
-    search_fields = ('title', 'privacity', 'owner', 'init_date', 'end_date', 'address')
+    list_display = ('title', 'privacity', 'owner')
+    list_filter = ('title', 'privacity', 'owner')
+    search_fields = ('title', 'privacity', 'owner')
 
 admin.site.register(models.Event, EventAdmin)
 

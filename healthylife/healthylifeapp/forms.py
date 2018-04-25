@@ -2,10 +2,11 @@
 # coding: utf-8
 
 from django import forms
-from django import forms
 from healthylifeapp import models
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+# from datetimewidget.widgets import DateTimeWidget
+# from django.contrib.admin import widgets
 
 # Register Forms
 class CustomRegisterForm(UserCreationForm):
@@ -15,7 +16,7 @@ class CustomRegisterForm(UserCreationForm):
     """
     username = forms.CharField(label='Nombre de usuario')
     email = forms.EmailField(label='Email', widget=forms.EmailInput())
-    password2 = forms.CharField(label='Contraseña (confirmación)', widget=forms.PasswordInput())
+    password2 = forms.CharField()
 
     class Meta:
         model = User
@@ -169,3 +170,13 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name']
+
+
+# Calendar forms
+class EventForm(forms.ModelForm):
+    #date = forms.DateTimeField(input_formats=('%y/%m/%d'), label='Fecha:')
+    #time = forms.DateTimeField(input_formats=('%H:%M'), label='Fecha:')
+
+    class Meta:
+        model = models.Event
+        fields = ['title', 'description', 'privacity'] #, 'date', 'time']

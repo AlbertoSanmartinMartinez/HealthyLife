@@ -1,5 +1,6 @@
 {% load staticfiles %}
 
+  {% now "m" as current_month %}
   <nav>
     <ul>
         <li><a href="{% url 'sport_profile' username=user.username %}">Deporte</a></li>
@@ -7,6 +8,6 @@
         <li><a href="{% url 'health_profile' username=user.username %}">Salud</a></li>
         <li><a href="{% url 'awards_profile' username=user.username %}">Premios</a></li>
         <li><a href="{% url 'ships' username=user.username %}">Pedidos</a></li>
-        <li><a href="{% url 'calendar' username=user.username %}">Calendario</a></li>
+        <li><a href="{% url 'calendar_month' month=current_month username=user.username %}">Calendario</a></li>
     </ul>
   </nav>

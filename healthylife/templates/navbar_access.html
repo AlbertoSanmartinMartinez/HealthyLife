@@ -1,50 +1,35 @@
 {% load staticfiles %}
 
-  <nav>
-    <ul>
+  {% now "m" as current_month %}
+
+
       <li><a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank">Facebook</a></li>
       <li><a href="https://twitter.com/BarbastroSMueve" target="_blank">Twitter</a></li>
       <li><a href="https://www.instagram.com/barbastrosemueve/" target="_blank">Instagram</a></li>
-    </ul>
+
 
     {% if user.is_authenticated %}
     <ul>
-      <li>
-        <a href="{% url 'profile' username=user.username %}">{{ user.username }}</a>
-      </li>
+      <li class"nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="{% url 'profile' username=user.username %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.username }}</a>
+         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
       {% if user.is_staff %}
-        <li>
-          <a href="{% url 'collaborator_profile' username=user.username %}">Colaborador</a>
-        </li>
-        <li>
-          <a href="/administracion" target="_blank">Administracion</a>
-        </li>
+          <a class="dropdown-item" href="{% url 'collaborator_profile' username=user.username %}">Colaborador</a>
+          <a class="dropdown-item" href="/administracion" target="_blank">Administracion</a>
       {% endif %}
-        <li>
-          <a href="{% url 'sport_profile' username=user.username %}">Deporte</a>
+          <a class="dropdown-item" href="{% url 'sport_profile' username=user.username %}">Deporte</a>
+          <a class="dropdown-item" href="{% url 'nutrition_profile' username=user.username %}">Nutricion</a>
+          <a class="dropdown-item" href="{% url 'health_profile' username=user.username %}">Salud</a>
+          <a class="dropdown-item" href="{% url 'awards_profile' username=user.username %}">Premios</a>
+          <a class="dropdown-item" href="{% url 'ships' username=user.username %}">Pedidos</a>
+          <a class="dropdown-item" href="{% url 'calendar_month' month=current_month username=user.username %}">Calendario</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Desconectar</a>
+        </div>
         </li>
-        <li>
-          <a href="{% url 'nutrition_profile' username=user.username %}">Nutricion</a>
-        </li>
-        <li>
-          <a href="{% url 'health_profile' username=user.username %}">Salud</a>
-        </li>
-        <li>
-          <a href="{% url 'awards_profile' username=user.username %}">Premios</a>
-        </li>
-        <li>
-          <a href="{% url 'ships' username=user.username %}">Pedidos</a>
-        </li>
-        <li>
-          <a href="{% url 'calendar' username=user.username %}">Calendario</a>
-        </li>
-        <li>
-          <a href="{% url 'logout' %}">Desconectar</a>
-        </li>
+      </ul>
     {% else %}
       <li>
         <a href="{% url 'custom_login' %}">Acceder</a>
       </li>
     {% endif %}
   </ul>
-  </nav>

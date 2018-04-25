@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block conocenos %}
+{% block know_us %}
   <p>Seccion del Proyecto</p>
   <hr>
   <p>Seccion del Equipo</p>
@@ -14,6 +14,7 @@
   <p>Seccion de los Colaboradores</p>
     {% for collaborator in collaborators %}
       <hr>
+      <a href="{% url 'collaborator' username=collaborator.user.username %}">{{ collaborator.user.username }}</a><br>
       {{ collaborator.position }}<br>
       {{ collaborator.company }}<br>
       {{ collaborator.education }}<br>
@@ -24,11 +25,18 @@
   <p>Seccion de las Empresas</p>
     {% for company in companies %}
       <hr>
-      {{ company.company_name }}<br>
+      <a href="{% url 'company' companyname=company.slug %}">{{ company.company_name }}</a><br>
       {{ company.description }}<br>
       {{ company.phone }}<br>
       {{ company.web }}<br>
       <img src="{{ company.company_image.url }}">
     {% endfor %}
   <hr>
+
+  {% block company %}
+  {% endblock %}
+
+  {% block collaborator %}
+  {% endblock %}
+
 {% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block company %}
+    <form method="POST">
+      {% csrf_token %}
+      {% if user.is_staff %}
+        {% if company is None %}
+          <input type="button" value="Añadir Tu Empresa" onClick="document.getElementById('company_form').style.visibility='visible'">
+          <div id="company_form" style="visibility:hidden">
+            <hr>
+            <p>Informacion de Empresa</p>
+            {{ company_form.as_p }}
+            <hr>
+            <p>Informacion Bancaria de la Empresa</p>
+            {{ bank_information_form.as_p }}
+            <hr>
+            <p>Direccion de la Empresa</p>
+            {{ address_form.as_p }}
+          </div>
+        {% else %}
+          <hr>
+          <p>Informacion de Empresa</p>
+          {{ company_form.as_p }}
+
+          <img src="{{ company.company_image.url }}">
+
+          <hr>
+          <p>Informacion Bancaria</p>
+          {{ bank_information_form.as_p }}
+          <hr>
+          <p>Direccion de la Empresa</p>
+          {{ address_form.as_p }}
+        {% endif %}
+        <hr>
+        <p>Informacion de colaborador</p>
+        {{ collaborator_profile_form.as_p }}
+        <img src="{{ collaborator_profile.collaborator_image.url }}">
+      {% endif %}
+      <button type="submit">Actualizar</button>
+  </form>
+{% endblock %}

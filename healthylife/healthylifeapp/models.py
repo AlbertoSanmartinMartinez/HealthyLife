@@ -255,6 +255,12 @@ class Category(models.Model):
         self.slug = self.name.replace(" ", "_").lower()
 
 
+class PostType(models.Model):
+    pass
+    # nombre
+    # plantilla
+
+
 @autoconnect
 class Post(models.Model):
     """Modelo para los articulos del blog"""
@@ -375,6 +381,7 @@ class Award(models.Model):
         pass
 
 
+# Calendar models
 @autoconnect
 class Event(models.Model):
     """
@@ -386,20 +393,22 @@ class Event(models.Model):
     slug = models.CharField(max_length=50, default=' ', blank=True)
     description = models.TextField()
     PrivacityType = ((1, 'Público'), (2, 'Privado'))
-    privacity = models.IntegerField(choices=PrivacityType, default=1)
+    privacity = models.IntegerField(choices=PrivacityType, default=1, blank=True)
     owner = models.ForeignKey(User)
-    participant = models.ManyToManyField(User, related_name='event_participants')
-    init_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    address = models.ForeignKey(Address, default=1)
+    # participant = models.ManyToManyField(User, related_name='event_participants')
+    #date = models.DateField(default=datetime.now)
+    # end_date = models.DateField(default=datetime.now)
+    #time = models.TimeField(default=datetime.now)
+    #end_hour = models.TimeField(default=datetime.now)
+    # address = models.ForeignKey(Address, default=1, blank=True)
 
     def __unicode__(self):
-        return self.name
+        return self.title
 
     def pre_save(self):
         """Metodo para aignar el slug y el autor de un post automaticamente al crearlo"""
         self.slug = self.title.replace(" ", "_").lower()
-        # self.owner = instance.username
+
 
     def inviteParticipants(self):
         """

@@ -5,7 +5,7 @@
 
 {% block login %}
 
-<form method="POST">
+<form class="boton" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Acceder</button>

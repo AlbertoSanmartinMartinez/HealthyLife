@@ -44,6 +44,9 @@ urlpatterns = [
     # Pages URLS's
     url(r'^$', views.home, name='home'),
     url(r'^conocenos/$', views.know_us, name='know_us'),
+    url(r'^conocenos/colaboradores/(?P<username>\w+)/$', views.know_us_collaborator, name='collaborator'),
+    url(r'^conocenos/empresas/(?P<companyname>\w+)/$', views.know_us_company, name='company'),
+
     url(r'^trabaja_con_nosotros/', views.work_with_our, name='work_with_our'),
     url(r'^informacion_legal/', views.legal_information, name='legal_information'),
     url(r'^contacto/', views.contact, name='contact'),
@@ -82,12 +85,17 @@ urlpatterns = [
     # Profile URLS's
     url(r'^mi_cuenta/(?P<username>\w+)/$', views.profile, name='profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
-    url(r'^mi_cuenta/(?P<username>\w+)/calendario/$', views.calendar, name='calendar'),
+
+    # Calendar URLS's
+    url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<month>\w+)/$', views.calendarMonth, name='calendar_month'),
+    # url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<month>\w+)/(?P<day>\w+)/$', views.calendarDay, name='calendar_day'),
+    # url(r'^mi_cuenta/(?P<username>\w+)/calendario/eventos/(?P<event>\w+)/$', views.event, name='event'),
+
     url(r'^mi_cuenta/(?P<username>\w+)/deporte/$', views.sport_profile, name='sport_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/nutricion/$', views.nutrition_profile, name='nutrition_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/salud/$', views.health_profile, name='health_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/premios/$', views.awards_profile, name='awards_profile'),
-    url(r'^mi_cuenta/(?P<username>\w+)/colaborador/$', views.collaborator, name='collaborator_profile'),
+    url(r'^mi_cuenta/(?P<username>\w+)/colaborador/$', views.collaborator_profile, name='collaborator_profile'),
 
     # Company URLS's
     #url(r'^empresas/(?P<company>\w+)/empresa/$', views.company, name='company'),

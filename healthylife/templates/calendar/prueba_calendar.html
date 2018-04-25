@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block calendar %}
+
+  {% now "m" as current_month %}
+
+  {{ calendar }}
+
+{% endblock %}

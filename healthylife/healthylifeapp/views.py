@@ -18,6 +18,7 @@ from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Permission
 from django.contrib.auth import authenticate, login
+#from calendar import HTMLCalendar
 
 # API imports
 from rest_framework.decorators import api_view
@@ -99,8 +100,6 @@ def legal_information(request):
 
 
 def know_us(request):
-    users = User.objects.filter(is_staff=True).order_by("date_joined")
-    # team = []
     collaborators = models.CollaboratorProfile.objects.all()
     companies = models.Company.objects.all()
 
@@ -108,7 +107,27 @@ def know_us(request):
         "search_form":getSearchForm(),
         "companies": companies,
         "collaborators": collaborators,
-        # "team": team,
+    })
+
+
+def know_us_collaborator(request, username):
+    user = User.objects.get(username=username)
+    print(user)
+    collaborator = models.CollaboratorProfile.objects.get(user_id=user.id)
+    print(collaborator.education)
+
+    return render(request, 'collaborator.html', {
+        "collaborator": collaborator,
+        "search_form":getSearchForm(),
+    })
+
+
+def know_us_company(request, companyname):
+    company = models.Company.objects.get(slug=companyname)
+
+    return render(request, 'company.html', {
+        "company": company,
+        "search_form":getSearchForm(),
     })
 
 
@@ -324,7 +343,7 @@ def profile(request, username):
 
 
 @login_required(redirect_field_name='custom_login')
-def collaborator(request, username):
+def collaborator_profile(request, username):
     """
     Vista que muestra la informacion del perfil de colaborador
     """
@@ -416,7 +435,7 @@ def collaborator(request, username):
             address_form = forms.AddressForm(instance=address)
         collaborator_profile_form = forms.CollaboratorProfileForm(instance=collaborator_profile)
 
-    return render(request, 'collaborator.html', {
+    return render(request, 'collaborator_profile.html', {
         "bank_information_form": bank_information_form,
         "address_form": address_form,
         "company_form": company_form,
@@ -451,10 +470,42 @@ def awards_profile(request, username):
     })
 
 
-def calendar(request, username):
-    return render(request, 'calendar.html', {
+# Calendar views
+def calendarMonth(request, username, month):
+    """
+    https://williambert.online/2011/06/django-event-calendar-for-a-django-beginner/
+    continuar por las views del calendario
+    """
+    calendar = HTMLCalendar()
+    calendar = calendar.formatmonth(2018, 04)
+    user = User.objects.get(username=username)
+    #events = models.Event.objects.filter(owner_id=user.id)
+
+    """
+    if request.method == 'POST':
+        event_form = forms.EventForm(data=request.POST)
+        if event_form.is_valid():
+            data = event_form.cleaned_data
+            event = models.Event.objects.create()
+            event.save()
+    else:
+        event_form = forms.EventForm()
+    """
+
+    return render(request, 'prueba_calendar.html', {
         "search_form": getSearchForm(),
+        #"events": events,
+        #"event_form": event_form,
+        "calendar": calendar,
     })
+
+
+def calendarDay(reques, username, month, day):
+    pass
+
+
+def event(reques):
+    pass
 
 
 def ships(request, username):
