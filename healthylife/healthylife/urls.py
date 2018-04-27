@@ -87,9 +87,9 @@ urlpatterns = [
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', views.ships, name='ships'),
 
     # Calendar URLS's
-    url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<month>\w+)/$', views.calendarMonth, name='calendar_month'),
-    # url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<month>\w+)/(?P<day>\w+)/$', views.calendarDay, name='calendar_day'),
-    # url(r'^mi_cuenta/(?P<username>\w+)/calendario/eventos/(?P<event>\w+)/$', views.event, name='event'),
+    url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<year>\w+)/(?P<month>\w+)/(?P<day>\w+)/$', views.calendar, name='calendar'),
+    #url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<year>\w+)/(?P<month>\w+)/(?P<day>\w+)/(?<slug>\w)/$', views.event, name='detail_event'),
+    url(r'^mi_cuenta/(?P<username>\w+)/calendario/eventos/nuevo/$', views.event, name='add_event'),
 
     url(r'^mi_cuenta/(?P<username>\w+)/deporte/$', views.sport_profile, name='sport_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/nutricion/$', views.nutrition_profile, name='nutrition_profile'),

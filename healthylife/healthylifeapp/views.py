@@ -18,7 +18,10 @@ from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Permission
 from django.contrib.auth import authenticate, login
-#from calendar import HTMLCalendar
+import calendar
+from calendar import HTMLCalendar
+from datetime import datetime
+
 
 # API imports
 from rest_framework.decorators import api_view
@@ -27,10 +30,20 @@ from rest_framework import status
 
 # General views
 def home(request):
-    last_posts = models.Post.objects.filter(status=1).order_by("-creation_date")[:6]
-    return render(request, "base.html", {
+    last_posts = models.Post.objects.filter(status=1).order_by("-creation_date")[:3]
+
+    if request.method == 'POST':
+        subscribe_form = forms.SubscriberForm(data=request.POST)
+        if subscribe_form.is_valid():
+            subscribe_form.save()
+            return redirect('home')
+    else:
+        subscribe_form = forms.SubscriberForm()
+
+    return render(request, "home.html", {
         "search_form":getSearchForm(),
         "last_posts": last_posts,
+        'subscribe_form': subscribe_form,
     })
 
 
@@ -300,6 +313,12 @@ def shop(request):
     })
 
 
+def ships(request, username):
+    return render(request, 'ships.html', {
+        "search_form": getSearchForm(),
+    })
+
+
 # Profile views
 @login_required(redirect_field_name='custom_login')
 def profile(request, username):
@@ -471,16 +490,18 @@ def awards_profile(request, username):
 
 
 # Calendar views
-def calendarMonth(request, username, month):
-    """
-    https://williambert.online/2011/06/django-event-calendar-for-a-django-beginner/
-    continuar por las views del calendario
-    """
-    calendar = HTMLCalendar()
-    calendar = calendar.formatmonth(2018, 04)
-    user = User.objects.get(username=username)
-    #events = models.Event.objects.filter(owner_id=user.id)
+def named_month(month_number):
+    return date(1900, month_number, 1).strftime("%B")
 
+
+def this_month(request):
+    today = datetime.now()
+    return calendar(request, today.year, today.month)
+
+
+def event(request, username):
+    """
+    Vista para los eventos
     """
     if request.method == 'POST':
         event_form = forms.EventForm(data=request.POST)
@@ -490,28 +511,68 @@ def calendarMonth(request, username, month):
             event.save()
     else:
         event_form = forms.EventForm()
-    """
 
-    return render(request, 'prueba_calendar.html', {
+    return render(request, 'event.html', {
         "search_form": getSearchForm(),
-        #"events": events,
-        #"event_form": event_form,
-        "calendar": calendar,
+        "event": event,
     })
 
 
-def calendarDay(reques, username, month, day):
-    pass
+def calendar(request, username, year, month, day):
+    """
+    Vista para el calendario.
+    """
+    year = int(year)
+    month = int(month)
+
+    #calendar = models.EventCalendar()
+    # htmlcalendar = HTMLCalendar(calendar.MONDAY)
+    htmlcalendar = HTMLCalendar()
+    htmlcalendar = htmlcalendar.formatmonth(year, month)
+
+    #calendar_from_month = datetime(my_year, my_month, 1)
+    #my_calendar_to_month = datetime(my_year, my_month, 1)
+    #my_calendar_to_month = datetime(my_year, my_month, monthrange(my_year,my_month)[1])
+
+    events = models.Event.objects.all()
+
+    previous_year = year
+    previous_month = month -1
+
+    if previous_month == 0:
+        previous_year = year -1
+        previous_month = 12
+
+    next_year = year
+    next_month = month +1
+
+    if next_month == 13:
+        next_year = year +1
+        next_month = 1
+
+    year_after_this = year +1
+    year_before_this = year -1
+
+    return render(request, 'calendar.html', {
+        "calendar": htmlcalendar,
+        'search_form': getSearchForm(),
+        'events': events,
+        'month': month,
+		'year': year,
+		'previous_month': previous_month,
+	    'previous_year': previous_year,
+		'next_month': next_month,
+		'next_year': next_year,
+		'year_before_this': year_before_this,
+		'year_after_this': year_after_this,
+        #'month_name': named_month(my_month),
+        #'previous_month_name': named_month(my_previous_month),
+        #'next_month_name': named_month(my_next_month),
+    })
 
 
 def event(reques):
     pass
-
-
-def ships(request, username):
-    return render(request, 'ships.html', {
-        "search_form": getSearchForm(),
-    })
 
 
 # Admin views

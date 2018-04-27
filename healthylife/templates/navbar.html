@@ -1,88 +1,101 @@
 {% load staticfiles %}
+
 {% now "m" as current_month %}
+{% now "Y" as current_year %}
+{% now "d" as current_day %}
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{% url 'home' %}">Barbastro Se Mueve</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <nav class="navbar navbar-default">
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class"nav-item">
-          <a class="nav-link" href="{% url 'know_us' %}">Conocenos<span class="sr-only">(current)</span></a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="{% url 'sport' %}">Deporte</a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="{% url 'nutrition' %}">Nutricion</a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="{% url 'health' %}">Salud</a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="{% url 'blog' %}">Blog</a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="{% url 'shop' %}">Tienda</a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="{% url 'contact' %}">Contacto</a>
-        </li>
+    <div class="container-fluid">
 
-        {% include 'search.html' %}
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'home' %}">Barbastro Se Mueve</a>
+      </div>
 
-        <li class"nav-item">
-          <a class="nav-link" href="https://www.facebook.com/BarbastroSeMueve/" target="_blank">Facebook</a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="https://twitter.com/BarbastroSMueve" target="_blank">Twitter</a>
-        </li>
-        <li class"nav-item">
-          <a class="nav-link" href="https://www.instagram.com/barbastrosemueve/" target="_blank">Instagram</a>
-        </li>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="{% url 'know_us' %}">Conocenos<span class="sr-only">(current)</span></a>
+          </li>
+          <li>
+            <a  href="{% url 'sport' %}">Deporte</a>
+          </li>
+          <li>
+            <a href="{% url 'nutrition' %}">Nutricion</a>
+          </li>
+          <li>
+            <a href="{% url 'health' %}">Salud</a>
+          </li>
+          <li>
+            <a href="{% url 'blog' %}">Blog</a>
+          </li>
+          <li>
+            <a href="{% url 'shop' %}">Tienda</a>
+          </li>
+          <li>
+            <a href="{% url 'contact' %}">Contacto</a>
+          </li>
 
-        {% if user.is_authenticated %}
-          <li class"nav-item">
-            <a class="nav-link" href="{% url 'profile' username=user.username %}">{{ user.username }}</a>
+          {% include 'search.html' %}
+
+          <li>
+            <a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank">Facebook</a>
+          </li>
+          <li>
+            <a href="https://twitter.com/BarbastroSMueve" target="_blank">Twitter</a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/barbastrosemueve/" target="_blank">Instagram</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% if not user.is_authenticated %}
+          <li>
+            <a href="{% url 'custom_login' %}">Acceder</a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{% url 'profile' username=user.username %}">{{ user.username }}</a>
             <ul>
               {% if user.is_staff %}
-                <li class"nav-item">
-                  <a class="nav-link" href="{% url 'collaborator_profile' username=user.username %}">Colaborador</a>
+                <li>
+                  <a href="{% url 'collaborator_profile' username=user.username %}">Colaborador</a>
                 </li>
-                <li class"nav-item">
-                  <a class="nav-link" href="/administracion" target="_blank">Administracion</a>
+                <li>
+                  <a href="/administracion" target="_blank">Administracion</a>
                 </li>
-              {% endif %}
-              <li class"nav-item">
-                <a class="nav-link" href="{% url 'sport_profile' username=user.username %}">Deporte</a>
-              </li>
-              <li class"nav-item">
-                <a class="nav-link" href="{% url 'nutrition_profile' username=user.username %}">Nutricion</a>
-              </li>
-              <li class"nav-item">
-                <a class="nav-link" href="{% url 'health_profile' username=user.username %}">Salud</a>
-              </li>
-              <li class"nav-item">
-                <a class="nav-link" href="{% url 'awards_profile' username=user.username %}">Premios</a>
-              </li>
-              <li class"nav-item">
-                <a class="nav-link" href="{% url 'ships' username=user.username %}">Pedidos</a>
-              </li>
-              <li class"nav-item">
-                <a class="nav-link" href="{% url 'calendar_month' month=current_month username=user.username %}">Calendario</a>
-              </li>
-              <li class"nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Desconectar</a>
-              </li>
-            </ul>
-          </li>
-        {% else %}
-          <li class"nav-item">
-            <a class="nav-link" href="{% url 'custom_login' %}">Acceder</a>
-          </li>
-        {% endif %}
-      </ul>
+                {% endif %}
+                <li>
+                  <a href="{% url 'sport_profile' username=user.username %}">Deporte</a>
+                </li>
+                <li>
+                  <a href="{% url 'nutrition_profile' username=user.username %}">Nutricion</a>
+                </li>
+                <li>
+                  <a href="{% url 'health_profile' username=user.username %}">Salud</a>
+                </li>
+                <li>
+                  <a href="{% url 'awards_profile' username=user.username %}">Premios</a>
+                </li>
+                <li>
+                  <a href="{% url 'ships' username=user.username %}">Pedidos</a>
+                </li>
+                <li>
+                  <a href="{% url 'calendar' year=current_year month=current_month day=current_day username=user.username %}">Calendario</a>
+                </li>
+                <li>
+                  <a href="{% url 'logout' %}">Desconectar</a>
+                </li>
+              </ul>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
     </div>
   </nav>

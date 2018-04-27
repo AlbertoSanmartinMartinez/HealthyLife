@@ -1,0 +1,27 @@
+/********** GENERAL **********/
+
+.content {
+    height: 200px;
+    width: 50%;
+    background-color: yellow;
+}
+
+/********** BLOG **********/
+.blog_navbar {
+  background-color: blue;
+}
+
+.post_content {
+
+}
+
+.blog_content {
+
+}
+
+/********** HEADER **********/
+
+/********** FOOTER **********/
+.footer {
+  background-color: yellow;
+}

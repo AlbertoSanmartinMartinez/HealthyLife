@@ -1,6 +1,7 @@
 {% load staticfiles %}
 
 {% block navbar_blog %}
+  <div class="blog_navbar">
   {% for category in categories %}
     <ul>
       <li>
@@ -22,6 +23,7 @@
         </ul>
       {% endfor %}
     </ul>
+  </div>
 {% endblock %}
 
 <!-- controlar si quedan categorias hijo, bucles anidados, automatico -->

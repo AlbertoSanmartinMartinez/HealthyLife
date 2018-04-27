@@ -1,2 +1,20 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+
+{% block event %}
+
+  <hr>
+  <form method="POST">
+    {% csrf_token %}
+    <input type="button" value="Añadir un evento" onClick="document.getElementById('event_form').style.visibility='visible'">
+    <div id="event_form" style="visibility:hidden">
+      <p>Añade un evento</p>
+      {{ event_form.as_p }}
+      <button type="submit">Crear evento</button>
+    </div>
+  </form>
+
+  {% block event %}
+  {% endblock %}
+
+{% endblock %}

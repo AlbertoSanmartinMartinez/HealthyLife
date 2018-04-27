@@ -6,6 +6,7 @@ https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.Mo
 
 from django.contrib import admin
 from healthylifeapp import models
+from healthylifeapp import custom_calendar
 from django.contrib.auth.models import Permission
 from guardian.admin import GuardedModelAdmin
 from guardian.models import UserObjectPermission
@@ -14,7 +15,7 @@ from taggit.managers import TaggableManager
 # from myapp.seo import MyMetadata
 # from collections import OrderedDict as SortedDict
 
-# Admin Health Models
+# Admin Sport Models
 admin.site.register(models.SportType)
 
 class SportSessionAdmin(GuardedModelAdmin):
@@ -129,6 +130,8 @@ class EventAdmin(GuardedModelAdmin):
 
 admin.site.register(models.Event, EventAdmin)
 
+# admin.site.register(custom_calendar.EventCalendar)
+
 # Admin Permissions Models
 admin.site.register(Permission)
 admin.site.register(UserObjectPermission)
@@ -138,3 +141,6 @@ class IllnesAdmin(GuardedModelAdmin):
     model = models.Illnes
 
 admin.site.register(models.Illnes, IllnesAdmin)
+
+# Admin General Models
+admin.site.register(models.Subscriber)    

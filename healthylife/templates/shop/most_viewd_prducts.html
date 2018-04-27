@@ -1,0 +1,19 @@
+{% load staticfiles %}
+
+{% block last_posts %}
+
+<div class="last_products">
+  <div class="last_products_title">
+    <p>Productos más vistos</p>
+  </div>
+  <div class="row well">
+    {% for products in most_viewd_prducts %}
+    {% endfor %}
+  </div>
+  <div class="most_viewd_prducts_link">
+    <a href="{% url 'shop' %}">Ir a la Tienda</a>
+  </div>
+</div>
+<hr>
+
+{% endblock %}

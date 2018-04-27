@@ -2,21 +2,43 @@
 
 {% block content %}
     <div class="footer">
+      <div class="subscribe_banner">
+        <div class="subscribe_banner_title">
+          <p>No te pierdas las últimas novedades y noticias</p>
+        </div>
+        <div class="subscribe_banner_content">
+        <form>
+          {% csrf_token %}
+          <div class="subscribe_banner_content_email">
+            {{ subscribe_form.as_p }}
+          </div>
+          <div class="subscribe_banner_content_button">
+            <button type="submit">Subscribirse</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <hr>
+    <div class="footer_menu">
       <ul>
         <li>
-          <a href="{% url 'api' %}">API</a></p>
+          <a href="{% url 'api' %}">API</a>
         </li>
         <li>
-          <a href="{% url 'legal_information' %}">Informacion Legal</a>
+          <a href="{% url 'legal_information' %}">Política de Privacidad</a>
+        </li>
+        <li>
+          <a href="{% url 'legal_information' %}">Condiciones de Uso</a>
         </li>
         <li>
           <a href="{% url 'work_with_our' %}">Trabaja con Nosotros</a>
         </li>
-        <li>
-          <p>Creado por: <a href="http://www.preconcebido.com" target="_blank">Preconcebido</a></p>
-        </li>
-        </li>
-          <a href="#">Top</a></p>
-      </li>
+      </ul>
     </div>
+    <div class="footer_information">
+      <p>Creado por: <a href="http://www.preconcebido.com" target="_blank">Preconcebido</a></p>
+      <p>&#169; 2018 Barbastro Se Mueve. Todos los derechos reservados</p>
+      <a href="#">Top</a></p>
+    </div>
+  </div>
 {% endblock %}

@@ -33,6 +33,13 @@ class CustomAuthenticationForm(AuthenticationForm):
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
 
 
+class SubscriberForm(forms.ModelForm):
+    email = forms.EmailField(label='', widget=forms.TextInput(attrs={'placeholder':'Suscribete con tu correo electrónico'}))
+
+    class Meta:
+        model = models.Subscriber
+        exclude = []
+
 # General Forms
 class CompanyForm(forms.ModelForm):
     company_name = forms.CharField(label='Nombre')
