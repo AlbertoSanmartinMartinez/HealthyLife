@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block nutrition_section %}
+
 <section>
-  <h3>Nutrition Section</h3
-    <article>
-      <p>Descripción de nutricion</p>
-    </articles>
+  <div class="nutrition_section">
+    <img src="{% static 'images/nutrition_section.jpg' %}">
+  </div>
+  <hr>
 </section>
+
 {% endblock %}

@@ -1,0 +1,21 @@
+{% load staticfiles %}
+
+{% block comment %}
+
+<div class="detail_post_comments_form">
+  <div class="detail_post_comments_form_image">
+    <img src="{% static 'images/perfil_miniatura.jpg' %}">
+    <!--Cargar la foto de perfil del usuario que va a comentar-->
+  </div>
+  <div class="detail_post_comments_form_input">
+    <form method="POST" action="{% url 'comment' post_slug=post.slug %}">
+      <p>Escribir un comentario</p>
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit">Comentar</button>
+    </form>
+  </div>
+  <hr>
+</div>
+
+{% endblock %}

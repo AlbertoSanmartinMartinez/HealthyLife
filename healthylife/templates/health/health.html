@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block health_section %}
+
 <section>
-  <h3>Health Section</h3
-    <article>
-      <p>Descripción de salud</p>
-    </articles>
+  <div class="health_section">
+    <img src="{% static 'images/health_section.jpg' %}">
+  </div>
+  <hr>
 </section>
+
 {% endblock %}

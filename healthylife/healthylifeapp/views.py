@@ -28,22 +28,17 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+
 # General views
 def home(request):
     last_posts = models.Post.objects.filter(status=1).order_by("-creation_date")[:3]
-
-    if request.method == 'POST':
-        subscribe_form = forms.SubscriberForm(data=request.POST)
-        if subscribe_form.is_valid():
-            subscribe_form.save()
-            return redirect('home')
-    else:
-        subscribe_form = forms.SubscriberForm()
+    #most_viwed_products
+    #best_awards
 
     return render(request, "home.html", {
         "search_form":getSearchForm(),
         "last_posts": last_posts,
-        'subscribe_form': subscribe_form,
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -61,6 +56,7 @@ def contact(request):
     context = {
         "contact_form": form,
         "search_form":getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     }
     return render(request, "contact.html", context)
 
@@ -101,15 +97,17 @@ def work_with_our(request):
         user_form = forms.CustomRegisterColaboratorForm()
 
     return render(request, 'work_with_our.html', {
-        "user_form": user_form
+        "user_form": user_form,
+        'subscribe_form': getSubscribeForm(),
     })
 
 
 def legal_information(request):
-    context = {
+
+    return render(request, 'aviso_legal.html', {
         "search_form":getSearchForm(),
-    }
-    return render(request, 'aviso_legal.html', context)
+        'subscribe_form': getSubscribeForm(),
+    })
 
 
 def know_us(request):
@@ -120,6 +118,7 @@ def know_us(request):
         "search_form":getSearchForm(),
         "companies": companies,
         "collaborators": collaborators,
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -132,6 +131,7 @@ def know_us_collaborator(request, username):
     return render(request, 'collaborator.html', {
         "collaborator": collaborator,
         "search_form":getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -141,6 +141,7 @@ def know_us_company(request, companyname):
     return render(request, 'company.html', {
         "company": company,
         "search_form":getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -161,6 +162,7 @@ def custom_login(request):
     return render(request, 'custom_login.html', {
         "search_form": getSearchForm,
         "form": form,
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -177,6 +179,7 @@ def cutom_registration(request):
     return render(request, 'custom_register.html', {
         "search_form": getSearchForm,
         "form": form,
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -198,13 +201,16 @@ def registration_activation_complete(request):
 
 # Statistics views
 def statistics(request):
-    return render(request, 'statistics.html', {})
+    return render(request, 'statistics.html', {
+        'subscribe_form': getSubscribeForm(),
+    })
 
 
 # Nutrition views
 def nutrition(request):
     return render(request, 'nutrition.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -212,18 +218,22 @@ def nutrition(request):
 def health(request):
     return render(request, 'health.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
 # Award views
 def awards(request):
-    return render(request, 'awards.html', {})
+    return render(request, 'awards.html', {
+        'subscribe_form': getSubscribeForm(),
+    })
 
 
 # Sport views
 def sport(request):
     return render(request, 'sport.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -235,14 +245,88 @@ def blog(request):
         "posts": posts,
         "categories": obtenerCategorias(request),
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
-def detail_post(request, post):
-    post = models.Post.objects.get(slug=post)
-    comments = models.Comment.objects.filter(post=post.id)
+def detail_post(request, post_slug):
+    post = models.Post.objects.get(slug=post_slug)
+    comments = models.Comment.objects.filter(post=post.id, status=1).order_by("-creation_date")
     images = models.Image.objects.filter(album=post.album)
 
+    """
+    if request.method == 'POST':
+        comment_form = forms.CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            data = comment_form.cleaned_data
+            comment = models.Comment.objects.create(
+                author_id=request.user.id,
+                post_id=post.id,
+                title = data['title'],
+                content = data['content'])
+            comment_form.save()
+    else:
+        comment_form = forms.CommentForm()
+    """
+
+    return render(request, "post.html", {
+        "post": post,
+        "images": images,
+        "categories": obtenerCategorias(request),
+        "comments":comments,
+        # "comment_form": comment_form,
+        "comment_form": getCommentForm(),
+        "answer_form": getCommentForm(),
+        "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
+    })
+
+
+def blog_category_posts(request, category):
+    category = models.Category.objects.get(slug=category)
+    posts = models.Post.objects.filter(status=1, category=category.id)
+
+    return render(request, 'blog.html', {
+        "posts":posts,
+        "categories": obtenerCategorias(request),
+        "search_form":getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
+    })
+
+
+def blog_author_posts(request, username):
+    author = User.objects.get(username=username)
+    posts = models.Post.objects.filter(status=1, author=author.id)
+    categories = models.Category.objects.order_by("name")
+
+    return render(request, 'blog.html', {
+        "categories":categories,
+        "posts":posts,
+        "categories": obtenerCategorias(request),
+        "search_form":getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
+    })
+
+
+def subscribe(request):
+    print("funcion de subscripcion")
+    if request.method == 'POST':
+        print("metodo post")
+        subscribe_form = forms.SubscriberForm(data=request.POST)
+        if subscribe_form.is_valid():
+            print("formualrio valido")
+            data = subscribe_form.cleaned_data['email']
+            print(data)
+            subscribe_form.save()
+    else:
+        subscribe_form = forms.SubscriberForm()
+
+    return redirect('home')
+
+
+@login_required(redirect_field_name='custom_login')
+def comment(request, post_slug):
+    post = models.Post.objects.get(slug=post_slug)
     if request.method == 'POST':
         comment_form = forms.CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -256,38 +340,7 @@ def detail_post(request, post):
     else:
         comment_form = forms.CommentForm()
 
-    return render(request, "post.html", {
-        "post": post,
-        "images": images,
-        "categories": obtenerCategorias(request),
-        "comments":comments,
-        "comment_form": comment_form,
-        "search_form": getSearchForm(),
-    })
-
-
-def blog_category_posts(request, category):
-    category = models.Category.objects.get(slug=category)
-    posts = models.Post.objects.filter(status=1, category=category.id)
-    context = {
-        "posts":posts,
-        "categories": obtenerCategorias(request),
-        "search_form":getSearchForm(),
-    }
-    return render(request, 'blog.html', context)
-
-
-def blog_author_posts(request, username):
-    author = User.objects.get(username=username)
-    posts = models.Post.objects.filter(status=1, author=author.id)
-    categories = models.Category.objects.order_by("name")
-    context = {
-        "categories":categories,
-        "posts":posts,
-        "categories": obtenerCategorias(request),
-        "search_form":getSearchForm(),
-    }
-    return render(request, 'blog.html', context)
+    return detail_post(request, post_slug)
 
 
 # Search views
@@ -296,26 +349,33 @@ def search(request):
     if form.is_valid():
         word = form.cleaned_data['word']
         posts = models.Post.objects.filter(status=1, title__contains=word).order_by("-creation_date")
-        categories =  obtenerCategorias(request)
+        categories = obtenerCategorias(request)
     else:
         form = forms.SearchForm()
         posts = None
+
     return render(request, 'blog.html', {
         "posts": posts,
         "categories": obtenerCategorias(request),
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
+
 
 # Shop views
 def shop(request):
+
     return render(request, 'shop.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
 def ships(request, username):
+
     return render(request, 'ships.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -358,6 +418,7 @@ def profile(request, username):
         "user_profile_form": user_profile_form,
         "search_form": getSearchForm(),
         "user_profile": user_profile,
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -462,30 +523,35 @@ def collaborator_profile(request, username):
         "search_form": getSearchForm(),
         "collaborator_profile_form": collaborator_profile_form,
         "collaborator_profile": collaborator_profile,
+        'subscribe_form': getSubscribeForm(),
         })
 
 
 def sport_profile(request, username):
     return render(request, 'sport_profile.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
 def nutrition_profile(request, username):
     return render(request, 'nutrition_profile.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
 def health_profile(request, username):
     return render(request, 'health_profile.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
 def awards_profile(request, username):
     return render(request, 'awards_profile.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -565,6 +631,7 @@ def calendar(request, username, year, month, day):
 		'next_year': next_year,
 		'year_before_this': year_before_this,
 		'year_after_this': year_after_this,
+        'subscribe_form': getSubscribeForm(),
         #'month_name': named_month(my_month),
         #'previous_month_name': named_month(my_previous_month),
         #'next_month_name': named_month(my_next_month),
@@ -582,6 +649,7 @@ def event(reques):
 def api(request):
     return render(request, 'api.html', {
         "search_form": getSearchForm(),
+        'subscribe_form': getSubscribeForm(),
     })
 
 
@@ -703,6 +771,14 @@ def obtenerCategorias(request):
 
 def getSearchForm():
     return forms.SearchForm()
+
+
+def getSubscribeForm():
+    return forms.SubscriberForm()
+
+
+def getCommentForm():
+    return forms.CommentForm()
 
 
 # Error Views

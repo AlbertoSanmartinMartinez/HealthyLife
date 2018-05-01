@@ -2,22 +2,7 @@
 
 {% block content %}
     <div class="footer">
-      <div class="subscribe_banner">
-        <div class="subscribe_banner_title">
-          <p>No te pierdas las últimas novedades y noticias</p>
-        </div>
-        <div class="subscribe_banner_content">
-        <form>
-          {% csrf_token %}
-          <div class="subscribe_banner_content_email">
-            {{ subscribe_form.as_p }}
-          </div>
-          <div class="subscribe_banner_content_button">
-            <button type="submit">Subscribirse</button>
-          </div>
-        </form>
-      </div>
-    </div>
+      {% include 'subscribe.html'%}
     <hr>
     <div class="footer_menu">
       <ul>

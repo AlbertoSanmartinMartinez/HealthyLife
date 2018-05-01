@@ -77,7 +77,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100, blank=True)
     phone = models.CharField(max_length=9, default='         ', blank=True)
-    profile_image = models.ImageField(upload_to="photos", default='photos/perfil.jpg', blank=True)
+    profile_image = models.ImageField(upload_to="photos", default='photos/perfil_miniatura.jpg', blank=True)
 
     def __unicode__(self):
         return str(self.user.username)
@@ -103,7 +103,7 @@ class CollaboratorProfile(models.Model):
 
 
 class Subscriber(models.Model):
-    email = models.CharField(max_length=50)
+    email = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
         return self.email
@@ -243,7 +243,6 @@ class Image(models.Model):
 
 # Blog models
 
-
 @autoconnect
 class Category(models.Model):
     """Modelo para las categorias del blog"""
@@ -320,13 +319,18 @@ class Comment(models.Model):
     author = models.ForeignKey(User, default=1)
     post = models.ForeignKey(Post, default=1)
     # guardar automaticamente el usuario que ha hecho el comentario
+    parent = models.ForeignKey('self', related_name='answer', null=True, blank=True)
 
     def __unicode__(self):
         return self.title
 
+    def post_save(self):
+        self.notifyNewComment()
+
     def notifyNewComment(self):
         """Metodo que avisa de un nuevo comentario en el blog"""
-        pass
+        self.status = 1
+        print("notificacion enviada")
 
 # Shop models
 class Product(models.Model):

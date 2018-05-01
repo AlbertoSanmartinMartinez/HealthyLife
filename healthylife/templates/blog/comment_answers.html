@@ -1,0 +1,13 @@
+{% load staticfiles %}
+{% load blog_tags %}
+
+{% block comment_answers %}
+
+<div class="detail_post_comments_answers">
+{% for answer in comment_answers comment.id %}
+    {{ answer.title }}
+    <hr>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -30,10 +30,12 @@ urlpatterns = [
 
     # Blog URLS's
     url(r'^blog/$', views.blog, name='blog'),
-    url(r'^blog/(?P<post>\w+)/$', views.detail_post, name='detail_post'),
+    url(r'^blog/subscripcion/$', views.subscribe, name='subscribe'),
+    url(r'^blog/(?P<post_slug>\w+)/$', views.detail_post, name='detail_post'),
+    url(r'^blog/(?P<post_slug>\w+)/comentar/$', views.comment, name='comment'),
     url(r'^blog/categorias/(?P<category>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
     url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
-    # url(r'^blog/etiquetas/(?P<tag>\w+)/$', views.blog_tag_posts, name='blog_tag_posts'),
+    #url(r'^blog/etiquetas/(?P<tag>\w+)/$', views.blog_tag_posts, name='blog_tag_posts'),
 
     # Search URLS's
     url(r'^resultado_busqueda/$', views.search, name='search'),

@@ -34,7 +34,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 class SubscriberForm(forms.ModelForm):
-    email = forms.EmailField(label='', widget=forms.TextInput(attrs={'placeholder':'Suscribete con tu correo electrónico'}))
+    email = forms.EmailField(label='', required=False, widget=forms.TextInput(attrs={'placeholder':'Introduce tu correo electrónico'}))
 
     class Meta:
         model = models.Subscriber
@@ -138,8 +138,8 @@ class PostForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
-    title = forms.CharField(label='Título del comentario', widget=forms.TextInput(attrs={'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='Contenido del comentario', widget=forms.TextInput(attrs={'placeholder':'Contenido del comentario'}))
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
     class Meta:
         model = models.Comment

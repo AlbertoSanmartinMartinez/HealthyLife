@@ -82,9 +82,9 @@ admin.site.register(models.PosTags, PostTagsAdmin)
 """
 
 class CommentAdmin(GuardedModelAdmin):
-    list_display = ('status', 'title', 'author', 'post')
-    list_filter = ('status', 'title', 'author', 'post')
-    search_fields = ('status', 'title', 'author', 'post')
+    list_display = ('status', 'title', 'author', 'post', 'parent')
+    list_filter = ('status', 'title', 'author', 'post', 'parent')
+    search_fields = ('status', 'title', 'author', 'post', 'parent')
 
 admin.site.register(models.Comment, CommentAdmin)
 
@@ -143,4 +143,4 @@ class IllnesAdmin(GuardedModelAdmin):
 admin.site.register(models.Illnes, IllnesAdmin)
 
 # Admin General Models
-admin.site.register(models.Subscriber)    
+admin.site.register(models.Subscriber)

@@ -1,42 +1,74 @@
 {% extends "blog.html" %}
 {% load staticfiles %}
+{% load blog_tags %}
 
 {% block detail_post %}
 
-  {% for item in images %}
-    {% if item.header_image %}
-      <img src="{{ item.image.url }}">
-    {% endif %}
-  {% endfor %}
-  <hr>
-  <p>{{ post.title }}</p>
-  <p>{{ post.description }}</p>
-  <p>{{ post.content }}</p>
-  <p><a href="{% url 'blog_category_posts' category=post.category.slug %}">{{ post.category.name }}</a></p>
-  <p><a href="{% url 'blog_author_posts' username=post.author.username %}">{{ post.author.username }}</a></p>
-  <p>{{ post.creation_date }}</p>
-  {% for tag in post.tags.all %}
-    {{tag.name}}
-  {% endfor %}
-  {% for item in images %}
-    <img src="{{ item.image.url }}">
-  {% endfor %}
+<div class="detail_post">
 
-  <form method="POST">
+  <div class="detail_post_images_header">
+    {% for item in images %}
+      {% if item.header_image %}
+        <img src="{{ item.image.url }}">
+      {% endif %}
+    {% endfor %}
     <hr>
-    <p>Escribir un comentario</p>
-    {% csrf_token %}
-    {{ comment_form.as_p }}
-    <button type="submit">Enviar</button>
-  </form>
+  </div>
 
-  {% for comment in comments %}
+  <div class="detail_post_content"
+    <p>{{ post.title }}</p>
+    <p>{{ post.description }}</p>
+    <p>{{ post.content }}</p>
+    <p><a href="{% url 'blog_category_posts' category=post.category.slug %}">{{ post.category.name }}</a></p>
+    <p><a href="{% url 'blog_author_posts' username=post.author.username %}">{{ post.author.username }}</a></p>
+    <p>{{ post.creation_date }}</p>
     <hr>
-    <p>{{ comment.title }}</p>
-    <p>{{ comment.content }}</p>
-    <p>{{ comment.creation_date }}</p>
-    <p>{{ comment.autor }}</p>
-    <p>Responder</p>
-  {% endfor %}
+  </div>
+
+  <div class="detail_post_tags">
+    <p>Etiquetas</p>
+    {% for tag in post.tags.all %}
+      {{tag.name}}
+    {% endfor %}
+    <hr>
+  </div>
+
+  <div class="detail_post_images">
+    {% for item in images %}
+      {% if not item.header_image %}
+        <img src="{{ item.image.url }}">
+      {% endif %}
+    {% endfor %}
+    <hr>
+  </div>
+
+  <div class="detail_post_comments">
+
+    {% include 'comment_form.html' %}
+
+    <div class="detail_post_comments_list">
+      <p>Comentarios</p>
+      {% for comment in comments %}
+        <img src="{% static 'images/perfil_miniatura.jpg' %}">
+        <p>{{ comment.autor__username }}</p>
+        <p>{{ comment.creation_date }}</p>
+        <p>{{ comment.title }}</p>
+        <p>{{ comment.content }}</p>
+
+        <input type="button" value="Responder" onClick="document.getElementById("comment_title").autofocus">
+
+        <div class="detail_post_comments_answers">
+        {% for answer in comment_answers %}
+            {{ answer.title }}
+            <hr>
+          {% endfor %}
+        </div>
+
+        <hr>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
 
 {% endblock %}

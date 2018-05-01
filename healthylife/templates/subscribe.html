@@ -1,0 +1,18 @@
+{% load staticfiles %}
+
+{% block subscribe %}
+
+<div class="subscribe_banner">
+  <div class="subscribe_banner_title">
+    <p>No te pierdas las últimas novedades y noticias</p>
+  </div>
+  <div class="subscribe_banner_content">
+    <form method="POST" action="{% url 'subscribe' %}">
+      {% csrf_token %}
+      {{ subscribe_form.as_p }}
+      <button type="submit">Subscribirse</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

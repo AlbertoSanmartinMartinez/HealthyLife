@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block sport_section %}
+
 <section>
-  <h3>Sport</h3>
+  <div class="sport_section">
+    <img src="{% static 'images/sport_section.jpg' %}">
+  </div>
+  <hr>
 </section>
+
 {% endblock %}

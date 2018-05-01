@@ -15,10 +15,8 @@ SECRET_KEY = 'r6zfm1@g^!qz8r@v!w*kl^z&s0&oxf1g5u5md!^1tv4-!xsbem'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '192.168.1.102',
-    '127.0.0.1'
-    ]
+ALLOWED_HOSTS = []
+
 EMAIL_HOST = 'mail.barbastrosemueve.es'
 EMAIL_HOST_USER = 'info@barbastrosemueve.es'
 EMAIL_HOST_PASSWORD = 'Barbastro2017'
