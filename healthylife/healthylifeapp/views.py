@@ -588,6 +588,8 @@ def calendar(request, username, year, month, day):
     """
     Vista para el calendario.
     """
+    # Controlar si no hay usuario loggeado para mostrar solo los eventos publicos
+
     year = int(year)
     month = int(month)
 

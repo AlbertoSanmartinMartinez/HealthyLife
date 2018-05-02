@@ -1,14 +1,12 @@
 /********** GENERAL **********/
 
 .content {
-    height: 200px;
-    width: 50%;
-    background-color: yellow;
+
 }
 
 /********** BLOG **********/
 .blog_navbar {
-  background-color: blue;
+
 }
 
 .post_content {
@@ -25,5 +23,9 @@
 
 /********** FOOTER **********/
 .footer {
-  background-color: yellow;
+
+}
+
+.footer_menu {
+
 }

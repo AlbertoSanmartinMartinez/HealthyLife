@@ -125,7 +125,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files
+# ********** STATIC FILES **********
 
 STATIC_URL = '/static/'
 
@@ -134,18 +134,20 @@ STATICFILES_DIRS = [
     # BASE_DIR + '/images/',
 ]
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+STATICFILES_FINDERS = [
+       "django.contrib.staticfiles.finders.FileSystemFinder",
+       "django.contrib.staticfiles.finders.AppDirectoriesFinder"
+]
 
-# Static files
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = '/media/'
 
-"""
 MEDIAFILES_DIRS = [
     os.path.join(BASE_DIR, "media"),
-    BASE_DIR + '/photos/',
+    # BASE_DIR + '/photos/',
 ]
-"""
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
