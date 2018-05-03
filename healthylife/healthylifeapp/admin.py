@@ -15,20 +15,6 @@ from taggit.managers import TaggableManager
 # from myapp.seo import MyMetadata
 # from collections import OrderedDict as SortedDict
 
-# Admin Sport Models
-admin.site.register(models.SportType)
-
-class SportSessionAdmin(GuardedModelAdmin):
-    model = models.SportSession
-
-admin.site.register(models.SportSession, SportSessionAdmin)
-
-# Admin Nutrition Models
-admin.site.register(models.Food)
-admin.site.register(models.Measure)
-admin.site.register(models.Nutrient)
-admin.site.register(models.Ingredient)
-
 # Admin Awards Models
 class AwardAdmin(GuardedModelAdmin):
     list_display = ('name', 'description', 'award_type', 'amount', 'company', 'author')
@@ -135,12 +121,6 @@ admin.site.register(models.Event, EventAdmin)
 # Admin Permissions Models
 admin.site.register(Permission)
 admin.site.register(UserObjectPermission)
-
-# Admin Health Models
-class IllnesAdmin(GuardedModelAdmin):
-    model = models.Illnes
-
-admin.site.register(models.Illnes, IllnesAdmin)
 
 # Admin General Models
 admin.site.register(models.Subscriber)

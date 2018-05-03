@@ -34,6 +34,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'healthylifeapp',
+    'nutritionapp',
+    'sportapp',
+    'healthapp',
     'rest_framework',
     'guardian',
     'ckeditor',
@@ -187,3 +190,7 @@ CORS_URLS_ALLOW_ALL_REGEX = (
 )
 
 CORS_URLS_ALLOW_ALL = True
+
+# ********** STATIC FILES **********
+X_APP_ID = 'bcd58f59'
+X_APP_KEY = '1a3868de0641119014fc38bb848af63e'

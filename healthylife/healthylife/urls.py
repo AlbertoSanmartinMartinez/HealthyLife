@@ -6,7 +6,6 @@ from django.conf import settings
 from healthylife import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from healthylifeapp.models import SportSession
 from django.views.generic import DetailView, ListView, UpdateView
 from healthylifeapp import views
 from django.contrib.auth import views as auth_views
@@ -55,13 +54,13 @@ urlpatterns = [
     url(r'^contacto/', views.contact, name='contact'),
 
     # Sport URLS's
-    url(r'^deporte/$', views.sport, name='sport'),
+    url(r'^deporte/', include('sportapp.urls', namespace='sportapp')),
 
     # Health URLS's
     url(r'^salud/$', views.health, name='health'),
 
     # Nutrition URLS's
-    url(r'^nutricion/$', views.nutrition, name='nutrition'),
+    url(r'^nutricion/', include('nutritionapp.urls', namespace='nutritionapp')),
 
     # Statistics URLS's
     url(r'^estadisticas/$', views.statistics, name='statistics'),

@@ -206,14 +206,6 @@ def statistics(request):
     })
 
 
-# Nutrition views
-def nutrition(request):
-    return render(request, 'nutrition.html', {
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
 # Health views
 def health(request):
     return render(request, 'health.html', {
@@ -225,14 +217,6 @@ def health(request):
 # Award views
 def awards(request):
     return render(request, 'awards.html', {
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
-# Sport views
-def sport(request):
-    return render(request, 'sport.html', {
-        "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
     })
 
@@ -349,7 +333,6 @@ def search(request):
     if form.is_valid():
         word = form.cleaned_data['word']
         posts = models.Post.objects.filter(status=1, title__contains=word).order_by("-creation_date")
-        categories = obtenerCategorias(request)
     else:
         form = forms.SearchForm()
         posts = None
@@ -766,7 +749,7 @@ class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CommentSerializer
 
 
-# Funciones Comunes
+# Common Functions
 def obtenerCategorias(request):
     return models.Category.objects.filter(parent__isnull=True).order_by("name")
 

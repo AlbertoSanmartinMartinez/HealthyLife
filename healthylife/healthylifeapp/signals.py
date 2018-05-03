@@ -8,8 +8,10 @@ def createPost(sender, **kwargs):
     pass
 
 
+"""
 @receiver(post_save, sender=models.Comment):
 def notifyNewComment(sender, instance, created, **kwargs):
     if created:
         user = instance.author_id
         send_mail("Nuevo comentario", email_from, email_to, email_message, fail_silently=True)
+"""

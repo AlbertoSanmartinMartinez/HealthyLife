@@ -108,91 +108,6 @@ class Subscriber(models.Model):
     def __unicode__(self):
         return self.email
 
-# Sport models
-class SportType(models.Model):
-    """puede ser conveniente un campo de eleccion multiple antes que una clase"""
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=500)
-
-    def __unicode__(self):  # python 2
-        return self.name
-
-
-class SportSession(models.Model):
-    name = models.CharField(max_length=100)
-    sport_type = models.ForeignKey(SportType)
-    date = models.DateField(datetime.today)
-    # usuario = models.ForeignKey(User)
-    duration = models.TimeField()
-    calories = models.IntegerField()
-
-    def __unicode__(self):  # python 2
-        return self.name
-
-    def __str__(self):  # python 3
-        return self.name
-
-
-# Nutrition models
-class Food(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=500)
-    date = models.DateField(datetime.today)
-
-    def __unicode__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    def addIngredient(self):
-        pass
-
-
-class Measure(models.Model):
-    """puede ser conveniente un campo de eleccion multiple antes que una clase"""
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-
-class Nutrient(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-
-class Ingredient(models.Model):
-    name = models.CharField(max_length=100)
-    fats = models.ForeignKey(Nutrient, default='')
-    # carbohydrates = models.ForeignKey(Nutrient)
-    # proteins = models.ForeignKey(Nutrient)
-    # fiber = models.ForeignKey(Nutrient)
-    # sodium = models.ForeignKey(Nutrient)
-    # calories = models.ForeignKey(Nutrient)
-
-    def __unicode__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-
-# Health models
-class Illnes(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return self.name
-
 
 # Statistics models
 class GeneralStatistics(models.Model):
@@ -242,7 +157,6 @@ class Image(models.Model):
 
 
 # Blog models
-
 @autoconnect
 class Category(models.Model):
     """Modelo para las categorias del blog"""

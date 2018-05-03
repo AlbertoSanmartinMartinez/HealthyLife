@@ -105,20 +105,6 @@ class CustomRegisterColaboratorForm(UserCreationForm):
         fields = ['username', 'email']
 
 
-# Sport forms
-class SportSessionForm(forms.ModelForm):
-    class Meta:
-        model = models.SportSession
-        fields = ['name', 'sport_type', 'date', 'duration', 'calories']
-
-
-class SportTypeForm(forms.ModelForm):
-    class Meta:
-        model = models.SportType
-        fields = []
-
-# Nutrition forms
-
 # Health forms
 
 # Awards forms

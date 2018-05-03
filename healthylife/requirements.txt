@@ -1,3 +1,0 @@
-Django==1.11
-django_guardian==1.4.9
-django_ckeditor==5.4.0

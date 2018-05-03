@@ -5,9 +5,21 @@
 
 <section>
   <div class="nutrition_section">
-    <img src="{% static 'images/nutrition_section.jpg' %}">
-  </div>
-  <hr>
+    <div class="nutrition_section_slide">
+      <img src="{% static 'images/nutrition_section.jpg' %}">
+      <hr>
+    </div>
+    <div class="nutrition_section_form">
+      <form method="POST" action="{% url 'nutritionapp:search_food' %}">
+        {% csrf_token %}
+        {{ search_food_form }}
+        <button type="submit">Buscar</button>
+      </form>
+      <hr>
+    </div>
+    <div class="nutrition_section_result">
+      {{ food_information.as_p }}
+    </div>
 </section>
 
 {% endblock %}
