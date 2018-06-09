@@ -54,17 +54,21 @@
         <p>{{ comment.creation_date }}</p>
         <p>{{ comment.title }}</p>
         <p>{{ comment.content }}</p>
-
-        <input type="button" value="Responder" onClick="document.getElementById("comment_title").autofocus">
+        <input type="button" value="Responder" onClick="document.getElementById("comment_title").focus()">
+        <hr>
 
         <div class="detail_post_comments_answers">
-        {% for answer in comment_answers %}
-            {{ answer.title }}
-            <hr>
-          {% endfor %}
+        {% get_comment_answers comment.id as answers %}
+        {% for answer in answers %}
+          <img src="{% static 'images/perfil_miniatura.jpg' %}">
+          <p>{{ answer.author__username }}</p>
+          <p>{{ answer.creation_date }}</p>
+          <p>{{ answer.title }}</p>
+          <p>{{ answer.content }}</p>
+          <hr>
+        {% endfor %}
         </div>
 
-        <hr>
       {% endfor %}
     </div>
   </div>

@@ -3,13 +3,18 @@
 
 from django import template
 from django.shortcuts import render
+from healthylifeapp import models
 
 register = template.Library()
 
-@register.filter('comment_answers')
-def comment_answers():
-    comment_answers = models.Comment.objects.filter(parent_id=7).order_by("-creation_date")
+@register.simple_tag
+def get_comment_answers(comment_parent):
+    """
+    Template tag method que busca las respuestas a un comentario
+    """
+    comment_answers = models.Comment.objects.filter(parent_id=comment_parent).order_by("-creation_date")
 
-    return recomment_answers if comment_answers else None
+    return comment_answers if comment_answers else None
+
 
 #register.filter('comment_answers', comment_answers)

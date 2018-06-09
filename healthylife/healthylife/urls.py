@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^blog/$', views.blog, name='blog'),
     url(r'^blog/subscripcion/$', views.subscribe, name='subscribe'),
     url(r'^blog/(?P<post_slug>\w+)/$', views.detail_post, name='detail_post'),
-    url(r'^blog/(?P<post_slug>\w+)/comentar/$', views.comment, name='comment'),
+    # url(r'^blog/(?P<post_slug>\w+)/(?P<comment_parent_id>\w+)/comentado/$', views.comment, name='comment'),
     url(r'^blog/categorias/(?P<category>\w+)/$', views.blog_category_posts, name='blog_category_posts'),
     url(r'^blog/autores/(?P<username>\w+)/$', views.blog_author_posts, name='blog_author_posts'),
     #url(r'^blog/etiquetas/(?P<tag>\w+)/$', views.blog_tag_posts, name='blog_tag_posts'),
@@ -80,7 +80,7 @@ urlpatterns = [
 
     # Registro URLS's
     # url(r'^mi_cuenta/$', include('django.contrib.auth.urls')),
-    url(r'^mi_cuenta/registro/$', views.cutom_registration, name='custom_register'),
+    url(r'^mi_cuenta/registro/$', views.custom_registration, name='custom_register'),
     url(r'^mi_cuenta/registro/completado/$', views.registration_complete, name='custom_register_complete'),
     url(r'^mi_cuenta/registro/cancelado/$', views.registration_disallowed, name='registration_disallowed'),
 

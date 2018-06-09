@@ -15,7 +15,10 @@ SECRET_KEY = 'r6zfm1@g^!qz8r@v!w*kl^z&s0&oxf1g5u5md!^1tv4-!xsbem'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.1.21',
+    '127.0.0.1'
+]
 
 EMAIL_HOST = 'mail.barbastrosemueve.es'
 EMAIL_HOST_USER = 'info@barbastrosemueve.es'
@@ -181,6 +184,8 @@ CKEDITOR_CONFIGS = {
 # https://github.com/zestedesavoir/django-cors-middleware
 CORS_ORIGIN_WHITELIST = (
     '127.0.0.1',
+    '192.168.1.21',
+    '172.16.120.113'
 )
 
 CORS_ORIGIN_ALLOW_ALL = True

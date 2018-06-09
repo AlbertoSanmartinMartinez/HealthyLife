@@ -123,13 +123,22 @@ class PostForm(forms.ModelForm):
         fields = []
 
 
-class CommentForm(forms.ModelForm):
+class CommentFormAuthenticated(forms.ModelForm):
     title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
     content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
     class Meta:
         model = models.Comment
         fields = ['title', 'content']
+
+class CommentFormNotAuthenticated(forms.ModelForm):
+    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Eamil'}))
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+
+    class Meta:
+        model = models.Comment
+        fields = ['title', 'content', 'email']
 
 
 # Profile forms

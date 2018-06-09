@@ -8,7 +8,7 @@
     <!--Cargar la foto de perfil del usuario que va a comentar-->
   </div>
   <div class="detail_post_comments_form_input">
-    <form method="POST" action="{% url 'comment' post_slug=post.slug %}">
+    <form method="POST" action="{% url 'comment' post_slug=post.slug comment_parent_id=comment_parent_id %}">
       <p>Escribir un comentario</p>
       {% csrf_token %}
       {{ comment_form.as_p }}

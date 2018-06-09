@@ -57,6 +57,7 @@ def getNutritionixApiInformation(food):
     """
     Funcion que realiza la consulta http get a la api
     Ejemplo consultas manuales https://www.nutritionix.com/natural-demo
+    Ejemplo respuesta https://gist.github.com/mattsilv/6d19997bbdd02cf5337e9d4806b4f464
     """
     url = "https://trackapi.nutritionix.com/v2/search/instant?"
     body = {

@@ -21,7 +21,8 @@ from django.contrib.auth import authenticate, login
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
-
+from django.template import RequestContext
+from django.http import HttpResponseRedirect
 
 # API imports
 from rest_framework.decorators import api_view
@@ -156,6 +157,17 @@ def custom_login(request):
                 if user.is_active:
                     login(request, user)
                     return redirect('home')
+                    #return HttpResponseRedirect(request.POST.get('next', reverse('index')))
+                    """
+                    if request.POST["next"] is not "":
+                        print("next no esta vacio")
+                        return HttpResponseRedirect(request.POST["next"])
+                    else:
+                        print("next esta vacio")
+                        #HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+                        return redirect(settings.LOGIN_REDIRECT_URL)
+                    """
+
     else:
         form = forms.CustomAuthenticationForm()
 
@@ -167,7 +179,7 @@ def custom_login(request):
 
 
 # Registration views
-def cutom_registration(request):
+def custom_registration(request):
     if request.method == 'POST':
         form = forms.CustomRegisterForm(data=request.POST)
         if form.is_valid():
@@ -235,34 +247,19 @@ def blog(request):
 
 def detail_post(request, post_slug):
     post = models.Post.objects.get(slug=post_slug)
-    comments = models.Comment.objects.filter(post=post.id, status=1).order_by("-creation_date")
+    comments = models.Comment.objects.filter(post=post.id, status=1, parent_id__isnull=True).order_by("-creation_date")
     images = models.Image.objects.filter(album=post.album)
-
-    """
-    if request.method == 'POST':
-        comment_form = forms.CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            data = comment_form.cleaned_data
-            comment = models.Comment.objects.create(
-                author_id=request.user.id,
-                post_id=post.id,
-                title = data['title'],
-                content = data['content'])
-            comment_form.save()
-    else:
-        comment_form = forms.CommentForm()
-    """
 
     return render(request, "post.html", {
         "post": post,
         "images": images,
         "categories": obtenerCategorias(request),
         "comments":comments,
-        # "comment_form": comment_form,
         "comment_form": getCommentForm(),
         "answer_form": getCommentForm(),
         "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
+        'comment_parent_id': 24,
     })
 
 
@@ -295,12 +292,9 @@ def blog_author_posts(request, username):
 def subscribe(request):
     print("funcion de subscripcion")
     if request.method == 'POST':
-        print("metodo post")
         subscribe_form = forms.SubscriberForm(data=request.POST)
         if subscribe_form.is_valid():
-            print("formualrio valido")
             data = subscribe_form.cleaned_data['email']
-            print(data)
             subscribe_form.save()
     else:
         subscribe_form = forms.SubscriberForm()
@@ -308,20 +302,32 @@ def subscribe(request):
     return redirect('home')
 
 
-@login_required(redirect_field_name='custom_login')
-def comment(request, post_slug):
+#@login_required(redirect_field_name='custom_login')
+def comment(request, post_slug, comment_parent_id):
     post = models.Post.objects.get(slug=post_slug)
     if request.method == 'POST':
-        comment_form = forms.CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            data = comment_form.cleaned_data
-            comment = models.Comment.objects.create(
-                author_id=request.user.id,
-                post_id=post.id,
-                title = data['title'],
-                content = data['content'])
-            comment_form.save()
+        print("metodo post")
+        if request.user.is_authenticated:
+            print("usuario suscrito")
+            comment_form = forms.CommentFormAuthenticated(data=request.POST)
+            if comment_form.is_valid():
+                print("formulario valido")
+                data = comment_form.cleaned_data
+                comment = models.Comment.objects.create(
+                    author_id=request.user.id,
+                    post_id=post.id,
+                    title = data['title'],
+                    content = data['content'],
+                    parent_id = comment_parent_id)
+        else:
+            print("usuario no suscrito")
+            comment_form = forms.CommentFormNotAuthenticated(data=request.POST)
+            if comment_form.is_valid():
+                #data = comment_form.cleaned_data
+                print("formulario valido")
+                #subscribe(request)
     else:
+        print("metodo no post")
         comment_form = forms.CommentForm()
 
     return detail_post(request, post_slug)
@@ -763,7 +769,7 @@ def getSubscribeForm():
 
 
 def getCommentForm():
-    return forms.CommentForm()
+    return forms.CommentFormAuthenticated()
 
 
 # Error Views
