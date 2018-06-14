@@ -14,13 +14,14 @@ class CustomRegisterForm(UserCreationForm):
     Formulario para de registro para usuarios
     https://docs.djangoproject.com/en/2.0/ref/forms/fields/
     """
-    username = forms.CharField(label='Nombre de usuario')
-    email = forms.EmailField(label='Email', widget=forms.EmailInput())
-    password2 = forms.CharField()
+    username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder':'Nombre usuario', "size": 30 }))
+    email = forms.EmailField(label="", widget=forms.EmailInput(attrs={'placeholder':'Correo electronico',"size": 30}))
+    password1 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder':'Contrasena', "size": 30 }))
+    password2 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder':'Confirmar contrasena', "size": 30 }))
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'password1', 'password2']
 
 
 # Login Forms
@@ -29,12 +30,12 @@ class CustomAuthenticationForm(AuthenticationForm):
     Formulario de acceso para usuarios
     https://docs.djangoproject.com/en/2.0/topics/auth/default/#django.contrib.auth.forms.AuthenticationForm
     """
-    username = forms.CharField(label='Nombre o email de usuario')
-    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder':'Nombre usuario o correo electronico', "size": 30}))
+    password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder':'Contrasena', "size": 30 }))
 
 
 class SubscriberForm(forms.ModelForm):
-    email = forms.EmailField(label='', required=False, widget=forms.TextInput(attrs={'placeholder':'Introduce tu correo electrónico'}))
+    email = forms.EmailField(label='', required=False, widget=forms.TextInput(attrs={'placeholder':'Introduce tu correo electrónico', "size": 80}))
 
     class Meta:
         model = models.Subscriber
@@ -108,38 +109,6 @@ class CustomRegisterColaboratorForm(UserCreationForm):
 # Health forms
 
 # Awards forms
-
-# Blog forms
-class SearchForm(forms.Form):
-    """
-    Formulario de busqueda en el blog
-    """
-    word = forms.CharField(label='search', widget=forms.TextInput(attrs={'placeholder':'Escribe aquí'}))
-
-
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = models.Post
-        fields = []
-
-
-class CommentFormAuthenticated(forms.ModelForm):
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
-
-    class Meta:
-        model = models.Comment
-        fields = ['title', 'content']
-
-class CommentFormNotAuthenticated(forms.ModelForm):
-    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Eamil'}))
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
-
-    class Meta:
-        model = models.Comment
-        fields = ['title', 'content', 'email']
-
 
 # Profile forms
 class CollaboratorProfileForm(forms.ModelForm):

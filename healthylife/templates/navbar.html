@@ -5,20 +5,33 @@
 {% now "d" as current_day %}
 
   <nav class="navbar navbar-default">
-
     <div class="container-fluid">
-
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">Barbastro Se Mueve</a>
-      </div>
+        <div class="socialDer">
+          <button type="button" id="botonNav" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'home' %}">Barbastro Se Mueve</a>
+        </div>
+        <div class="socialIzq">
+          <a class="social" href="https://www.facebook.com/BarbastroSeMueve/" target="_blank">
+            <!--<div id="botonFace">-->
+              <img class="imgMenu" src="{% static 'images/Facebook.png' %}"/>
+            <!--</div>-->
+          </a>
+          <a class="social" href="https://twitter.com/BarbastroSMueve" target="_blank"><img class="imgMenu"src="{% static 'images/Twitter_black.png' %}"/></a>
+          <a class="social" href="https://www.instagram.com/barbastrosemueve/" target="_blank"><img class="imgMenu"src="{% static 'images/iconoinsta.png' %}"/></a>
+          <!--</div>-->
+          <div class="buscador">
+            {% include 'search.html' %}
+          </div>
+        </div>
+        </ div>
 
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="botonNav">
         <ul class="nav navbar-nav">
           <li>
             <a href="{% url 'know_us' %}">Conocenos</a>
@@ -42,17 +55,6 @@
             <a href="{% url 'contact' %}">Contacto</a>
           </li>
 
-          {% include 'search.html' %}
-
-          <li>
-            <a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank">Facebook</a>
-          </li>
-          <li>
-            <a href="https://twitter.com/BarbastroSMueve" target="_blank">Twitter</a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/barbastrosemueve/" target="_blank">Instagram</a>
-          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if not user.is_authenticated %}

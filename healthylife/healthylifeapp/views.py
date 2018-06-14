@@ -5,6 +5,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from healthylifeapp import forms
 from healthylifeapp import models
+from blog import models as blog_models
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
@@ -32,7 +33,7 @@ from rest_framework import status
 
 # General views
 def home(request):
-    last_posts = models.Post.objects.filter(status=1).order_by("-creation_date")[:3]
+    last_posts = blog_models.Post.objects.filter(status=1).order_by("-creation_date")[:3]
     #most_viwed_products
     #best_awards
 
@@ -234,61 +235,6 @@ def awards(request):
 
 
 # Blog views
-def blog(request):
-    posts = models.Post.objects.filter(status=1).order_by("-creation_date")
-
-    return render(request, "blog.html", {
-        "posts": posts,
-        "categories": obtenerCategorias(request),
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
-def detail_post(request, post_slug):
-    post = models.Post.objects.get(slug=post_slug)
-    comments = models.Comment.objects.filter(post=post.id, status=1, parent_id__isnull=True).order_by("-creation_date")
-    images = models.Image.objects.filter(album=post.album)
-
-    return render(request, "post.html", {
-        "post": post,
-        "images": images,
-        "categories": obtenerCategorias(request),
-        "comments":comments,
-        "comment_form": getCommentForm(),
-        "answer_form": getCommentForm(),
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-        'comment_parent_id': 24,
-    })
-
-
-def blog_category_posts(request, category):
-    category = models.Category.objects.get(slug=category)
-    posts = models.Post.objects.filter(status=1, category=category.id)
-
-    return render(request, 'blog.html', {
-        "posts":posts,
-        "categories": obtenerCategorias(request),
-        "search_form":getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
-def blog_author_posts(request, username):
-    author = User.objects.get(username=username)
-    posts = models.Post.objects.filter(status=1, author=author.id)
-    categories = models.Category.objects.order_by("name")
-
-    return render(request, 'blog.html', {
-        "categories":categories,
-        "posts":posts,
-        "categories": obtenerCategorias(request),
-        "search_form":getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
 def subscribe(request):
     print("funcion de subscripcion")
     if request.method == 'POST':
@@ -693,66 +639,6 @@ class APIUserList(generics.ListCreateAPIView):
 class APIUserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
-
-
-# Blog Api Views
-class APIPostList(generics.ListAPIView):
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    # filter_backends = [SearchFilter, OrderingFilter]
-    # search_fields = ['title', 'slug']
-    model = models.Post
-    serializer_class = serializers.PostSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        data = self.request.query_params
-        return models.Post.objects.filter(status=data['status'])
-
-
-class APIPostDetail(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsOwnerOrReadOnly,)
-    serializer_class = serializers.PostSerializer
-    model = models.Post
-    """
-    def get_queryset(self, *args, **kwargs):
-        status = self.request.query_params.get('status', None)
-        if status:
-            queryset = models.Post.objects.filter(status=status)
-            return queryset
-    """
-
-class APICategoryList(generics.ListCreateAPIView):
-    #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    # model = models.Category
-    queryset = models.Category.objects.all()
-    serializer_class = serializers.CategorySerializer
-
-
-class APICategoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsOwnerOrReadOnly,)
-    # model = models.Category
-    queryset = models.Category.objects.all()
-    serializer_class = serializers.CategorySerializer
-
-    def get_queryset(self):
-        queryset = models.Category.objects.all()
-        queryset = queryset.filter(name=self.request.query_params.get('category_id'))
-
-
-class APICommentList(generics.ListCreateAPIView):
-    #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    model = models.Category
-    serializer_class = serializers.CommentSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        data = self.request.query_params
-        return models.Comment.objects.filter(post_id=data['post_id'])
-
-
-class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsOwnerOrReadOnly,)
-    # model = models.Category
-    queryset = models.Comment.objects.all()
-    serializer_class = serializers.CommentSerializer
 
 
 # Common Functions

@@ -40,10 +40,11 @@ INSTALLED_APPS = (
     'nutritionapp',
     'sportapp',
     'healthapp',
+    'blog',
+    'shop',
     'rest_framework',
     'guardian',
     'ckeditor',
-    'taggit',
     'corsheaders',
     'datetimewidget'
 )

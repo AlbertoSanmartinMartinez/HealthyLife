@@ -28,51 +28,7 @@ admin.site.register(models.GeneralStatistics)
 admin.site.register(models.SpecificStatistics)
 
 # Admin Blog Models
-"""
-class TagAdmin(GuardedModelAdmin):
-    list_display = ('name', 'slug')
 
-admin.site.register(models.Tag, TagAdmin)
-"""
-
-class CategoryAdmin(GuardedModelAdmin):
-    list_display = ('name', 'parent')
-    list_filter = ('name', 'parent')
-    search_fields = ('name', 'parent')
-
-admin.site.register(models.Category, CategoryAdmin)
-
-class PostAdmin(GuardedModelAdmin):
-    """
-    Modelo de administracion para los posts
-    """
-    list_display = ('status', 'title', 'slug', 'category', 'author')
-    list_filter = ('status', 'title', 'slug', 'category', 'author')
-    search_fields = ('status', 'title', 'slug', 'category', 'author')
-    readonly_fields = ('author', 'slug', 'album')
-
-    def save_model(self, request, obj, form, change):
-        """
-        Metodo que modifica el author del post
-        """
-        obj.author = request.user
-        super(PostAdmin, self).save_model(request, obj, form, change)
-
-admin.site.register(models.Post, PostAdmin)
-
-"""
-class PostTagsAdmin(GuardedModelAdmin):
-    list_display = ('name', 'description')
-
-admin.site.register(models.PosTags, PostTagsAdmin)
-"""
-
-class CommentAdmin(GuardedModelAdmin):
-    list_display = ('status', 'title', 'author', 'post', 'parent')
-    list_filter = ('status', 'title', 'author', 'post', 'parent')
-    search_fields = ('status', 'title', 'author', 'post', 'parent')
-
-admin.site.register(models.Comment, CommentAdmin)
 
 class ImageAdmin(GuardedModelAdmin):
     list_display = ('id', 'image', 'description', 'alt', 'album')

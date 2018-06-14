@@ -5,14 +5,16 @@
 
 {% block login %}
 
-<form class="boton" method="POST">
+<div class="acceder">
+  <form class="boton" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Acceder</button>
     <!--<input type="hidden" name="next" value="{{ next }}"-->
-</form>
+  </form>
 
-<p><a href="{% url 'password_reset' %}">Has olvidado tu contraseña ?</a></p>
-<p><a href="{% url 'custom_register' %}">Aún no estás registrado ?</a></p>
+  <p><a href="{% url 'password_reset' %}">Has olvidado tu contraseña ?</a></p>
+  <p><a href="{% url 'custom_register' %}">Aún no estás registrado ?</a></p>
+</div>
 
 {% endblock %}
