@@ -66,7 +66,7 @@ class Post(models.Model):
         """metodo de la clase post para calcular el slug de un post y crear un album asociado a ese post"""
         self.slug = self.title.replace(" ", "_").lower()
         if not self.pk:
-            album = Album.objects.create(name='album '+self.title)
+            album = general_models.Album.objects.create(name='album '+self.title)
             self.album = album
         super(Post, self).save(*args, **kwargs)
 
@@ -83,7 +83,7 @@ class Comment(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, default=1)
+    author = models.ForeignKey(User, default=1) # posibilidad de que sea null
     post = models.ForeignKey(Post, default=1)
     # guardar automaticamente el usuario que ha hecho el comentario
     parent = models.ForeignKey('self', related_name='answer', null=True, blank=True)

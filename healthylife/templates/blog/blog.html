@@ -5,25 +5,79 @@
 
   {% include 'navbar_blog.html' %}
 
-  <div class="row well">
-    {% for post in posts %}
-      <div class="col-md-4 well">
-        <p><a href="{% url 'detail_post' post_slug=post.slug %}">{{ post.title }}</a></p>
-        <p>{{ post.description }}</p>
-        <p><a href="{% url 'blog_category_posts' category=post.category.slug %}">{{ post.category.name }}</a></p>
-        <p><a href="{% url 'blog_author_posts' username=post.author.username %}">{{ post.author.username }}</a></p>
-        <p>{{ post.creation_date }}</p>
-        {% for item in post.album.image_set.all %}
-          {% if item.header_image %}
-            <img src="{{ item.image.url }}">
-          {% endif %}
-        {% endfor %}
-        <hr>
+  <!-- Start Breadcumbs Area -->
+  <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/2.jpg) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="bradcaump__inner text-center">
+              <h2 class="bradcaump-title">Blog</h2>
+              <nav class="bradcaump-inner">
+                <a class="breadcrumb-item" href="index.html">Home</a>
+                <span class="brd-separetor">/</span>
+                <span class="breadcrumb-item active">Titulo del post</span>
+              </nav>
+            </div>
+          </div>
+        </div>
       </div>
-    {% endfor %}
-
-  {% block detail_post %}
-  {% endblock %}
-
+    </div>
   </div>
+
+  <!-- Star Blog Area -->
+  <div class="htc__blog__area bg__white ptb--120">
+    <div class="container">
+      <div class="row">
+        <div class="blog__wrap blog--page clearfix">
+
+          <!-- Star Simple Post Area -->
+          {% for post in posts %}
+          <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
+            <div class="blog foo">
+              <div class="blog__inner">
+                <div class="blog__thumb">
+
+                  <!-- Star Header Image Area -->
+                  {% for item in post.album.image_set.all %}
+                    {% if item.header_image %}
+
+                      <a href="blog-details.html">
+                        <img src="{{ item.image.url }}" alt="blog images">
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                  <div class="blog__post__time">
+                    <div class="post__time--inner">
+                      <span class="date">{{ post.creation_date }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Start Post Information Area -->
+                <div class="blog__hover__info">
+                  <div class="blog__hover__action">
+                    <ul class="bl__meta">
+                      <li>By :
+                        <a href="{% url 'blog:author_posts' username=post.author.username %}">{{ post.author.username }}</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'blog:category_posts' category=post.category.slug %}">{{ post.category.name }}</a>
+                      </li>
+                    </ul>
+                    <p class="blog__des"><a href="{% url 'blog:detail_post' post_slug=post.slug %}">{{ post.title }}</a></p>
+                    <div class="blog__btn">
+                      <a class="read__more__btn" href="{% url 'blog:detail_post' post_slug=post.slug %}">Leer Más</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <!-- Deatil Post page -->
+          {% block detail_post %}
+          {% endblock %}
+
 {% endblock %}

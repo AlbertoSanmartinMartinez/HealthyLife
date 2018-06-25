@@ -1,29 +1,30 @@
 {% load static %}
 
 {% block navbar_blog %}
-  <div class="blog_navbar">
+
+  <ul>
   {% for category in categories %}
-    <ul>
       <li>
-        <a href="{% url 'blog_category_posts' category=category.slug %}">{{ category.name }}</a>
+        <a href="{% url 'blog:category_posts' category=category.slug %}">{{ category.name }}</a>
       </li>
+      <!--
       {% for subcategory in category.children.all %}
         <ul>
           <li>
-            <a href="{% url 'blog_category_posts' category=subcategory.slug %}">{{ subcategory.name }}</a>
+            <a href="{% url 'blog:category_posts' category=subcategory.slug %}">{{ subcategory.name }}</a>
           </li>
           {% for subsubcategory in subcategory.children.all %}
             <ul>
               <li>
-                <a href="{% url 'blog_category_posts' category=subsubcategory.slug %}">{{ subsubcategory.name }}</a>
+                <a href="{% url 'blog:category_posts' category=subsubcategory.slug %}">{{ subsubcategory.name }}</a>
               </li>
             {% endfor %}
             </ul>
           {% endfor %}
-        </ul>
+        </ul>-->
       {% endfor %}
     </ul>
-  </div>
+
 {% endblock %}
 
 <!-- controlar si quedan categorias hijo, bucles anidados, automatico -->

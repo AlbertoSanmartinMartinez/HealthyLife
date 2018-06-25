@@ -1,32 +1,60 @@
 {% load static %}
 
-{% block last_posts %}
+<!-- Start Last Posts Home Area -->
+<section class="htc__blog__area bg__white pb--100">
+  <div class="container">
 
-<div class="last_post">
-  <div class="last_posts_title">
-    <h4>Últimas noticias</h4>
-  </div>
-  <div class="row well">
-    {% for post in last_posts %}
-    <div class="col-md-4 well">
-      <p><a href="{% url 'detail_post' post_slug=post.slug %}">{{ post.title }}</a></p>
-      <p>{{ post.description }}</p>
-      <p><a href="{% url 'blog_category_posts' category=post.category.slug %}">{{ post.category.name }}</a></p>
-      <p><a href="{% url 'blog_author_posts' username=post.author.username %}">{{ post.author.username }}</a></p>
-      <p>{{ post.creation_date }}</p>
-      {% for item in post.album.image_set.all %}
-        {% if item.header_image %}
-          <img src="{{ item.image.url }}">
-        {% endif %}
-      {% endfor %}
-      <hr>
+    <!-- Start Title Area -->
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="section__title text-center">
+          <h2 class="title__line">Últimas Noticias</h2>
+        </div>
+      </div>
     </div>
-    {% endfor %}
-  </div>
-  <div class="last_posts_link">
-    <a href="{% url 'blog' %}">Ir al blog</a>
-  </div>
-</div>
-<hr>
+    <div class="row">
+      <div class="blog__wrap clearfix mt--60 xmt-30">
 
-{% endblock %}
+        <!-- Start Single Blog -->
+        {% for post in last_posts %}
+          <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
+            <div class="blog foo">
+              <div class="blog__inner">
+                <div class="blog__thumb">
+                  {% for item in post.album.image_set.all %}
+                    {% if item.header_image %}
+                      <a href="">
+                        <img src="{{ item.image.url }}" alt="blog images">
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                  <div class="blog__post__time">
+                    <div class="post__time--inner">
+                      <span class="date">{{ post.creation_date }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="blog__hover__info">
+                  <div class="blog__hover__action">
+                    <ul class="bl__meta">
+                      <li>By :
+                        <a href="{% url 'blog:author_posts' username=post.author.username %}">{{ post.author.username }}</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'blog:category_posts' category=post.category.slug %}">{{ post.category.name }}</a>
+                      </li>
+                    </ul>
+                    <p class="blog__des"><a href="{% url 'blog:detail_post' post_slug=post.slug %}">{{ post.title }}</a></p>
+                    <div class="blog__btn">
+                      <a class="read__more__btn" href="{% url 'blog:detail_post' post_slug=post.slug %}">Leer Más</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

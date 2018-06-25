@@ -72,7 +72,7 @@ class Product(models.Model):
         """metodo de la clase post para calcular el slug de un producto y crear un album asociado a ese producto"""
         self.slug = self.name.replace(" ", "_").lower()
         if not self.pk:
-            album = Album.objects.create(name='album '+self.name)
+            album = general_models.Album.objects.create(name='album '+self.name)
             self.album = album
         super(Product, self).save(*args, **kwargs)
 

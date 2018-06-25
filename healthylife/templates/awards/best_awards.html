@@ -2,19 +2,13 @@
 
 {% block last_posts %}
 
-<div class="best_awards">
-  <div class="best_warads_title">
-    <p>Premios mejor valorados</p>
-  </div>
-  <div class="row well">
-    {% for awards in best_awards %}
-    {% endfor %}
-    <div class="best_awards_link">
-      <a href="{% url 'awards' %}">Conseguir Premios</a>
-    </div>
-  </div>
-</div>
-<hr>
+<section class="htc__best__product__area pb--100 bg__white">
+  <p>Premios mejor valorados</p>
+  {% for awards in best_awards %}
+  {% endfor %}
+  <a href="{% url 'awards' %}">Conseguir Premios</a>
+  <hr>
+</section>
 
 
 {% endblock %}

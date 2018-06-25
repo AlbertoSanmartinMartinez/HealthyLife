@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from django import forms
-from healthylifeapp import models
+from healthylifeapp import models as general_models
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 # from datetimewidget.widgets import DateTimeWidget
@@ -38,7 +38,7 @@ class SubscriberForm(forms.ModelForm):
     email = forms.EmailField(label='', required=False, widget=forms.TextInput(attrs={'placeholder':'Introduce tu correo electrónico', "size": 80}))
 
     class Meta:
-        model = models.Subscriber
+        model = general_models.Subscriber
         exclude = []
 
 # General Forms
@@ -50,7 +50,7 @@ class CompanyForm(forms.ModelForm):
     company_image = forms.ImageField(required=False)
 
     class Meta:
-        model = models.Company
+        model = general_models.Company
         fields = ['company_name', 'description', 'phone', 'web', 'company_image']
 
 
@@ -62,7 +62,7 @@ class BankInformationForm(forms.ModelForm):
     security_code = forms.CharField(label='Código de seguridad', required=False)
 
     class Meta:
-        model = models.BankInformation
+        model = general_models.BankInformation
         fields = ['bank_name', 'account', 'month', 'year', 'security_code']
 
 
@@ -76,7 +76,7 @@ class AddressForm(forms.ModelForm):
     door = forms.CharField(label='Puerta', required=False)
 
     class Meta:
-        model = models.Address
+        model = general_models.Address
         fields = ['address_name', 'city', 'postal_code', 'street', 'number', 'floor', 'door']
 
 
@@ -119,7 +119,7 @@ class CollaboratorProfileForm(forms.ModelForm):
     collaborator_image = forms.ImageField(required=False)
 
     class Meta:
-        model = models.CollaboratorProfile
+        model = general_models.CollaboratorProfile
         fields = ['position', 'company', 'education', 'extract', 'collaborator_image']
 
 
@@ -129,7 +129,7 @@ class UserProfileForm(forms.ModelForm):
     profile_image = forms.ImageField(required=False)
 
     class Meta:
-        model = models.UserProfile
+        model = general_models.UserProfile
         fields = ['bio', 'phone', 'profile_image']
 
 
@@ -143,11 +143,18 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'first_name', 'last_name']
 
 
+class SearchForm(forms.Form):
+    """
+    Formulario de busqueda en el blog
+    """
+    word = forms.CharField(label='search', widget=forms.TextInput(attrs={'placeholder':'Escribe aquí'}))
+
+
 # Calendar forms
 class EventForm(forms.ModelForm):
     #date = forms.DateTimeField(input_formats=('%y/%m/%d'), label='Fecha:')
     #time = forms.DateTimeField(input_formats=('%H:%M'), label='Fecha:')
 
     class Meta:
-        model = models.Event
+        model = general_models.Event
         fields = ['title', 'description', 'privacity'] #, 'date', 'time']

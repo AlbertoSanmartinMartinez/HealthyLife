@@ -17,6 +17,22 @@ admin.autodiscover()
 
 urlpatterns = [
 
+    # General URLS's
+    #url(r'^', include('healthylifeapp.urls', namespace='general')),
+
+    # Pages URLS's
+    url(r'^$', general_views.home, name='home'),
+    url(r'^conocenos/$', general_views.know_us, name='know_us'),
+    url(r'^conocenos/colaboradores/(?P<username>\w+)/$', general_views.know_us_collaborator, name='collaborator'),
+    url(r'^conocenos/empresas/(?P<companyname>\w+)/$', general_views.know_us_company, name='company'),
+
+    url(r'^trabaja_con_nosotros/', general_views.work_with_our, name='work_with_our'),
+    url(r'^informacion_legal/', general_views.legal_information, name='legal_information'),
+    url(r'^contacto/', general_views.contact, name='contact'),
+
+    # Subscribe URLS
+    url(r'^subscripcion/$', general_views.subscribe, name='subscribe'),
+
     # Admin URLS's
     url(r'^administracion/', include(admin.site.urls)),
 
@@ -32,21 +48,11 @@ urlpatterns = [
     # Shop URLS's
     url(r'^tienda/', include('shop.urls', namespace='shop')),
 
-    # Pages URLS's
-    url(r'^$', general_views.home, name='home'),
-    url(r'^conocenos/$', general_views.know_us, name='know_us'),
-    url(r'^conocenos/colaboradores/(?P<username>\w+)/$', general_views.know_us_collaborator, name='collaborator'),
-    url(r'^conocenos/empresas/(?P<companyname>\w+)/$', general_views.know_us_company, name='company'),
-
-    url(r'^trabaja_con_nosotros/', general_views.work_with_our, name='work_with_our'),
-    url(r'^informacion_legal/', general_views.legal_information, name='legal_information'),
-    url(r'^contacto/', general_views.contact, name='contact'),
-
     # Sport URLS's
     url(r'^deporte/', include('sportapp.urls', namespace='sportapp')),
 
     # Health URLS's
-    url(r'^salud/$', general_views.health, name='health'),
+    url(r'^salud/', include('healthapp.urls', namespace='healthapp')),
 
     # Nutrition URLS's
     url(r'^nutricion/', include('nutritionapp.urls', namespace='nutritionapp')),

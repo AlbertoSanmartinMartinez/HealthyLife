@@ -7,7 +7,7 @@
   Version: 1.1
 -------------------------------------------------------------------------------------*/
 /*
- 
+
     font-family: 'Poppins', sans-serif;
 
     font-family: 'Dosis', sans-serif;
@@ -75,8 +75,8 @@
 }
 
 .header--2 .mean-container a.meanmenu-reveal {
-  border: 2px solid #fff;
-  color: #fff;
+  /*border: 2px solid #fff;
+  color: #fff;*/
 }
 .header--2 .mean-container a.meanmenu-reveal span {
   background: #fff none repeat scroll 0 0;
@@ -700,7 +700,8 @@
 
 
 .offsetmenu,
-.shopping__cart, 
+.shopping__cart,
+.profile,
 .user__meta  {
   background: #eeeeee none repeat scroll 0 0;
   box-shadow: 0 0 85px rgba(0, 0, 0, 0.2);
@@ -722,13 +723,15 @@
 }
 .offsetmenu.offsetmenu__on,
 .shopping__cart.shopping__cart__on,
+.profile.profile__on,
 .user__meta.user__meta__on {
   opacity: 1;
   padding-bottom: 50px;
   right: calc(0px - 16px);
 }
-.offsetmenu__inner, 
-.shopping__cart__inner, 
+.offsetmenu__inner,
+.shopping__cart__inner,
+.profile__inner,
 .user__meta__inner {
   height: 100%;
   padding: 60px 50px 60px;
@@ -860,10 +863,12 @@ h4.offset__title {
 .sidebar__thumd li a:hover::before {
     opacity: 0.7;
 }
-.shopping__cart__inner {
+.shopping__cart__inner,
+.profile__inner {
   padding: 102px 50px;
 }
-.shopping__cart__inner .offsetmenu__close__btn {
+.shopping__cart__inner .offsetmenu__close__btn,
+.profile__inner .offsetmenu__close__btn {
   padding: 21px 50px 24px;
 }
 
@@ -920,12 +925,36 @@ h4.offset__title {
   width: 100%;
   display: block;
 }
+.profile__btn li a {
+  background-color: transparent;
+  border: 1px solid #000;
+  color: #000;
+  font-size: 14px;
+  height: 57px;
+  line-height: 57px;
+  margin-bottom: 15px;
+  padding: 0 25px;
+  text-align: center;
+  text-transform: none;
+  transition: all 0.5s ease 0s;
+  width: 100%;
+  display: block;
+}
 .shopping__btn li a:hover{
   background: #ff4136;
   border: 1px solid #ff4136;
   color: #fff;
 }
+.profile__btn li a:hover{
+  background: #ff4136;
+  border: 1px solid #ff4136;
+  color: #fff;
+}
 .shopping__btn .shp__checkout a{
+  background-color: #000;
+  color: #fff;
+}
+.profile__btn .profile__checkout a{
   background-color: #000;
   color: #fff;
 }
@@ -951,7 +980,8 @@ h4.offset__title {
 .shp__pro__details {
     min-width: 71%;
 }
-.shp__cart__wrap {
+.shp__cart__wrap,
+.profile__wrap {
     margin-top: -30px;
 }
 .shoping__total {
@@ -972,7 +1002,6 @@ h4.offset__title {
 .shp__cart__wrap .shp__single__product + .shp__single__product {
   border-top: 1px solid #ddd;
 }
-
 
 
 
@@ -1026,13 +1055,3 @@ h4.offset__title {
 .main__menu ul.dropdown.mega_dropdown li {
   border-bottom: 1px solid transparent;
 }
-
-
-
-
-
-
-
-
-
-

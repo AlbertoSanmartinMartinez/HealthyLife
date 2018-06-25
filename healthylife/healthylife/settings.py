@@ -17,7 +17,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '192.168.1.21',
-    '127.0.0.1'
+    '192.168.1.100',
+    '127.0.0.1',
+    '172.16.120.113',
 ]
 
 EMAIL_HOST = 'mail.barbastrosemueve.es'

@@ -5,13 +5,6 @@ from django import forms
 from blog import models as blog_models
 
 # Blog forms
-class SearchForm(forms.Form):
-    """
-    Formulario de busqueda en el blog
-    """
-    word = forms.CharField(label='search', widget=forms.TextInput(attrs={'placeholder':'Escribe aquí'}))
-
-
 class PostForm(forms.ModelForm):
     class Meta:
         model = blog_models.Post

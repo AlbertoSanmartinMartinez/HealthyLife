@@ -6,17 +6,10 @@
 
 {% block next_events %}
 
-<div class="next_events">
-  <div class="next_events_title">
-    <p>Próximos eventos</p>
-  </div>
-  <div class="next_events_content">
-
-  </div>
-  <div class="next_events_link">
-    <a href="{% url 'calendar' year=current_year month=current_month day=current_day username=None %}">Ir al calendario completo</a>
-  </div>
+<section class="htc__best__product__area pb--100 bg__white">
+  <p>Próximos eventos</p>
+  <a href="{% url 'calendar' year=current_year month=current_month day=current_day username=None %}">Ir al calendario completo</a>
+  <hr>
 </div>
-<hr>
 
 {% endblock %}

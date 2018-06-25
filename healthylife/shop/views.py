@@ -1,7 +1,10 @@
+#!/usr/local/bin/python
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
+from __future__ import unicode_literals
 from django.shortcuts import render
+from shop import models as shop_models
+from shop import forms as shop_forms
 
 # Shop Views
 def product_list(request, shop_category_slug=None):

@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import permissions, generics
 from blog import models as blog_models
 from blog import serializer as blog_serializer
+from blog import forms as blog_forms
+from healthylifeapp import models as general_models
+from healthylifeapp import views as general_views
+from django.contrib.auth.models import User
 
 # Blog Views
 def list_posts(request):
@@ -12,26 +16,26 @@ def list_posts(request):
 
     return render(request, "blog.html", {
         "posts": posts,
-        "categories": obtenerCategorias(request),
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
+        "categories": getBlogCategories(),
+        "search_form": general_views.getSearchForm(),
+        'subscribe_form': general_views.getSubscribeForm(),
     })
 
 
 def detail_post(request, post_slug):
     post = blog_models.Post.objects.get(slug=post_slug)
     comments = blog_models.Comment.objects.filter(post=post.id, status=1, parent_id__isnull=True).order_by("-creation_date")
-    images = blog_models.Image.objects.filter(album=post.album)
+    images = general_models.Image.objects.filter(album=post.album)
 
     return render(request, "post.html", {
         "post": post,
         "images": images,
-        "categories": obtenerCategorias(request),
+        "categories": getBlogCategories(),
         "comments":comments,
-        "comment_form": getCommentForm(),
-        "answer_form": getCommentForm(),
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
+        "comment_form": getCommentForm(request),
+        "answer_form": getCommentForm(request),
+        "search_form": general_views.getSearchForm(),
+        'subscribe_form': general_views.getSubscribeForm(),
         'comment_parent_id': 24,
     })
 
@@ -42,9 +46,9 @@ def category_posts(request, category):
 
     return render(request, 'blog.html', {
         "posts":posts,
-        "categories": obtenerCategorias(request),
-        "search_form":getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
+        "categories": getBlogCategories(),
+        "search_form": general_views.getSearchForm(),
+        'subscribe_form': general_views.getSubscribeForm(),
     })
 
 
@@ -56,10 +60,55 @@ def author_posts(request, username):
     return render(request, 'blog.html', {
         "categories":categories,
         "posts":posts,
-        "categories": obtenerCategorias(request),
-        "search_form":getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
+        "categories": getBlogCategories(),
+        "search_form": general_views.getSearchForm(),
+        'subscribe_form': general_views.getSubscribeForm(),
     })
+
+
+def add_comment(request):#, post_slug, comment_parent_id=None):
+    #post = blog_models.Post.get_object_or_404(slug=post_slug)
+    comment_form = getCommentForm(request)
+    print(request.GET['post'])
+
+    if request.user.is_authenticated():
+        user = request.user.id
+    else:
+        user = None
+
+    if comment_parent_id:
+        response = comment_parent_id
+    else:
+        response = None
+
+    if comment_form.is_valid():
+        data = comment_form.cleaned_data
+        blog_models.Comment.objects.create(
+            status=2,
+            title=data['title'],
+            content=data['content'],
+            author=user,
+            post=1,
+            parent=response)
+
+    return redirect('blog:shoppingcart_detail post_slug=post.slug')
+
+# Common Functions
+def getBlogCategories():
+    return blog_models.Category.objects.filter(parent__isnull=True).order_by("name")
+
+
+def getCommentForm(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            return blog_forms.CommentFormAuthenticated(request.POST)
+        else:
+            return blog_forms.CommentFormNotAuthenticated(request.POST)
+    else:
+        if request.user.is_authenticated():
+            return blog_forms.CommentFormAuthenticated()
+        else:
+            return blog_forms.CommentFormNotAuthenticated()
 
 
 # Blog Api Views

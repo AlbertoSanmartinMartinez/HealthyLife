@@ -3,7 +3,7 @@
 
 from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
-from healthylifeapp import forms
+from healthylifeapp import forms as general_forms
 from healthylifeapp import models
 from blog import models as blog_models
 from django.utils import timezone
@@ -24,6 +24,7 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from shop import models as shop_models
 
 # API imports
 from rest_framework.decorators import api_view
@@ -33,19 +34,21 @@ from rest_framework import status
 
 # General views
 def home(request):
-    last_posts = blog_models.Post.objects.filter(status=1).order_by("-creation_date")[:3]
-    #most_viwed_products
+    last_posts = blog_models.Post.objects.filter(status=1).order_by("-creation_date")[:6]
+    last_products = shop_models.Product.objects.filter(status=1).order_by("-created_date")[:9]
     #best_awards
+    print(last_posts)
 
     return render(request, "home.html", {
         "search_form":getSearchForm(),
         "last_posts": last_posts,
+        "last_products": last_products,
         'subscribe_form': getSubscribeForm(),
     })
 
 
 def contact(request):
-    form = forms.ContactForm(request.POST or None)
+    form = general_forms.ContactForm(request.POST or None)
     if form.is_valid():
         email_form = form.cleaned_data.get("email")
         message_form = form.cleaned_data.get("mensaje")
@@ -69,7 +72,7 @@ def work_with_our(request):
     """
     if request.method == 'POST':
         # perfil colaborador
-        user_form = forms.CustomRegisterColaboratorForm(data=request.POST)
+        user_form = general_forms.CustomRegisterColaboratorForm(data=request.POST)
         if user_form.is_valid():
             data = user_form.cleaned_data
             user = user_form.save(commit=False)
@@ -96,7 +99,7 @@ def work_with_our(request):
                 health_colaborator_group.user_set.add(user)
             return redirect('home')
     else:
-        user_form = forms.CustomRegisterColaboratorForm()
+        user_form = general_forms.CustomRegisterColaboratorForm()
 
     return render(request, 'work_with_our.html', {
         "user_form": user_form,
@@ -150,11 +153,14 @@ def know_us_company(request, companyname):
 # Login views
 def custom_login(request):
     if request.method == 'POST':
-        form = forms.CustomAuthenticationForm(data=request.POST)
+        print("metodo post")
+        form = general_forms.CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
+            print("formulario valido")
             data = form.cleaned_data
             user = authenticate(username=data['username'], password=data['password'])
             if user is not None:
+                print("user correcto")
                 if user.is_active:
                     login(request, user)
                     return redirect('home')
@@ -170,7 +176,8 @@ def custom_login(request):
                     """
 
     else:
-        form = forms.CustomAuthenticationForm()
+        print("metodo no post")
+        form = general_forms.CustomAuthenticationForm()
 
     return render(request, 'custom_login.html', {
         "search_form": getSearchForm,
@@ -182,12 +189,12 @@ def custom_login(request):
 # Registration views
 def custom_registration(request):
     if request.method == 'POST':
-        form = forms.CustomRegisterForm(data=request.POST)
+        form = general_forms.CustomRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
     else:
-        form = forms.CustomRegisterForm()
+        form = general_forms.CustomRegisterForm()
 
     return render(request, 'custom_register.html', {
         "search_form": getSearchForm,
@@ -341,10 +348,10 @@ def profile(request, username):
             address_form.save()
 
     else:
-        user_form = forms.UserForm(instance=request.user)
-        bank_information_form = forms.BankInformationForm(instance=bank_information)
-        address_form = forms.AddressForm(instance=address)
-        user_profile_form = forms.UserProfileForm(instance=request.user.userprofile)
+        user_form = general_forms.UserForm(instance=request.user)
+        bank_information_form = general_forms.BankInformationForm(instance=bank_information)
+        address_form = general_forms.AddressForm(instance=address)
+        user_profile_form = general_forms.UserProfileForm(instance=request.user.userprofile)
 
     return render(request, 'profile.html', {
         "user_form": user_form,
@@ -642,20 +649,12 @@ class APIUserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 # Common Functions
-def obtenerCategorias(request):
-    return models.Category.objects.filter(parent__isnull=True).order_by("name")
-
-
 def getSearchForm():
-    return forms.SearchForm()
+    return general_forms.SearchForm()
 
 
 def getSubscribeForm():
-    return forms.SubscriberForm()
-
-
-def getCommentForm():
-    return forms.CommentFormAuthenticated()
+    return general_forms.SubscriberForm()
 
 
 # Error Views

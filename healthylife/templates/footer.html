@@ -1,29 +1,90 @@
-<!doctype html>
+{% load static %}
 
 {% block content %}
-    <div class="footer">
+
+
       {% include 'subscribe.html'%}
-    <hr>
-    <div class="footer_menu">
-      <ul>
-        <li>
-          <a class="footerEnlaces" href="{% url 'api' %}">API</a>
-        </li>
-        <li>
-          <a class="footerEnlaces" href="{% url 'legal_information' %}">Política de Privacidad</a>
-        </li>
-        <li>
-          <a class="footerEnlaces" href="{% url 'legal_information' %}">Condiciones de Uso</a>
-        </li>
-        <li>
-          <a class="footerEnlaces" href="{% url 'work_with_our' %}">Trabaja con Nosotros</a>
-        </li>
-      </ul>
-    </div>
-    <div class="footer_information">
-      <p>Creado por: <a class="footerEnlaces" href="http://www.preconcebido.com" target="_blank">Preconcebido</a></p>
-      <p class="centrarFooter">&#169; 2018 Barbastro Se Mueve. Todos los derechos reservados</p>
-      <a href="#">Top</a></p>
-    </div>
-  </div>
+
+      <!-- Start Footer -->
+      <footer class="htc__foooter__area bg__gray">
+            <div class="container">
+                <div class="row">
+                    <div class="footer__container clearfix">
+
+                         <!-- Start Slogan Area -->
+                        <div class="col-md-3 col-lg-3 col-sm-6">
+                            <div class="ft__widget">
+                                <div class="ft__logo">
+                                    <a href="index.html">
+                                        <img src="images/logo/uniqlo.png" alt="footer logo">
+                                    </a>
+                                </div>
+                                <div class="footer__details">
+                                    <p>Intentamos mejorar la vida de las personas de Barbastro.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Start Aubacribe Area -->
+                        <div class="col-md-3 col-lg-3 col-lg-offset-1 col-sm-6 smb-30 xmt-30">
+                            <div class="ft__widget">
+                                <h2 class="ft__title">Subscríbete</h2>
+                                <div class="newsletter__form">
+                                    <div class="input__box">
+                                        <div id="mc_embed_signup">
+                                            {% include 'subscribe.html'%}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Start Contact Area -->
+                        <div class="col-md-3 col-lg-3 col-sm-6 smt-30 xmt-30">
+                            <div class="ft__widget contact__us">
+                                <h2 class="ft__title">Contacto</h2>
+                                <div class="footer__inner">
+                                    <p>Terrero 5 bajo D<Br>Barbastro (Huesca)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Start Social Media Area -->
+                        <div class="col-md-3 col-lg-2 col-sm-6 smt-30 xmt-30">
+                            <div class="ft__widget">
+                                <h2 class="ft__title">Síguenos</h2>
+                                <ul class="social__icon">
+                                  <li><a href="https://twitter.com/BarbastroSMueve" target="_blank"><i class="zmdi zmdi-twitter"></i></a></li>
+                                  <li><a href="https://www.instagram.com/barbastrosemueve/" target="_blank"><i class="zmdi zmdi-instagram"></i></a></li>
+                                  <li><a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank"><i class="zmdi zmdi-facebook"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- End Single Footer Widget -->
+                    </div>
+                </div>
+
+                <!-- Start Copyright Area -->
+                <div class="htc__copyright__area">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                            <div class="copyright__inner">
+                                <div class="copyright">
+                                  <p>© 2018 Todos los derechos reservados.</p>
+                                  <p>Creado por: <a class="footerEnlaces" href="http://www.preconcebido.com" target="_blank">Preconcebido</a></p>
+                                </div>
+                                <ul class="footer__menu">
+                                  <li><a href="{% url 'api' %}">API</a></li>
+                                  <li class="{% url 'legal_information' %}"><a href="#">Legal</a></li>
+                                  <!--<li><a href="{% url 'legal_information' %}">Condiciones de Uso</a></li>-->
+                                  <li><a href="{% url 'work_with_our' %}">Únete</a></li>
+                                  <li><a href="{% url 'contact' %}">Contacto</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
 {% endblock %}

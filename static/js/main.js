@@ -26,15 +26,15 @@
   12. Filter Area
   13. User Menu
   14. Overlay Close
-  15. Home Slider 
+  15. Home Slider
   16. Popular Product Wrap
   17. Testimonial Wrap
-  18. Magnific Popup  
+  18. Magnific Popup
   19. Price Slider Active
   20.  Plus Minus Button
   21. jQuery scroll Nav
 
-  
+
 
 /*--------------------------------
 [ End table content ]
@@ -48,7 +48,7 @@
 /*-------------------------------------------
   01. jQuery MeanMenu
 --------------------------------------------- */
-    
+
 $('.mobile-menu nav').meanmenu({
     meanMenuContainer: '.mobile-menu-area',
     meanScreenWidth: "991",
@@ -65,15 +65,15 @@ $('.mobile-menu nav').meanmenu({
 
 /*-------------------------------------------
   03. Product  Masonry (width)
---------------------------------------------- */ 
+--------------------------------------------- */
 
 $('.htc__product__container').imagesLoaded( function() {
-  
+
     // filter items on button click
     $('.product__menu').on( 'click', 'button', function() {
       var filterValue = $(this).attr('data-filter');
       $grid.isotope({ filter: filterValue });
-    }); 
+    });
     // init Isotope
     var $grid = $('.product__list').isotope({
       itemSelector: '.single__pro',
@@ -98,12 +98,12 @@ $('.product__menu button').on('click', function(event) {
 
 /*-------------------------------------------
   04. Sticky Header
---------------------------------------------- */ 
+--------------------------------------------- */
 
 
   var win = $(window);
   var sticky_id = $("#sticky-header-with-topbar");
-  win.on('scroll',function() {    
+  win.on('scroll',function() {
     var scroll = win.scrollTop();
     if (scroll < 245) {
       sticky_id.removeClass("scroll-header");
@@ -130,7 +130,7 @@ $.scrollUp({
 
 /*---------------------------
   06. Tooltip
-------------------------------*/    
+------------------------------*/
 $('[data-toggle="tooltip"]').tooltip({
     animated: 'fade',
     placement: 'top',
@@ -159,10 +159,10 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
 
 
-/*------------------------------------    
+/*------------------------------------
   09. Search Bar
---------------------------------------*/ 
-    
+--------------------------------------*/
+
   $( '.search__open' ).on( 'click', function () {
     $( 'body' ).toggleClass( 'search__box__show__hide' );
     return false;
@@ -176,7 +176,7 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
 
 
-/*------------------------------------    
+/*------------------------------------
   10. Toogle Menu
 --------------------------------------*/
 
@@ -193,7 +193,7 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
 
 
-/*------------------------------------    
+/*------------------------------------
   11. Shopping Cart Area
 --------------------------------------*/
 
@@ -209,7 +209,23 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
   });
 
 
-/*------------------------------------    
+  /*------------------------------------
+    11. Profile Area
+  --------------------------------------*/
+
+  $('.profile__menu').on('click', function() {
+    $('.profile').addClass('profile__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.offsetmenu__close__btn').on('click', function() {
+      $('.profile').removeClass('profile__on');
+      $('.body__overlay').removeClass('is-visible');
+  });
+
+
+/*------------------------------------
   12. Filter Area
 --------------------------------------*/
 
@@ -226,7 +242,7 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
 
 
-/*------------------------------------    
+/*------------------------------------
   13. User Menu
 --------------------------------------*/
 
@@ -243,13 +259,14 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
 
 
-/*------------------------------------    
+/*------------------------------------
   14. Overlay Close
 --------------------------------------*/
   $('.body__overlay').on('click', function() {
     $(this).removeClass('is-visible');
     $('.offsetmenu').removeClass('offsetmenu__on');
     $('.shopping__cart').removeClass('shopping__cart__on');
+    $('.profile').removeClass('profile__on');
     $('.filter__wrap').removeClass('filter__menu__on');
     $('.user__meta').removeClass('user__meta__on');
   });
@@ -410,7 +427,7 @@ $('.image-popup').magnificPopup({
   mainClass: 'mfp-fade',
   removalDelay: 100,
   gallery:{
-      enabled:true, 
+      enabled:true,
   }
 });
 
@@ -437,7 +454,7 @@ $('.image-popup').magnificPopup({
 
 
 /*-------------------------------
-  20.  Plus Minus Button 
+  20.  Plus Minus Button
 --------------------------------*/
 
 
@@ -465,7 +482,7 @@ $('.image-popup').magnificPopup({
 ---------------------------- */
     $('.onepage--menu').onePageNav({
         scrollOffset: 0
-    }); 
+    });
 
 
 
@@ -475,7 +492,3 @@ $('.image-popup').magnificPopup({
 
 
 })(jQuery);
-
-
-
-
