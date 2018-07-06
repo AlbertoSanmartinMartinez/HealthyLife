@@ -2,11 +2,12 @@
 
 {% block navbar_blog %}
 
-  <ul>
+  <!--<ul>-->
   {% for category in categories %}
-      <li>
+      <!--<li>-->
         <a href="{% url 'blog:category_posts' category=category.slug %}">{{ category.name }}</a>
-      </li>
+        <span class="brd-separetor">/</span>
+      <!--</li>-->
       <!--
       {% for subcategory in category.children.all %}
         <ul>
@@ -23,7 +24,7 @@
           {% endfor %}
         </ul>-->
       {% endfor %}
-    </ul>
+    <!--</ul>-->
 
 {% endblock %}
 

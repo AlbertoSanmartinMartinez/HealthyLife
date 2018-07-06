@@ -18,17 +18,22 @@ class PostAdmin(GuardedModelAdmin):
     """
     Modelo de administracion para los posts
     """
-    list_display = ('status', 'title', 'slug', 'category', 'author')
-    list_filter = ('status', 'title', 'slug', 'category', 'author')
-    search_fields = ('status', 'title', 'slug', 'category', 'author')
-    readonly_fields = ('author', 'slug', 'album')
+    list_display = ('id', 'status', 'title', 'slug', 'category', 'author')
+    list_filter = ('status', 'category', 'author')
+    search_fields = ('title', 'slug', 'author')
+    list_editable = ('status', 'title', 'category')
+    readonly_fields = ('slug', 'author', 'album')
+    #exclude = ('author', 'album')
 
     def save_model(self, request, obj, form, change):
-        """
-        Metodo que modifica el author del post
-        """
         obj.author = request.user
         super(PostAdmin, self).save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        queryset = super(PostAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(author_id=request.user.id)
 
 admin.site.register(blog_models.Post, PostAdmin)
 
@@ -40,8 +45,9 @@ admin.site.register(blog_models.Tag, TagsAdmin)
 
 
 class CommentAdmin(GuardedModelAdmin):
-    list_display = ('status', 'title', 'author', 'post', 'parent')
-    list_filter = ('status', 'title', 'author', 'post', 'parent')
-    search_fields = ('status', 'title', 'author', 'post', 'parent')
+    list_display = ('id', 'status', 'title', 'creation_date', 'author', 'post', 'parent')
+    list_editable = ('status', 'author')
+    list_filter = ('status', 'parent')
+    search_fields = ('title', 'content', 'author', 'post')
 
 admin.site.register(blog_models.Comment, CommentAdmin)

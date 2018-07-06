@@ -11,19 +11,38 @@ class PostForm(forms.ModelForm):
         fields = []
 
 
+class PostFilter(forms.ModelForm):
+    title = forms.CharField(label='Título', required=False, widget=forms.TextInput(attrs={'placeholder':'Escribe lo que quieras'}))
+    minimum_date = forms.DateField(label='fecha mínima', required=False, widget=forms.DateInput(attrs={'placeholder': 'Mínimo'}))
+    maximum_date = forms.DateField(label='fecha máxima', required=False, widget=forms.DateInput(attrs={'placeholder': 'Máximo'}))
+    ORDER_BY = ((1, ("Más antiguos primero")), (2, ("Más recientes primero")))
+    order_by = forms.ChoiceField(choices = ORDER_BY, label="Ordenar", initial=1, widget=forms.Select(), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(PostFilter, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.ModelChoiceField(
+            label='Categoria',
+            required=False,
+            queryset=blog_models.Category.objects.all())
+
+    class Meta:
+        model = blog_models.Post
+        exclude = ['description', 'content']
+
 class CommentFormAuthenticated(forms.ModelForm):
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+    title = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
     class Meta:
         model = blog_models.Comment
         fields = ['title', 'content']
 
 class CommentFormNotAuthenticated(forms.ModelForm):
-    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Eamil'}))
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+    name = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Nombre'}))
+    email = forms.EmailField(label='', required=False, widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Email'}))
+    title = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
     class Meta:
         model = blog_models.Comment
-        fields = ['title', 'content', 'email']
+        fields = ['name', 'title', 'content', 'email']

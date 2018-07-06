@@ -21,8 +21,8 @@ class ProductFilter(forms.ModelForm):
     #category = forms.ChoiceField(label='Categoria', required=False)
     #category = forms.ModelForm()
     name = forms.CharField(label='Nombre', required=False, widget=forms.TextInput(attrs={'placeholder':'Busca un producto'}))
-    minimum_price = forms.DecimalField(label='Precio minimo', required=False, max_digits=8, decimal_places=2)
-    maximum_price = forms.DecimalField(label='Precio maximo', required=False, max_digits=8, decimal_places=2)
+    minimum_price = forms.DecimalField(label='Precio minimo', required=False, max_digits=8, decimal_places=2, widget=forms.NumberInput(attrs={'placeholder': 'Mínimo'}))
+    maximum_price = forms.DecimalField(label='Precio maximo', required=False, max_digits=8, decimal_places=2, widget=forms.NumberInput(attrs={'placeholder': 'Máximo'}))
     # https://www.w3schools.com/howto/howto_js_rangeslider.asp
     ORDER_BY = ((1, ("Precio de menor a mayor")), (2, ("Precio de mayor a menor")))
     order_by = forms.ChoiceField(choices = ORDER_BY, label="Ordenar", initial=1, widget=forms.Select(), required=False)
@@ -44,27 +44,31 @@ class ProductFilter(forms.ModelForm):
 
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(0, 26)]
 
-
 class ShoppingCartForm(forms.Form):
     quantity = forms.TypedChoiceField(choices=PRODUCT_QUANTITY_CHOICES, coerce=int, help_text = 'Uds.')
     #update = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)
 
 
-class CommentFormAuthenticated(forms.ModelForm):
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+REVIEW_MARK_CHOICES = [(i, str(i)) for i in range(0, 11)]
+# Comment Forms
+class ReviewFormAuthenticated(forms.ModelForm):
+    title = forms.CharField(required=True, label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(required=True, label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+    mark = forms.TypedChoiceField(required=True, choices=REVIEW_MARK_CHOICES, coerce=int, help_text = '', label='Puntuación')
 
     class Meta:
-        model = shop_models.Comment
-        fields = ['title', 'content']
+        model = shop_models.Review
+        fields = ['title', 'content', 'mark']
 
 
-class CommentFormNotAuthenticated(forms.ModelForm):
-    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Eamil'}))
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+class ReviewFormNotAuthenticated(forms.ModelForm):
+    name = forms.CharField(required=True, label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Nombre'}))
+    email = forms.EmailField(required=True, label='', widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Eamil'}))
+    title = forms.CharField(required=True, label='', widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(required=True, label='', widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+    mark = forms.TypedChoiceField(required=True, choices=REVIEW_MARK_CHOICES, coerce=int, help_text = '', label='Puntuación')
 
     class Meta:
-        model = shop_models.Comment
-        fields = ['title', 'content', 'email']
+        model = shop_models.Review
+        fields = ['name', 'mark', 'title', 'content', 'email']
 #

@@ -8,11 +8,22 @@ from guardian.admin import GuardedModelAdmin
 
 # Admin Shop Models
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'status', 'name', 'created_date', 'category', 'description', 'stock', 'price', 'album', 'discount']
+    list_display = ['id', 'status', 'name', 'created_date', 'category', 'stock', 'price', 'album', 'discount']
     list_filter = ['status', 'category']
-    list_editable = ['status', 'name', 'category', 'description', 'stock', 'price', 'album', 'discount']
+    list_editable = ['status', 'name', 'category', 'stock', 'price', 'album', 'discount']
     search_fields = ['name', 'stock', 'price']
+    readonly_fields = ('slug', 'author', 'album')
     # prepopulated_fields
+
+    def save_model(self, request, obj, form, change):
+        obj.author = request.user
+        super(ProductAdmin, self).save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        queryset = super(ProductAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(author_id=request.user.id)
 
 admin.site.register(shop_models.Product, ProductAdmin)
 
@@ -65,10 +76,13 @@ class AlbumAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Album, AlbumAdmin)
 """
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('status', 'title', 'content', 'creation_date')
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('id', 'status', 'title', 'content', 'creation_date', 'author', 'product', 'parent')
+    list_editable = ('status', 'author')
+    list_filter = ('status', 'parent')
+    search_fields = ('title', 'content', 'author', 'post')
 
-admin.site.register(shop_models.Comment, CommentAdmin)
+admin.site.register(shop_models.Review, ReviewAdmin)
 
 class DiscountAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'amount')

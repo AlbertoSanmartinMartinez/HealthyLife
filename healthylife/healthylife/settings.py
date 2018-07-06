@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'healthapp',
     'blog',
     'shop',
+    'events',
+    'awards',
     'rest_framework',
     'guardian',
     'ckeditor',

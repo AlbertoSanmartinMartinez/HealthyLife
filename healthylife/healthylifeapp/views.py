@@ -25,6 +25,8 @@ from datetime import datetime
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from shop import models as shop_models
+from awards import models as award_models
+from healthylifeapp import models as general_models
 
 # API imports
 from rest_framework.decorators import api_view
@@ -34,15 +36,16 @@ from rest_framework import status
 
 # General views
 def home(request):
-    last_posts = blog_models.Post.objects.filter(status=1).order_by("-creation_date")[:6]
-    last_products = shop_models.Product.objects.filter(status=1).order_by("-created_date")[:9]
-    #best_awards
-    print(last_posts)
+    last_posts = blog_models.Post.objects.filter(status=1).order_by("-creation_date")[:3]
+    last_products = shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
+    #next events
+    best_awards = award_models.Award.objects.filter(status=1).order_by("-creation_date")[:3]
 
     return render(request, "home.html", {
         "search_form":getSearchForm(),
         "last_posts": last_posts,
         "last_products": last_products,
+        "best_awards": best_awards,
         'subscribe_form': getSubscribeForm(),
     })
 
@@ -78,7 +81,7 @@ def work_with_our(request):
             user = user_form.save(commit=False)
             user.is_staff = True
             user.save()
-            collaborator = models.CollaboratorProfile.objects.create(user_id = user.id)
+            collaborator = general_models.CollaboratorProfile.objects.create(user_id = user.id)
             if data['blog_colaborator'] == True:
                 blog_colaborator_group = Group.objects.get(name='colaboradores_blog')
                 blog_colaborator_group.user_set.add(user)
@@ -129,9 +132,7 @@ def know_us(request):
 
 def know_us_collaborator(request, username):
     user = User.objects.get(username=username)
-    print(user)
     collaborator = models.CollaboratorProfile.objects.get(user_id=user.id)
-    print(collaborator.education)
 
     return render(request, 'collaborator.html', {
         "collaborator": collaborator,
@@ -230,13 +231,6 @@ def statistics(request):
 def health(request):
     return render(request, 'health.html', {
         "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
-# Award views
-def awards(request):
-    return render(request, 'awards.html', {
         'subscribe_form': getSubscribeForm(),
     })
 
@@ -444,18 +438,18 @@ def collaborator_profile(request, username):
 
     else:
         if company is None:
-            company_form = forms.CompanyForm()
+            company_form = general_forms.CompanyForm()
         else:
-            company_form = forms.CompanyForm(instance=company)
+            company_form = general_forms.CompanyForm(instance=company)
         if bank_information is None:
-            bank_information_form = forms.BankInformationForm()
+            bank_information_form = general_forms.BankInformationForm()
         else:
-            bank_information_form = forms.BankInformationForm(instance=bank_information)
+            bank_information_form = general_forms.BankInformationForm(instance=bank_information)
         if address is None:
-            address_form = forms.AddressForm()
+            address_form = general_forms.AddressForm()
         else:
-            address_form = forms.AddressForm(instance=address)
-        collaborator_profile_form = forms.CollaboratorProfileForm(instance=collaborator_profile)
+            address_form = general_forms.AddressForm(instance=address)
+        collaborator_profile_form = general_forms.CollaboratorProfileForm(instance=collaborator_profile)
 
     return render(request, 'collaborator_profile.html', {
         "bank_information_form": bank_information_form,
@@ -485,13 +479,6 @@ def nutrition_profile(request, username):
 
 def health_profile(request, username):
     return render(request, 'health_profile.html', {
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
-def awards_profile(request, username):
-    return render(request, 'awards_profile.html', {
         "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
     })

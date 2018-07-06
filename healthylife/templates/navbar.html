@@ -4,7 +4,7 @@
 {% now "Y" as current_year %}
 {% now "d" as current_day %}
 
-<header id="header" class="htc-header">
+<header id="header" class="htc-header header--5">
 
   <!-- Start Mainmenu Area -->
   <div id="sticky-header-with-topbar" class="mainmenu__area sticky__header header--2">
@@ -30,7 +30,7 @@
                   <li><a href="{% url 'sportapp:sport' %}">Deporte</a></li>
                   <li><a href="{% url 'nutritionapp:nutrition' %}">Nutricion</a></li>
                   <li><a href="{% url 'healthapp:health' %}">Salud</a></li>
-                  <li><a href="{% url 'awards' %}">Premios</a></li>
+                  <li><a href="{% url 'awardsapp:awards' %}">Premios</a></li>
                 </ul>
               </li>
               <li><a href="{% url 'know_us' %}">Conocenos</a></li>
@@ -81,7 +81,7 @@
                               </ul>
                           </nav>
 
-                          <!-- Start Mobile Menu  -->
+                          <!-- Start Mobile Menu
                           <div class="mobile-menu clearfix visible-xs visible-sm">
                               <nav id="mobile_dropdown">
                                   <ul>
@@ -89,24 +89,24 @@
                                       <li><a href="{% url 'sportapp:sport' %}">Deporte</a></li>
                                       <li><a href="{% url 'nutritionapp:nutrition' %}">Nutricion</a></li>
                                       <li><a href="{% url 'healthapp:health' %}">Salud</a></li>
-                                      <li><a href="{% url 'awards' %}">Premios</a></li>
+                                      <li><a href="{% url 'awardsapp:awards' %}">Premios</a></li>
                                       <li><a href="{% url 'know_us' %}">Conocenos</a></li>
                                       <li><a href="{% url 'blog:list_post' %}">Blog</a></li>
                                       <li><a href="{% url 'shop:product_list' %}">Tienda</a></li>
                                       <li><a href="{% url 'contact' %}">Contacto</a></li>
                                   </ul>
                               </nav>
-                          </div>
+                          </div>-->
 
                       </div>
 
                       <!-- Profile Icon  -->
                       <div class="col-md-2 col-sm-4 col-xs-3">
                           <ul class="menu-extra">
-                              <li class="search search__open"><span class="ti-search"></span></li>
+                              <li class="search search__open hidden-xs"><span class="ti-search"></span></li>
                               <li class="profile__menu"><span class="ti-user"></span></li>
                               <li class="cart__menu"><span class="ti-shopping-cart"></span></li>
-                              <!--<li class="toggle__menu hidden-xs hidden-sm"><span class="ti-menu"></span></li>-->
+                              <li class="toggle__menu"><span class="ti-menu"></span></li>
                           </ul>
                       </div>
                   </div>

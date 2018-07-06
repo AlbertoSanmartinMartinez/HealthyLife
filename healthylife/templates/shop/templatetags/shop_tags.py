@@ -16,7 +16,7 @@ def calculateStockItem(product_id):
 
 @register.simple_tag
 def getHeaderImage(product_id):
-    product = shop_models.Product.objects.get(id=product_id)
+    product = shop_models.Product.objects.get(id=str(product_id))
     picture = general_models.Image.objects.get(header_image=True, album=product.album)
 
     return picture

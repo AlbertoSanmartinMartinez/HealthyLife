@@ -6,6 +6,7 @@ from payments import PurchasedItem
 from payments.models import BasePayment
 from healthylife.decorators import autoconnect
 from healthylifeapp import models as general_models
+from django.contrib.auth.models import User
 
 # Shop Models
 @autoconnect
@@ -48,6 +49,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100, db_index=True, unique=True)
     slug = models.SlugField(max_length=100, db_index=True, unique=True, blank=True)
     description = models.CharField(max_length=500, blank=True)
+    # contenido
     updated_date = models.DateTimeField(auto_now_add=True)
     created_date = models.DateTimeField(auto_now=True)
     stock = models.PositiveIntegerField()
@@ -59,6 +61,7 @@ class Product(models.Model):
     size = models.IntegerField(choices=Size, default=1, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0)
     discount = models.ForeignKey(Discount, blank=True, null=True)
+    author = models.ForeignKey(User, default=3, blank=True)
     #tag
 
     class Meta:
@@ -72,8 +75,10 @@ class Product(models.Model):
         """metodo de la clase post para calcular el slug de un producto y crear un album asociado a ese producto"""
         self.slug = self.name.replace(" ", "_").lower()
         if not self.pk:
-            album = general_models.Album.objects.create(name='album '+self.name)
+            album = general_models.Album.objects.create(name='album '+self.name, author=self.author)
             self.album = album
+            general_models.Image.objects.create(album=self.album, header_image=True, image='photos/header_product_default_image.jpg')
+        general_models.Album.objects.filter(id=self.album.id).update(name='Album Product ' + self.name)
         super(Product, self).save(*args, **kwargs)
 
     """
@@ -136,17 +141,18 @@ class MetaData(models.Model):
 
 
 @autoconnect
-class Comment(models.Model):
+class Review(models.Model):
     """Modelo para los comentarios de la tienda"""
     Status = ((1, "Publicado"), (2, "Pendiente de Revision"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=2, blank=True)
     title = models.CharField(max_length=50)
     content = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    #author = models.ForeignKey(User, default=1)
-    product = models.ForeignKey(Product, default=1)
-    # guardar automaticamente el usuario que ha hecho el comentario
-    parent = models.ForeignKey('self', related_name='answer', null=True, blank=True)
+    update_date = models.DateTimeField(auto_now=True)
+    author = models.CharField(max_length=100)
+    product = models.ForeignKey(Product)
+    parent = models.ForeignKey('self', related_name='answers', null=True, blank=True)
+    mark = models.IntegerField(default=10)
 
     def __unicode__(self):
         return self.title

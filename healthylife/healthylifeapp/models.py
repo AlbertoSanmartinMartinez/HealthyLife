@@ -76,7 +76,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100, blank=True)
     phone = models.CharField(max_length=9, default='         ', blank=True)
-    profile_image = models.ImageField(upload_to="photos", default='photos/perfil_miniatura.jpg', blank=True)
+    profile_image = models.ImageField(upload_to="photos", default='user_default_image.jpg', blank=True)
 
     def __unicode__(self):
         return str(self.user.username)
@@ -124,14 +124,13 @@ class SpecificStatistics(models.Model):
 @autoconnect
 class Album(models.Model):
     name = models.CharField(max_length=50, default='album')
-    slug = models.CharField(max_length=100, blank=True)
-    # image_header = models.IntegerField(Image)
+    #slug = models.CharField(max_length=100, blank=True)
+    author = models.ForeignKey(User, default=3, blank=True)
 
     def __unicode__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        """metodo de la clase Album para calcular el slug"""
         self.slug = self.name.replace(" ", "_").lower()
         super(Album, self).save(*args, **kwargs)
 
@@ -155,24 +154,6 @@ class Image(models.Model):
         return unicode(self.image)
 
 
-# Shop models
-class Product(models.Model):
-    """modelo para los productos de la tienda"""
-    pass
-
-    def __unicode__(self):
-        pass
-
-
-class Discount(models.Model):
-    name = models.CharField(max_length=50)
-    DiscountType = ((1, "Cantidad"), (2, "Porcentaje"))
-    discount = models.IntegerField(choices=DiscountType, default=1)
-    amount = models.DecimalField(max_digits=6, decimal_places=2)
-
-    def __unicode__(self):
-        pass
-
 
 @autoconnect
 class Company(models.Model):
@@ -192,112 +173,6 @@ class Company(models.Model):
         """metodo de la clase company para calcular el slug"""
         self.slug = self.company_name.replace(" ", "_").lower()
         super(Company, self).save(*args, **kwargs)
-
-
-# Awards models
-@autoconnect
-class Award(models.Model):
-    """modelo para los premios de los usuarios"""
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-    AwardType = ((1,'Porcentaje'), (2, 'Cantidad'))
-    award_type = models.IntegerField(choices=AwardType, default=2)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
-    author = models.ForeignKey(User, default=1)
-    company = models.ForeignKey(Company, default=1)
-
-    def __unicode__(self):
-        return self.name
-
-    def pre_save(self):
-        """Metodo para asignar el usuario y la empresa automaticamente al crear un premio"""
-        pass
-
-
-# Calendar models
-#class EventCalendar(HTMLCalendar):
-class Calendar(models.Model):
-    """
-    Clase para el calendario.
-    Formado por un día, un mes y año. Infinitos calendarios
-    """
-    year = models.IntegerField()
-    month = models.IntegerField()
-    day = models.IntegerField()
-
-    def __init__(self, year, month, day):
-        self.year = year
-        self.month = month
-        self.day = day
-
-    def getEvents(self):
-        """
-        Devuelve todos los eventos de un calendario
-        """
-        events = models.Event.objects.filter()
-        return events
-
-    def addEvent(self):
-        #controlar los parámetros que se pasan del calendario
-        models.Event.create()
-
-    def formatday(self, day, weekday):
-        pass
-
-    def formatmonth(self, year, month):
-        pass
-
-    def group_by_day(self, events):
-        pass
-
-    def render(self, context):
-        try:
-            events = self.events.resolve(context)
-            year = self.year.resolve(context)
-            month = self.month.resolve(context)
-            day = self.day.resolve(context)
-            cal = EventCalendar(events)
-            return cal.formatmonth(int(year), int(month), int(day))
-        except ValueError:
-            return
-        except template.VariableDoesNotExist:
-            return
-
-
-@autoconnect
-class Event(models.Model):
-    """
-    Clase para los eventos.
-    """
-    title = models.CharField(max_length=50)
-    slug = models.CharField(max_length=50, default=' ', blank=True)
-    description = models.TextField()
-    PrivacityType = ((1, 'Público'), (2, 'Privado'))
-    privacity = models.IntegerField(choices=PrivacityType, default=1, blank=True)
-    owner = models.ForeignKey(User)
-    # tipo de evento
-    # participant = models.ManyToManyField(User, related_name='event_participants')
-    #date = models.DateField(default=datetime.now)
-    # end_date = models.DateField(default=datetime.now)
-    #time = models.TimeField(default=datetime.now)
-    #end_hour = models.TimeField(default=datetime.now)
-    # address = models.ForeignKey(Address, default=1, blank=True)
-    #calendar = models.ForeignKey(Calendar, default=datetime.today) #revisar la estandarizacion de la fecha
-
-    def __unicode__(self):
-        return self.title
-
-    def pre_save(self):
-        """Metodo para aignar el slug y el autor de un post automaticamente al crearlo"""
-        self.slug = self.title.replace(" ", "_").lower()
-
-    def inviteParticipants(self):
-        """
-        Metodo que envia un correo a un usuario para que se una al evento
-        """
-        pass
-
-    # funcion para estandarizar el calendario del evento
 
 
 # SEO models

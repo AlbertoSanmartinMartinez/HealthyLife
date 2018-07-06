@@ -31,8 +31,11 @@
   17. Testimonial Wrap
   18. Magnific Popup
   19. Price Slider Active
-  20.  Plus Minus Button
+  20. Plus Minus Button
   21. jQuery scroll Nav
+
+  22. Profile Area
+  23. Blog Filter Area
 
 
 
@@ -126,6 +129,21 @@ $.scrollUp({
     animation: 'fade'
 });
 
+/*
+$.scrollToReplayReview({
+    scrollText: '<i class="zmdi zmdi-chevron-up"></i>',
+    easingType: 'linear',
+    scrollSpeed: 900,
+    animation: 'fade'
+});
+
+$.scrollToReplayComment({
+    scrollText: '<i class="zmdi zmdi-chevron-up"></i>',
+    easingType: 'linear',
+    scrollSpeed: 900,
+    animation: 'fade'
+});
+*/
 
 
 /*---------------------------
@@ -210,7 +228,7 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
 
   /*------------------------------------
-    11. Profile Area
+    22. Profile Area
   --------------------------------------*/
 
   $('.profile__menu').on('click', function() {
@@ -241,6 +259,21 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
   });
 
 
+  /*------------------------------------
+    23. Blog Filter Area
+  --------------------------------------*/
+
+  $('.blog__filter__menu').on('click', function() {
+    $('.blog__filter__wrap').addClass('blog__filter__menu__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.blog__filter__menu__close__btn').on('click', function() {
+      $('.blog__filter__wrap').removeClass('blog__filter__menu__on');
+      $('.body__overlay').removeClass('is-visible');
+  });
+
 
 /*------------------------------------
   13. User Menu
@@ -268,6 +301,7 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
     $('.shopping__cart').removeClass('shopping__cart__on');
     $('.profile').removeClass('profile__on');
     $('.filter__wrap').removeClass('filter__menu__on');
+    $('.blog__filter__wrap').removeClass('blog__filter__menu__on');
     $('.user__meta').removeClass('user__meta__on');
   });
 
@@ -485,10 +519,28 @@ $('.image-popup').magnificPopup({
     });
 
 
+/*------------------------------------
+  23. Comment Form
+--------------------------------------*/
 
+  $('.blog__comment__reply').on('click', function() {
+    $('.blog__comment__form').removeClass('hidden');
+  });
 
+  $('.blog__comment__reply__close').on('click', function() {
+    $('.blog__comment__form').addClass('hidden');
+  });
 
+  /*--------------------*/
 
+  $('.blog__answer__reply').on('click', function() {
+    $('.blog__comment__form').addClass('hidden');
+    $('.blog__answer__form').removeClass('hidden');
+  });
 
+  $('.blog__answer__reply__close').on('click', function() {
+    $('.blog__comment__form').removeClass('hidden');
+    $('.blog__answer__form').addClass('hidden');
+  });
 
 })(jQuery);

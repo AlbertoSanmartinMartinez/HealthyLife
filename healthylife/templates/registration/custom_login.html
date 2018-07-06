@@ -3,72 +3,62 @@
 
 {% block login %}
 
-<div class="htc__login__register bg__white ptb--130" style="background: rgba(0, 0, 0, 0) url(images/bg/5.jpg) no-repeat scroll center center / cover ;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <ul class="login__register__menu" role="tablist">
-                            <li role="presentation" class="login active"><a href="{% url 'custom_login' %}" role="tab" data-toggle="tab">Acceso</a></li>
-                            <li role="presentation" class="register"><a href="{% url 'custom_register' %}" role="tab" data-toggle="tab">Registro</a></li>
-                        </ul>
-                    </div>
+<div class="htc__login__register bg__white ptb--130" style="background: rgba(0, 0, 0, 0) url({% static 'images/white_background.png' %}) no-repeat scroll center center / cover ;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <ul class="login__register__menu" role="tablist">
+          <li class="login active"><a href="{% url 'custom_login' %}">Acceso</a></li>
+          <li class="register"><a href="{% url 'custom_register' %}">Registro</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Start Login Register Content -->
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="htc__login__register__wrap">
+
+          <!-- Start Single Content -->
+          <div id="login" role="tabpanel" class="single__tabs__panel tab-pane fade in active">
+            <form class="login" method="POST">
+              {% csrf_token %}
+              <div class="single-contact-form">
+                <div class="contact-box subject">
+                  {{ form.username }}
                 </div>
-                <!-- Start Login Register Content -->
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <div class="htc__login__register__wrap">
-                            <!-- Start Single Content -->
-                            <div id="login" role="tabpanel" class="single__tabs__panel tab-pane fade in active">
-
-                                <form class="login" method="POST">
-                                  {% csrf_token %}
-                                  {{ form.as_p }}
-
-                                  <div class="tabs__checkbox">
-                                      <!--<input type="checkbox">
-                                      <span> Remember me</span>-->
-                                      <span class="forget"><a href="{% url 'password_reset' %}">Has olvidado tu contraseña ?</a></span>
-                                  </div>
-
-                                  <div class="htc__login__btn mt--30">
-                                      <!--<a href="{% url 'custom_login' %}">Acceder</a>-->
-                                      <button type="submit">Acceder</button>
-                                  </div>
-
-                                </form>
-
-                                <!--<div class="htc__social__connect">
-                                    <h2>Or Login With</h2>
-                                    <ul class="htc__soaial__list">
-                                        <li><a class="bg--twitter" href="https://twitter.com/devitemsllc" target="_blank"><i class="zmdi zmdi-twitter"></i></a></li>
-
-                                        <li><a class="bg--instagram" href="https://www.instagram.com/devitems/" target="_blank"><i class="zmdi zmdi-instagram"></i></a></li>
-
-                                        <li><a class="bg--facebook" href="https://www.facebook.com/devitems/?ref=bookmarks" target="_blank"><i class="zmdi zmdi-facebook"></i></a></li>
-
-                                        <li><a class="bg--googleplus" href="https://plus.google.com/" target="_blank"><i class="zmdi zmdi-google-plus"></i></a></li>
-                                    </ul>
-                                </div>-->
-                            </div>
-                            <!-- End Single Content -->
-                        </div>
-                    </div>
+              </div>
+              <div class="single-contact-form">
+                <div class="contact-box subject">
+                  {{ form.password }}
                 </div>
-                <!-- End Login Register Content -->
-            </div>
+              </div>
+              <div class="tabs__checkbox">
+                <!--<input type="checkbox">
+                <span> Remember me</span>-->
+                <span class="forget"><a href="{% url 'password_reset' %}">Has olvidado tu contraseña ?</a></span>
+              </div>
+              <div class="contact-btn">
+                <!--<a href="{% url 'custom_login' %}">Acceder</a>-->
+                <input type="submit" class="fv-btn" value="Acceder">
+              </div>
+            </form>
+
+
+            <!--<div class="htc__social__connect">
+              <h2>Or Login With</h2>
+              <ul class="htc__soaial__list">
+                <li><a class="bgtwitter" href="https://twitter.com/devitemsllc" target="_blank"><i class="zmdi zmdi-twitter"></i></a></li>
+                <li><a class="bginstagram" href="https://www.instagram.com/devitems/" target="_blank"><i class="zmdi zmdi-instagram"></i></a></li>
+                <li><a class="bgfacebook" href="https://www.facebook.com/devitems/?ref=bookmarks" target="_blank"><i class="zmdi zmdi-facebook"></i></a></li>
+                <li><a class="bggoogleplus" href="https://plus.google.com/" target="_blank"><i class="zmdi zmdi-google-plus"></i></a></li>
+              </ul>
+            </div>-->
+          </div>
         </div>
-
-<!-- #################################################################################### -->
-<div class="acceder">
-  <form class="boton" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Acceder</button>
-    <!--<input type="hidden" name="next" value="{{ next }}"-->
-  </form>
-
-  <p><a href="{% url 'password_reset' %}">Has olvidado tu contraseña ?</a></p>
-  <p><a href="{% url 'custom_register' %}">Aún no estás registrado ?</a></p>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

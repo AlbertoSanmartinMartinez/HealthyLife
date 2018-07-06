@@ -51,7 +51,8 @@ class Post(models.Model):
     content = RichTextField(default=" ", blank=False)
     category = models.ForeignKey(Category, default=1)
     creation_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, default=31, blank=True)
+    #update_date = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, default=3, blank=True)
     album = models.ForeignKey(general_models.Album, default=1, blank=True, null=True)
     # tags
 
@@ -59,15 +60,14 @@ class Post(models.Model):
     def __unicode__(self):
         return self.title
 
-    def pre_save(self):
-        pass
-
     def save(self, *args, **kwargs):
         """metodo de la clase post para calcular el slug de un post y crear un album asociado a ese post"""
         self.slug = self.title.replace(" ", "_").lower()
         if not self.pk:
-            album = general_models.Album.objects.create(name='album '+self.title)
+            album = general_models.Album.objects.create(name='album ' + self.title, author=self.author)
             self.album = album
+            general_models.Image.objects.create(album=self.album, header_image=True, image='photos/header_post_default_image.jpg')
+        general_models.Album.objects.filter(id=self.album.id).update(name='Album Post ' + self.title)
         super(Post, self).save(*args, **kwargs)
 
     def publishPost(self):
@@ -83,10 +83,10 @@ class Comment(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, default=1) # posibilidad de que sea null
-    post = models.ForeignKey(Post, default=1)
-    # guardar automaticamente el usuario que ha hecho el comentario
-    parent = models.ForeignKey('self', related_name='answer', null=True, blank=True)
+    update_date = models.DateTimeField(auto_now=True)
+    author = models.CharField(max_length=100)
+    post = models.ForeignKey(Post)
+    parent = models.ForeignKey('self', related_name='answers', null=True, blank=True)
 
     def __unicode__(self):
         return self.title

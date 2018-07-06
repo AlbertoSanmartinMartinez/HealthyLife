@@ -8,7 +8,7 @@
 
 
 -----------------------------------------------------------------------------------
-  
+
   CSS INDEX
   ===================
 
@@ -138,7 +138,7 @@
  #scrollUp {
     background: #cfcecc none repeat scroll 0 0;
 }
- 
+
 
 /*---------------------------------------
   End Scroll To Top
@@ -974,7 +974,7 @@ h3.widget-title-modal {
 
 .popular__product__wrap .col-lg-4 {
     width: 100%;
-    
+
 }
 .popular__product__wrap{
     position: relative;
@@ -1653,7 +1653,7 @@ product__style--7
 
 /*------------------------------
   18. Our Shop Area
---------------------------------*/ 
+--------------------------------*/
 
 .shop__page .product__menu {
     text-align: left;
@@ -1671,10 +1671,13 @@ product__style--7
     text-transform: uppercase;
 }
 
+.blog__filter__wrap.blog__filter__menu__on,
 .filter__wrap.filter__menu__on {
     opacity: 1;
     right: calc(0px - 16px);
 }
+
+.blog__filter__wrap,
 .filter__wrap {
     background: #ffffff none repeat scroll 0 0;
     box-shadow: 0 0 85px rgba(0, 0, 0, 0.2);
@@ -1693,6 +1696,7 @@ product__style--7
     height: 100%;
     padding: 130px 50px 60px;
 }
+.blog__filter__menu__close__btn,
 .filter__menu__close__btn {
     background-color: #fff;
     left: 0;
@@ -1733,10 +1737,12 @@ product__style--7
     transition: all 0.3s ease 0s;
 }
 .filter__list li:hover a ,
-.filter__menu__close__btn a:hover i{
+.filter__menu__close__btn a:hover i,
+.blog__filter__menu__close__btn a:hover i{
     color: #ff4136;
 }
-.filter__menu__close__btn a i {
+.filter__menu__close__btn a i,
+.blog__filter__menu__close_btn a i{
     color: #999;
     font-size: 36px;
     transition: 0.3s;
@@ -1748,7 +1754,7 @@ product__style--7
 
 /*------------------------------
   19. Our Shop Sidebar
---------------------------------*/ 
+--------------------------------*/
 
 
 .section-title-4 {
@@ -2162,6 +2168,7 @@ select.select-color {
 
 .pro__review {
     display: flex;
+    margin-top: 40px;
 }
 .review__thumb {
     margin-right: 30px;
@@ -2531,7 +2538,7 @@ select.select-color {
     line-height: 44px;
     text-transform: uppercase;
 }
-.wrapper__sidebar .main__menu > li:hover > a, 
+.wrapper__sidebar .main__menu > li:hover > a,
 .wrapper__sidebar .main__menu > li.current > a {
     background: #fff none repeat scroll 0 0;
     color: #ff4136;
@@ -3134,7 +3141,7 @@ blockquote::before {
 }
 .wishlist-table table th {
     font-weight: 600;
-} 
+}
 .wishlist-table table th, .wishlist-table table td {
     border-bottom: 1px solid #c1c1c1;
     border-right: 1px solid #c1c1c1;
@@ -3147,7 +3154,7 @@ blockquote::before {
     padding: 0 15px;
     width: 20px;
 }
-.wishlist-table table .product-remove > a, 
+.wishlist-table table .product-remove > a,
 .table-content table .product-remove > a {
     font-size: 25px;
 }
@@ -3698,11 +3705,3 @@ a.shipping-calculator-button:hover{
     padding-left: 60px;
     padding-right: 60px;
 }
-
-
-
-
-
-
-
-

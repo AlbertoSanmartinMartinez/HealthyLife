@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from healthylifeapp import views as general_views
 from shop import models as shop_models
 from shop import forms as shop_forms
+from healthylifeapp.views import *
+
 
 # Shop Views
 def product_list(request, shop_category_slug=None):
@@ -20,8 +23,7 @@ def product_list(request, shop_category_slug=None):
         shop_filter_form = shop_forms.ProductFilter(request.POST)
         if shop_filter_form.is_valid():
             data = shop_filter_form.cleaned_data
-            print(data)
-            products = products.filter(name__contains=data['name'])
+            products = products.filter(name__icontains=data['name'])
             if data['category'] is not None:
                 products = products.filter(category_id=data['category'].id)
             if data['minimum_price'] is not None:
@@ -37,10 +39,8 @@ def product_list(request, shop_category_slug=None):
             if data['with_discount'] == True:
                 products = products.filter(discount_id__isnull=False)
             if data['order_by'] == '1':
-                print("ascendente")
                 products = products.order_by('price')
             if data['order_by'] == '2':
-                print("descendente")
                 products = products.all().order_by('-price')
     else:
         shop_filter_form = shop_forms.ProductFilter()
@@ -48,43 +48,84 @@ def product_list(request, shop_category_slug=None):
     return render(request, 'product_list.html', {
         'category': category,
         'products': products,
-        'categories': getShopCategories(),
+        #'categories': getShopCategories(),
         'shop_filter_form': shop_filter_form,
         'shoppingcart_form': getShoppingCart(),
+        #"search_form": general_views.getSearchForm(),
+        #'subscribe_form': general_views.getSubscribeForm(),
     })
 
 
 def product_detail(request, product_slug):
     product = get_object_or_404(shop_models.Product, slug=product_slug)
-    # formularios
+    reviews = shop_models.Review.objects.filter(product=product.id, status=1, parent_id__isnull=True).order_by('creation_date')
+    images = general_models.Image.objects.filter(album=product.album)
+    shop_filter_form = shop_forms.ProductFilter()
+    num_reviews = len(shop_models.Review.objects.filter(product=product.id, status=1))
+
     return render(request, 'product_detail.html', {
         'product': product,
+        'images': images,
         'categories': getShopCategories(),
-        'shop_filter_form': getShopFilter(request),
+        'reviews': reviews,
+        'num_reviews': num_reviews,
+        'review_form': getReviewForm(request),
+        'shop_filter_form': shop_filter_form,
         'shoppingcart_form': getShoppingCart(),
+        "search_form": general_views.getSearchForm(),
     })
 
-"""
-def shop_search(request):
-    products = None
-    category = None
 
-    if request.method == 'POST':
-        form = shop_forms.SearchForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            print(data['name'])
-            products = shop_models.Product.objects.filter(stock__gt=1)
+def last_products():
+    return shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
 
-    return render(request, 'product_list.html', {
-        'category': category,
-        'products': products,
-        'categories': getShopCategories(),
-        'shop_filter_form': getShopFilter(request),
-    })
-"""
+
+# Comments Views
+def add_review(request, product_slug):
+    """
+    Method that add comment to product:
+    - from existing user and new user
+    - new comments and answers
+    If user is new add it to subscribers list
+    """
+    product = get_object_or_404(shop_models.Product, slug=product_slug)
+    reviw_form = getReviewForm(request)
+    name = None
+    review_parent = None
+
+    try:
+        review_parent_id = int(request.POST.get('review_parent_id'))
+    except:
+        review_parent_id = None
+
+    if reviw_form.is_valid():
+        data = reviw_form.cleaned_data
+        if request.user.is_authenticated():
+            name = request.user.username
+        else:
+            user = User.objects.filter(email=data['email'])
+            if not user:
+                general_models.Subscriber.objects.update_or_create(email=data['email'])
+                name = data['name']
+            else:
+                name = user.username
+
+        if review_parent_id:
+            review_parent = shop_models.Review.objects.get(id=review_parent_id)
+            if review_parent:
+                review_parent_id = review_parent.id
+
+        shop_models.Review.objects.create(
+            title=data['title'],
+            content=data['content'],
+            author=name,
+            product=product,
+            parent=review_parent)
+
+    return redirect('shop:product_detail', product_slug=product.slug)
+
+
 # ShoppingCart Views
-#@required_POST
 def cartAdd(request, product_id):
     cart = ShoppingCart(request)
     product = get_object_or_404(shop_models.Product, id=product_id)
@@ -188,3 +229,23 @@ def getShopFilter(request):
     shop_filter_form = shop_forms.ProductFilter(request.POST)
 
     return shop_filter_form
+
+
+def getReviewForm(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            return shop_forms.ReviewFormAuthenticated(request.POST)
+        else:
+            return shop_forms.ReviewFormNotAuthenticated(request.POST)
+    else:
+        if request.user.is_authenticated():
+            return shop_forms.ReviewFormAuthenticated()
+        else:
+            return shop_forms.ReviewFormNotAuthenticated()
+
+
+
+
+
+
+#

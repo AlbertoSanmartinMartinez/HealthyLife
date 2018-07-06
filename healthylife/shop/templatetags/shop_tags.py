@@ -26,3 +26,22 @@ def getImages(product_id):
     pictures = shop_models.Image.objects.filer(header_image=False, album=product.album)
 
     return picture
+
+
+@register.simple_tag
+def get_user_image(username):
+    """
+    Method that return user profile image from user
+    """
+    user_profile = None
+    print("funcion para obtener la foto")
+    print(username)
+    try:
+        user = User.objects.filter(username=username)
+    except:
+        user = None
+    if user:
+        user_profile = general_models.UserProfile.objects.get(user_id=user)
+        print(user_profile.profile_image)
+
+    return user_profile

@@ -15,20 +15,10 @@ from taggit.managers import TaggableManager
 # from myapp.seo import MyMetadata
 # from collections import OrderedDict as SortedDict
 
-# Admin Awards Models
-class AwardAdmin(GuardedModelAdmin):
-    list_display = ('name', 'description', 'award_type', 'amount', 'company', 'author')
-    list_filter = ('name', 'description', 'award_type', 'amount', 'company', 'author')
-    search_fields = ('name', 'description', 'award_type', 'amount', 'company', 'author')
-
-admin.site.register(models.Award, AwardAdmin)
 
 # Admin Statistics Models
 admin.site.register(models.GeneralStatistics)
 admin.site.register(models.SpecificStatistics)
-
-# Admin Blog Models
-
 
 class ImageAdmin(GuardedModelAdmin):
     list_display = ('id', 'image', 'description', 'alt', 'album')
@@ -41,8 +31,20 @@ class ImageInLine(admin.TabularInline):
 admin.site.register(models.Image, ImageAdmin)
 
 class AlbumAdmin(GuardedModelAdmin):
-    list_display = ('name', 'slug')
+    list_display = ('id', 'name', 'author')
+    search_fields = ('name', 'author')
     inlines = [ImageInLine,]
+
+    def save_model(self, request, obj, form, change):
+        obj.author = request.user
+        super(AlbumAdmin, self).save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        queryset = super(AlbumAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(author_id=request.user.id)
+
 
 admin.site.register(models.Album, AlbumAdmin)
 
@@ -58,21 +60,6 @@ admin.site.register(models.Address)
 admin.site.register(models.BankInformation)
 admin.site.register(models.Company)
 
-# Admin Shop Models
-class ProductAdmin(GuardedModelAdmin):
-    model = models.Product
-
-admin.site.register(models.Product)
-
-# Admin Events Models
-class EventAdmin(GuardedModelAdmin):
-    list_display = ('title', 'privacity', 'owner')
-    list_filter = ('title', 'privacity', 'owner')
-    search_fields = ('title', 'privacity', 'owner')
-
-admin.site.register(models.Event, EventAdmin)
-
-# admin.site.register(custom_calendar.EventCalendar)
 
 # Admin Permissions Models
 admin.site.register(Permission)

@@ -12,6 +12,7 @@
         </div>
       </div>
     </div>
+    
     <div class="row">
       <div class="blog__wrap clearfix mt--60 xmt-30">
 
@@ -56,5 +57,13 @@
         {% endfor %}
       </div>
     </div>
+    <!-- Go To Blog Button -->
+        <div class="row mt--60">
+            <div class="col-md-12">
+                <div class="htc__loadmore__btn">
+                    <a href="{% url 'blog:list_post' %}">Ir al Blog</a>
+                </div>
+            </div>
+        </div>
   </div>
 </section>

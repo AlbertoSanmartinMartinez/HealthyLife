@@ -16,8 +16,8 @@ class CustomRegisterForm(UserCreationForm):
     """
     username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder':'Nombre usuario', "size": 30 }))
     email = forms.EmailField(label="", widget=forms.EmailInput(attrs={'placeholder':'Correo electronico',"size": 30}))
-    password1 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder':'Contrasena', "size": 30 }))
-    password2 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder':'Confirmar contrasena', "size": 30 }))
+    password1 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder':'Contraseña', "size": 30 }))
+    password2 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder':'Confirmar contraseña', "size": 30 }))
 
     class Meta:
         model = User
@@ -35,7 +35,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 class SubscriberForm(forms.ModelForm):
-    email = forms.EmailField(label='', required=False, widget=forms.TextInput(attrs={'placeholder':'Introduce tu correo electrónico', "size": 80}))
+    email = forms.EmailField(label='', required=False, widget=forms.TextInput(attrs={'placeholder':'Correo Electrónico', "size": 80}))
 
     class Meta:
         model = general_models.Subscriber
@@ -82,28 +82,29 @@ class AddressForm(forms.ModelForm):
 
 class ContactForm(forms.Form):
     """Formulario de contacto"""
-    nombre = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    mensaje = forms.CharField(max_length=500)
+    name = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'placeholder':'Nombre', "size": 40}))
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder':'Correo Electrónico', "size": 40}))
+    message = forms.CharField(max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder':'Mensage', "size": 40}))
 
 
 class CustomRegisterColaboratorForm(UserCreationForm):
     """
     Formulario para de registro de colaboradores
     """
-    username = forms.CharField(label='Nombre de usuario', required=True)
-    email = forms.EmailField(label='Email', widget=forms.EmailInput())
-    password2 = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
-    blog_colaborator = forms.BooleanField(label='Quieres colaborar en el blog', required=False,)
-    shop_colaborator = forms.BooleanField(label='Quieres colaborar en la tienda', required=False,)
-    award_colaborator = forms.BooleanField(label='Quieres colaborar en el programa de premios y recompensas', required=False,)
-    sport_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de deporte', required=False,)
-    nutrition_colaborator = forms.BooleanField(label='Quieres colaborar en la sección de nutricion', required=False,)
-    health_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de salud', required=False,)
+    username = forms.CharField(max_length=100, label='Nombre de usuario', required=True, widget=forms.TextInput(attrs={'placeholder':'Nombre de usuario', "size": 40}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'placeholder':'Correo electrónico', "size": 40}))
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput(attrs={'placeholder':'Contraseña', "size": 40}))
+    password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput(attrs={'placeholder':'Repite la contraseña', "size": 40}))
+    blog_colaborator = forms.BooleanField(label='Quieres colaborar en el blog', required=False)
+    shop_colaborator = forms.BooleanField(label='Quieres colaborar en la tienda', required=False)
+    award_colaborator = forms.BooleanField(label='Quieres colaborar en el programa de premios y recompensas', required=False)
+    sport_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de deporte', required=False)
+    nutrition_colaborator = forms.BooleanField(label='Quieres colaborar en la sección de nutricion', required=False)
+    health_colaborator = forms.BooleanField(label='Quieres colaborar en la seccion de salud', required=False)
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'password1', 'password2']
 
 
 # Health forms
@@ -148,13 +149,3 @@ class SearchForm(forms.Form):
     Formulario de busqueda en el blog
     """
     word = forms.CharField(label='search', widget=forms.TextInput(attrs={'placeholder':'Escribe aquí'}))
-
-
-# Calendar forms
-class EventForm(forms.ModelForm):
-    #date = forms.DateTimeField(input_formats=('%y/%m/%d'), label='Fecha:')
-    #time = forms.DateTimeField(input_formats=('%H:%M'), label='Fecha:')
-
-    class Meta:
-        model = general_models.Event
-        fields = ['title', 'description', 'privacity'] #, 'date', 'time']

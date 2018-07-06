@@ -579,13 +579,15 @@
 .custop__container .filter__box {
   margin-top: 30px;
 }
-.filter__wrap {
+.filter__wrap,
+.blog__filter__wrap {
   width: 300px;
 }
 .filter__cart__inner {
   padding: 30px;
 }
-.filter__menu__close__btn {
+.filter__menu__close__btn,
+.blog__filter__menu__close__btn {
   padding: 30px;
 }
 .single__filter {

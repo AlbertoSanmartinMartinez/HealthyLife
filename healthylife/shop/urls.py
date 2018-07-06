@@ -10,13 +10,13 @@ urlpatterns = [
 
     # Products Shop Urls
     url(r'^productos/$', shop_views.product_list, name='product_list'),
-    url(r'^productos/(?P<product_slug>\w+)/$', shop_views.product_detail, name='product_detail'),
+    url(r'^productos/(?P<product_slug>.*)/$', shop_views.product_detail, name='product_detail'),
+    url(r'^productos/(?P<product_slug>.*)/comentario', shop_views.add_review, name='add_review'),
 
     # Category Urls
     url(r'^categorias/(?P<shop_category_slug>\w+)/$', shop_views.product_list, name='product_list_category'),
 
     #Search Urls
-    #url(r'^productos/resultado_busqueda$', shop_views.shop_search, name='shop_search'),
     url(r'^productos/$', shop_views.product_list, name='shop_search'),
 
     # Payments Urls
