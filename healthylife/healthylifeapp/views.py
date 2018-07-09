@@ -27,6 +27,7 @@ from django.http import HttpResponseRedirect
 from shop import models as shop_models
 from awards import models as award_models
 from healthylifeapp import models as general_models
+from events import models as events_models
 
 # API imports
 from rest_framework.decorators import api_view
@@ -227,13 +228,13 @@ def statistics(request):
     })
 
 
-# Health views
+"""
 def health(request):
     return render(request, 'health.html', {
         "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
     })
-
+"""
 
 # Blog views
 def subscribe(request):
@@ -249,6 +250,7 @@ def subscribe(request):
     return redirect('home')
 
 
+"""
 #@login_required(redirect_field_name='custom_login')
 def comment(request, post_slug, comment_parent_id):
     post = models.Post.objects.get(slug=post_slug)
@@ -278,6 +280,7 @@ def comment(request, post_slug, comment_parent_id):
         comment_form = forms.CommentForm()
 
     return detail_post(request, post_slug)
+"""
 
 
 # Search views
@@ -298,23 +301,6 @@ def search(request):
     })
 
 
-# Shop views
-def shop(request):
-
-    return render(request, 'shop.html', {
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
-def ships(request, username):
-
-    return render(request, 'ships.html', {
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
 # Profile views
 @login_required(redirect_field_name='custom_login')
 def profile(request, username):
@@ -322,15 +308,15 @@ def profile(request, username):
     Vista que muestra la informacion del perfil de usuario
     """
     user = User.objects.get(username=username)
-    user_profile = models.UserProfile.objects.get(user_id=user.id)
-    bank_information = models.BankInformation.objects.get(user_id=user.id, is_company=False)
-    address = models.Address.objects.get(user_id=user.id, is_company=False)
+    user_profile = general_models.UserProfile.objects.get(user_id=user.id)
+    bank_information = general_models.BankInformation.objects.get(user_id=user.id, is_company=False)
+    address = general_models.Address.objects.get(user_id=user.id, is_company=False)
 
     if request.method == 'POST':
-        user_form = forms.UserForm(data=request.POST, instance=request.user)
-        user_profile_form = forms.UserProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
-        address_form = forms.AddressForm(data=request.POST, instance=address)
-        bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
+        user_form = general_forms.UserForm(data=request.POST, instance=request.user)
+        user_profile_form = general_forms.UserProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
+        address_form = general_forms.AddressForm(data=request.POST, instance=address)
+        bank_information_form = general_forms.BankInformationForm(data=request.POST, instance=bank_information)
 
         if user_form.is_valid():
             user_form.save()
@@ -482,98 +468,6 @@ def health_profile(request, username):
         "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
     })
-
-
-# Calendar views
-def named_month(month_number):
-    return date(1900, month_number, 1).strftime("%B")
-
-
-def this_month(request):
-    today = datetime.now()
-    return calendar(request, today.year, today.month)
-
-
-def event(request, username):
-    """
-    Vista para los eventos
-    """
-    if request.method == 'POST':
-        event_form = forms.EventForm(data=request.POST)
-        if event_form.is_valid():
-            data = event_form.cleaned_data
-            event = models.Event.objects.create()
-            event.save()
-    else:
-        event_form = forms.EventForm()
-
-    return render(request, 'event.html', {
-        "search_form": getSearchForm(),
-        "event": event,
-    })
-
-
-def calendar(request, username, year, month, day):
-    """
-    Vista para el calendario.
-    """
-    # Controlar si no hay usuario loggeado para mostrar solo los eventos publicos
-
-    year = int(year)
-    month = int(month)
-
-    #calendar = models.EventCalendar()
-    # htmlcalendar = HTMLCalendar(calendar.MONDAY)
-    htmlcalendar = HTMLCalendar()
-    htmlcalendar = htmlcalendar.formatmonth(year, month)
-
-    #calendar_from_month = datetime(my_year, my_month, 1)
-    #my_calendar_to_month = datetime(my_year, my_month, 1)
-    #my_calendar_to_month = datetime(my_year, my_month, monthrange(my_year,my_month)[1])
-
-    events = models.Event.objects.all()
-
-    previous_year = year
-    previous_month = month -1
-
-    if previous_month == 0:
-        previous_year = year -1
-        previous_month = 12
-
-    next_year = year
-    next_month = month +1
-
-    if next_month == 13:
-        next_year = year +1
-        next_month = 1
-
-    year_after_this = year +1
-    year_before_this = year -1
-
-    return render(request, 'calendar.html', {
-        "calendar": htmlcalendar,
-        'search_form': getSearchForm(),
-        'events': events,
-        'month': month,
-		'year': year,
-		'previous_month': previous_month,
-	    'previous_year': previous_year,
-		'next_month': next_month,
-		'next_year': next_year,
-		'year_before_this': year_before_this,
-		'year_after_this': year_after_this,
-        'subscribe_form': getSubscribeForm(),
-        #'month_name': named_month(my_month),
-        #'previous_month_name': named_month(my_previous_month),
-        #'next_month_name': named_month(my_next_month),
-    })
-
-
-def event(reques):
-    pass
-
-
-# Admin views
 
 
 ############################## API VIEWS ##############################

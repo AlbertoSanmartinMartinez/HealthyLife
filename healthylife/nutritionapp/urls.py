@@ -8,5 +8,5 @@ from nutritionapp import views as nutrition_views
 urlpatterns = [
 
     url(r'^$', nutrition_views.nutrition, name='nutrition'),
-    url(r'^resultado_busqueda/$', nutrition_views.search_food, name='search_food'),
+    url(r'^informacion_nutricional/$', nutrition_views.nutrition, name='search_food'),
 ]

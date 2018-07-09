@@ -11,6 +11,8 @@ from healthylifeapp.views import *
 
 # Shop Views
 def product_list(request, shop_category_slug=None):
+    """
+    """
     category = None
     products = shop_models.Product.objects.filter(status=1, stock__gte=1)
     shop_filter_form = None
@@ -215,6 +217,11 @@ def shipping_checkout(request):
     })
 
 
+# Profile Views
+def ships(request):
+    pass
+
+    
 # Common Methods
 def getShopCategories():
     return shop_models.Category.objects.all()

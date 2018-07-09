@@ -8,58 +8,75 @@ from healthylife import settings
 from healthylifeapp import views as general_views
 
 import requests
-# import urllib2
 import json
 
 # Nutrition views
 def nutrition(request):
     """
-    Vista principal para la seccion de nutricion
+    View for nutrition section
+    Search nutritional information
     """
     food_information = None
 
-    return render(request, 'nutrition.html', {
-        "search_form": general_views.getSearchForm(),
-        'subscribe_form': general_views.getSubscribeForm(),
-        'search_food_form': getSearchFoodForm(),
-        'food_information': food_information,
-    })
+    nutrition_filter_form = getNutritionFilterForm(request)
 
-
-def search_food(request):
-    food_information = None
-    if request.method == 'POST':
-        food_form = nutrition_forms.SearchFoodForm(data=request.POST)
-        if food_form.is_valid():
-            food = food_form.cleaned_data['name']
-            # tratar el idioma de la consulta
-            food_information = getNutritionixApiInformation(food)
+    if nutrition_filter_form.is_valid():
+        food_name = nutrition_filter_form.cleaned_data['name']
+        print(food_name)
     else:
-        food_form = nutrition_forms.SearchFoodForm()
+        food_name = None
+
+    if food_name is not None:
+        food_information = getNutritionixApiInformation(food_name)
+        #food_information = json.loads(food_information)
+        print(food_information)
 
     return render(request, 'nutrition.html', {
         "search_form": general_views.getSearchForm(),
         'subscribe_form': general_views.getSubscribeForm(),
-        'search_food_form': getSearchFoodForm(),
+        'search_food_form': getNutritionFilterForm(request),
         'food_information': food_information,
     })
 
 
 # Common Functions
-def getSearchFoodForm():
+def getNutritionFilterForm(request):
     """
-    Funcion que devuelve el formulario de la consulta a la api de alimentacion
+    Method to get search food form
+    depends that get or post request
     """
-    return nutrition_forms.SearchFoodForm()
+    if request.method == 'POST':
+        nutrition_filter_form = nutrition_forms.NutritionFilter(request.POST)
+    else:
+        nutrition_filter_form = nutrition_forms.NutritionFilter()
+
+    return nutrition_filter_form
 
 
 def getNutritionixApiInformation(food):
     """
-    Funcion que realiza la consulta http get a la api
-    Ejemplo consultas manuales https://www.nutritionix.com/natural-demo
-    Ejemplo respuesta https://gist.github.com/mattsilv/6d19997bbdd02cf5337e9d4806b4f464
+    Method that request on nutrition api
     """
+
     url = "https://trackapi.nutritionix.com/v2/search/instant?"
+    """
+    Populate any search interface, including autocomplete, with common foods and branded foods from Nutritionix.  This searches our entire database of 600K+ foods.  Once a user selects the food from the autocomplete interface, make a separate API request to look up the nutrients of the food.
+    https://gist.github.com/mattsilv/6d19997bbdd02cf5337e9d4806b4f464
+    """
+
+    url2 = "https://trackapi.nutritionix.com/v2/natural/nutrients?"
+    """
+    Get detailed nutrient breakdown of any natural language text
+    https://gist.github.com/mattsilv/9dfb709e7609537ffd3b1b8c097e9bfb
+    https://gist.github.com/mattsilv/95f94dd1378d4747fb68ebb2d042a4a6
+    """
+
+    url3 = "https://trackapi.nutritionix.com/v2/search/item?"
+    """
+    Look up the nutrition information for any branded food item by the nix_item_id (from /search/instant endpoint) or UPC scanned from a branded grocery product.
+    https://gist.github.com/mattsilv/478c9288f213ce5333399a41bd6da5a4
+    """
+
     body = {
       'query': food,
     }
@@ -69,5 +86,8 @@ def getNutritionixApiInformation(food):
         #'x-remote-user-id': "7a43c5ba-50e7-44fb-b2b4-bbd1b7d22632",
     }
     response = requests.request("GET", url, params=body, headers=headers)
+    #content = response.json()['common']
+    content = response.json()
+    # revisar aparte del common
 
-    print(response.json()['common'])
+    return content

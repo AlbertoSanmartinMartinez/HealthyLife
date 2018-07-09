@@ -1670,13 +1670,17 @@ product__style--7
     font-size: 17px;
     text-transform: uppercase;
 }
-
+.award__filter__wrap.award__filter__menu__on,
+.sport__filter__wrap.sport__filter__menu__on,
+.nutrition__filter__wrap.nutrition__filter__menu__on,
 .blog__filter__wrap.blog__filter__menu__on,
 .filter__wrap.filter__menu__on {
     opacity: 1;
     right: calc(0px - 16px);
 }
-
+.award__filter__wrap,
+.sport__filter__wrap,
+.nutrition__filter__wrap,
 .blog__filter__wrap,
 .filter__wrap {
     background: #ffffff none repeat scroll 0 0;
@@ -1696,6 +1700,9 @@ product__style--7
     height: 100%;
     padding: 130px 50px 60px;
 }
+.award__filter__menu__close__btn,
+.sport__filter__menu__close__btn,
+.nutrition__filter__menu__close__btn,
 .blog__filter__menu__close__btn,
 .filter__menu__close__btn {
     background-color: #fff;
@@ -1738,11 +1745,17 @@ product__style--7
 }
 .filter__list li:hover a ,
 .filter__menu__close__btn a:hover i,
-.blog__filter__menu__close__btn a:hover i{
+.blog__filter__menu__close__btn a:hover i,
+.nutrition__filter__menu__close__btn a:hover i
+.sport__filter__menu__close__btn a:hover i
+.award__filter__menu__close__btn a:hover i {
     color: #ff4136;
 }
 .filter__menu__close__btn a i,
-.blog__filter__menu__close_btn a i{
+.blog__filter__menu__close__btn a i,
+.nutrition__filter__menu__close__btn a i
+.sport__filter__menu__close__btn a i
+.award__filter__menu__close__btn a i {
     color: #999;
     font-size: 36px;
     transition: 0.3s;

@@ -8,5 +8,5 @@ from sportapp import views as sport_views
 urlpatterns = [
 
     url(r'^$', sport_views.sport, name='sport'),
-
+    url(r'^ejercicios/$', sport_views.sport, name='search_sport'),
 ]

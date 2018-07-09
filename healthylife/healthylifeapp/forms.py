@@ -55,11 +55,11 @@ class CompanyForm(forms.ModelForm):
 
 
 class BankInformationForm(forms.ModelForm):
-    bank_name = forms.CharField(label='Nombre', required=False)
-    account = forms.CharField(label='Número de cuenta', required=False)
-    month = forms.CharField(label='Mes de caducidad', required=False)
-    year = forms.CharField(label='Año de caducidad', required=False)
-    security_code = forms.CharField(label='Código de seguridad', required=False)
+    bank_name = forms.CharField(label='Nombre', required=False, widget=forms.TextInput(attrs={'placeholder':'Nombre de tu informacion bancaria'}))
+    account = forms.CharField(label='Número de cuenta', required=False, widget=forms.TextInput(attrs={'placeholder':'Tarjeta de crédito'}))
+    month = forms.CharField(label='Mes de caducidad', required=False, widget=forms.TextInput(attrs={'placeholder':'Més de caducidad'}))
+    year = forms.CharField(label='Año de caducidad', required=False, widget=forms.TextInput(attrs={'placeholder':'Año de caducidad'}))
+    security_code = forms.CharField(label='Código de seguridad', required=False, widget=forms.TextInput(attrs={'placeholder':'Código de seguridad'}))
 
     class Meta:
         model = general_models.BankInformation
@@ -67,13 +67,13 @@ class BankInformationForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
-    address_name = forms.CharField(label='Nombre')
-    city = forms.CharField(label='Ciudad', required=False)
-    postal_code = forms.CharField(label='Código postal', required=False)
-    street = forms.CharField(label='Calle', required=False)
-    number = forms.CharField(label='Número', required=False)
-    floor = forms.CharField(label='Piso', required=False)
-    door = forms.CharField(label='Puerta', required=False)
+    address_name = forms.CharField(label='Nombre', widget=forms.TextInput(attrs={'placeholder':'Nombre de tu direccón de envío'}))
+    city = forms.CharField(label='Ciudad', required=False, widget=forms.TextInput(attrs={'placeholder':'Ciudad'}))
+    postal_code = forms.CharField(label='Código postal', required=False, widget=forms.TextInput(attrs={'placeholder':'Código postal'}))
+    street = forms.CharField(label='Calle', required=False, widget=forms.TextInput(attrs={'placeholder':'Calle'}))
+    number = forms.CharField(label='Número', required=False, widget=forms.TextInput(attrs={'placeholder':'Número'}))
+    floor = forms.CharField(label='Piso', required=False, widget=forms.TextInput(attrs={'placeholder':'Piso'}))
+    door = forms.CharField(label='Puerta', required=False, widget=forms.TextInput(attrs={'placeholder':'Puerta'}))
 
     class Meta:
         model = general_models.Address
@@ -135,7 +135,7 @@ class UserProfileForm(forms.ModelForm):
 
 
 class UserForm(forms.ModelForm):
-    username = forms.CharField(label='Nombre de usuario')
+    username = forms.CharField(label='Nombre de usuario', widget=forms.TextInput(attrs={'placeholder':'Nombre'}))
     #first_name = forms.CharField(label='Nombre')
     #last_name = forms.CharField(label='Apellidos')
 

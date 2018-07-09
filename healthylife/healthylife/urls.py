@@ -11,6 +11,7 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.contrib import admin
 from shop import views as shp_views
+from events import views as calendar_views
 
 admin.site.site_header = 'Barbastro Se Mueve'
 admin.autodiscover()
@@ -74,18 +75,15 @@ urlpatterns = [
 
     # Profile URLS's
     url(r'^mi_cuenta/(?P<username>\w+)/$', general_views.profile, name='profile'),
-    url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', general_views.ships, name='ships'),
-
-    # Calendar URLS's
-    url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<year>\w+)/(?P<month>\w+)/(?P<day>\w+)/$', general_views.calendar, name='calendar'),
-    #url(r'^mi_cuenta/(?P<username>\w+)/calendario/(?P<year>\w+)/(?P<month>\w+)/(?P<day>\w+)/(?<slug>\w)/$', views.event, name='detail_event'),
-    url(r'^mi_cuenta/(?P<username>\w+)/calendario/eventos/nuevo/$', general_views.event, name='add_event'),
-
+    # url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', general_views.ships, name='ships'),
     url(r'^mi_cuenta/(?P<username>\w+)/deporte/$', general_views.sport_profile, name='sport_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/nutricion/$', general_views.nutrition_profile, name='nutrition_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/salud/$', general_views.health_profile, name='health_profile'),
     #url(r'^mi_cuenta/(?P<username>\w+)/premios/$', general_views.awards_profile, name='awards_profile'),
     url(r'^mi_cuenta/(?P<username>\w+)/colaborador/$', general_views.collaborator_profile, name='collaborator_profile'),
+
+    # Calendar URLS's
+    url(r'^calendario/', include('events.urls', namespace='calendar')),
 
     # Company URLS's
     #url(r'^empresas/(?P<company>\w+)/empresa/$', views.company, name='company'),

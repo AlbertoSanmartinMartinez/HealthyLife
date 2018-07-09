@@ -41,6 +41,9 @@
     <!-- User style -->
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
+    <!-- Calendar style -->
+    <link rel="stylesheet" href="{% static 'css/monthly.css' %}">
+
   </head>
   <body>
 
@@ -195,10 +198,10 @@
                 <a href="{% url 'awardsapp:awards_profile' username=user.username %}">Premios</a>
               </li>
               <li>
-                <a href="{% url 'ships' username=user.username %}">Pedidos</a>
+                <a href="{% url 'shop:ships' username=user.username %}">Pedidos</a>
               </li>
               <li>
-                <a href="{% url 'calendar' year=current_year month=current_month day=current_day username=user.username %}">Calendario</a>
+                <a href="{% url 'calendar:calendar' year=current_year month=current_month day=current_day username=user.username %}">Calendario</a>
               </li>
               <li class="profile__checkout"><a href="{% url 'logout' %}">Desconectar</a></li>
               {% endif %}

@@ -15,3 +15,14 @@ class SportTypeForm(forms.ModelForm):
     class Meta:
         model = sport_models.SportType
         fields = []
+
+
+class SportFilter(forms.Form):
+    name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Escribe alimentos', 'id': 'name'}))
+
+    def __init__(self, *args, **kwargs):
+        super(SportFilter, self).__init__(*args, **kwargs)
+        self.fields['type'] = forms.ModelChoiceField(
+            label='Tipo',
+            required=False,
+            queryset=sport_models.SportType.objects.all())

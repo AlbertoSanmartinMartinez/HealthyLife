@@ -36,8 +36,9 @@
 
   22. Profile Area
   23. Blog Filter Area
-
-
+  24. Nutrition Filter Area
+  25. Sport Filter Area
+  26. Award Filter Area
 
 /*--------------------------------
 [ End table content ]
@@ -227,24 +228,8 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
   });
 
 
-  /*------------------------------------
-    22. Profile Area
-  --------------------------------------*/
-
-  $('.profile__menu').on('click', function() {
-    $('.profile').addClass('profile__on');
-    $('.body__overlay').addClass('is-visible');
-
-  });
-
-  $('.offsetmenu__close__btn').on('click', function() {
-      $('.profile').removeClass('profile__on');
-      $('.body__overlay').removeClass('is-visible');
-  });
-
-
 /*------------------------------------
-  12. Filter Area
+  12. Shop Filter Area
 --------------------------------------*/
 
   $('.filter__menu').on('click', function() {
@@ -255,22 +240,6 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
   $('.filter__menu__close__btn').on('click', function() {
       $('.filter__wrap').removeClass('filter__menu__on');
-      $('.body__overlay').removeClass('is-visible');
-  });
-
-
-  /*------------------------------------
-    23. Blog Filter Area
-  --------------------------------------*/
-
-  $('.blog__filter__menu').on('click', function() {
-    $('.blog__filter__wrap').addClass('blog__filter__menu__on');
-    $('.body__overlay').addClass('is-visible');
-
-  });
-
-  $('.blog__filter__menu__close__btn').on('click', function() {
-      $('.blog__filter__wrap').removeClass('blog__filter__menu__on');
       $('.body__overlay').removeClass('is-visible');
   });
 
@@ -302,6 +271,9 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
     $('.profile').removeClass('profile__on');
     $('.filter__wrap').removeClass('filter__menu__on');
     $('.blog__filter__wrap').removeClass('blog__filter__menu__on');
+    $('.nutrition__filter__wrap').removeClass('nutrition__filter__menu__on');
+    $('.sport__filter__wrap').removeClass('sport__filter__menu__on');
+    $('.award__filter__wrap').removeClass('award__filter__menu__on');
     $('.user__meta').removeClass('user__meta__on');
   });
 
@@ -520,8 +492,87 @@ $('.image-popup').magnificPopup({
 
 
 /*------------------------------------
-  23. Comment Form
+  22. Profile Area
 --------------------------------------*/
+
+  $('.profile__menu').on('click', function() {
+    $('.profile').addClass('profile__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.offsetmenu__close__btn').on('click', function() {
+    $('.profile').removeClass('profile__on');
+    $('.body__overlay').removeClass('is-visible');
+  });
+
+
+  /*------------------------------------
+    23. Blog Filter Area
+  --------------------------------------*/
+
+  $('.blog__filter__menu').on('click', function() {
+    $('.blog__filter__wrap').addClass('blog__filter__menu__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.blog__filter__menu__close__btn').on('click', function() {
+      $('.blog__filter__wrap').removeClass('blog__filter__menu__on');
+      $('.body__overlay').removeClass('is-visible');
+  });
+
+
+  /*------------------------------------
+    24. Nutrition Filter Area
+  --------------------------------------*/
+
+  $('.nutrition__filter__menu').on('click', function() {
+    $('.nutrition__filter__wrap').addClass('nutrition__filter__menu__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.nutrition__filter__menu__close__btn').on('click', function() {
+      $('.nutrition__filter__wrap').removeClass('nutrition__filter__menu__on');
+      $('.body__overlay').removeClass('is-visible');
+  });
+
+
+  /*------------------------------------
+    25. Sport Filter Area
+  --------------------------------------*/
+
+  $('.sport__filter__menu').on('click', function() {
+    $('.sport__filter__wrap').addClass('sport__filter__menu__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.sport__filter__menu__close__btn').on('click', function() {
+      $('.sport__filter__wrap').removeClass('sport__filter__menu__on');
+      $('.body__overlay').removeClass('is-visible');
+  });
+
+
+  /*------------------------------------
+    26. Award Filter Area
+  --------------------------------------*/
+
+  $('.award__filter__menu').on('click', function() {
+    $('.award__filter__wrap').addClass('award__filter__menu__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.award__filter__menu__close__btn').on('click', function() {
+      $('.award__filter__wrap').removeClass('award__filter__menu__on');
+      $('.body__overlay').removeClass('is-visible');
+  });
+
+  /*------------------------------------
+    27. Comment Form
+  --------------------------------------*/
 
   $('.blog__comment__reply').on('click', function() {
     $('.blog__comment__form').removeClass('hidden');
