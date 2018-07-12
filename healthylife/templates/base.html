@@ -1,10 +1,9 @@
 {% load staticfiles %}
 
-{% now "m" as current_month %}
+{% now "n" as current_month %}
 {% now "Y" as current_year %}
 {% now "d" as current_day %}
 
-<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -201,7 +200,7 @@
                 <a href="{% url 'shop:ships' username=user.username %}">Pedidos</a>
               </li>
               <li>
-                <a href="{% url 'calendar:calendar' year=current_year month=current_month day=current_day username=user.username %}">Calendario</a>
+                <a href="{% url 'calendar:month_calendar' year=current_year month=current_month username=user.username %}">Calendario</a>
               </li>
               <li class="profile__checkout"><a href="{% url 'logout' %}">Desconectar</a></li>
               {% endif %}
@@ -237,10 +236,25 @@
         {% block shop %}
         {% endblock %}
 
+        {% block ships %}
+        {% endblock %}
+
         {% block product_detail %}
         {% endblock %}
 
         {% block profile %}
+        {% endblock %}
+
+        {% block sport_profile %}
+        {% endblock %}
+
+        {% block nutrition_profile %}
+        {% endblock %}
+
+        {% block health_profile %}
+        {% endblock %}
+
+        {% block awards_profile %}
         {% endblock %}
 
         {% block statistics %}

@@ -3,7 +3,7 @@
 
 {% block calendar %}
 
-<!-- Sport Breadcrumbs Area -->
+<!-- Calendar Breadcrumbs Area -->
 <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url({% static 'images/bg/2.jpg' %}) no-repeat scroll center center / cover ;">
   <div class="ht__bradcaump__wrap">
     <div class="container">
@@ -23,48 +23,27 @@
   </div>
 </div>
 
-<!-- Start Sport Features Area -->
+<!-- Start Calendar Area -->
 <section class="htc__product__area shop__page ptb--130 bg__white">
   <div class="container">
     <div class="htc__product__container">
-      <div class="monthly-header">
-        <div class="monthly-header-title">
-          <a href="#" class="monthly-header-title-date" onclick="return false">jul. 2018</a>
-        </div>
-        <a href="#" class="monthly-prev"></a>
-        <a href="#" class="monthly-next"></a>
-      </div>
-      <div class="monthly-day-title-wrap">
-        <div>lun.</div>
-        <div>mar.</div>
-        <div>mié.</div>
-        <div>jue.</div>
-        <div>vie.</div>
-        <div>sáb.</div>
-        <div>dom.</div>
-    </div>
-    <div class="monthly-day-wrap">
 
-      <!-- para cada semana -->
-      <div class="monthly-week">
+      {% include 'calendar_filter.html' %}
 
-        <!-- para dia de la semana -->
+      {% block month %}
+      {% endblock %}
 
-        <!-- si existe el dia -->
-        <div class="m-d monthly-day monthly-day-event dt2018-06-30" data-number="1">
-          <div class="monthly-day-number">1</div>
-          <div class="monthly-indicator-wrap"></div>
-        </div>
+      {% block day %}
+      {% endblock %}
 
-        <!-- si no existe el dia -->
-        <div class="m-d monthly-day-blank">
-          <div class="monthly-day-number"></div>
-        </div>
-      </div>
+      {% block event %}
+      {% endblock %}
+
+      {% block add_event %}
+      {% endblock %}
+
     </div>
   </div>
 </section>
-
-<a href="{% url 'calendar:add_event' username=user.username %}">Añadir evento</a>
 
 {% endblock %}

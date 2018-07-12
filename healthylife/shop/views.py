@@ -218,10 +218,13 @@ def shipping_checkout(request):
 
 
 # Profile Views
-def ships(request):
-    pass
+def ships(request, username):
 
-    
+    return render(request, 'ships.html', {
+
+    })
+
+
 # Common Methods
 def getShopCategories():
     return shop_models.Category.objects.all()

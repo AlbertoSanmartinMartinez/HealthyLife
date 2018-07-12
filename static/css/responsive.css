@@ -580,6 +580,7 @@
   margin-top: 30px;
 }
 .filter__wrap,
+.calendar__filter__wrap,
 .blog__filter__wrap,
 .nutrition__filter__wrap
 .sport__filter__wrap
@@ -590,6 +591,7 @@
   padding: 30px;
 }
 .filter__menu__close__btn,
+.calendar__filter__menu__close__btn,
 .blog__filter__menu__close__btn,
 .nutrition__filter__menu__close__btn
 .sport__filter__menu__close__btn,

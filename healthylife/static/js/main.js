@@ -39,6 +39,7 @@
   24. Nutrition Filter Area
   25. Sport Filter Area
   26. Award Filter Area
+  27. Calendar Add Event Area
 
 /*--------------------------------
 [ End table content ]
@@ -274,6 +275,7 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
     $('.nutrition__filter__wrap').removeClass('nutrition__filter__menu__on');
     $('.sport__filter__wrap').removeClass('sport__filter__menu__on');
     $('.award__filter__wrap').removeClass('award__filter__menu__on');
+    $('.calendar__filter__wrap').removeClass('calendar__filter__menu__on');
     $('.user__meta').removeClass('user__meta__on');
   });
 
@@ -570,8 +572,25 @@ $('.image-popup').magnificPopup({
       $('.body__overlay').removeClass('is-visible');
   });
 
+
   /*------------------------------------
-    27. Comment Form
+    26. Award Filter Area
+  --------------------------------------*/
+
+  $('.calendar__filter__menu').on('click', function() {
+    $('.calendar__filter__wrap').addClass('calendar__filter__menu__on');
+    $('.body__overlay').addClass('is-visible');
+
+  });
+
+  $('.calendar__filter__menu__close__btn').on('click', function() {
+      $('.calendar__filter__wrap').removeClass('calendar__filter__menu__on');
+      $('.body__overlay').removeClass('is-visible');
+  });
+
+
+  /*------------------------------------
+    28. Comment Form
   --------------------------------------*/
 
   $('.blog__comment__reply').on('click', function() {

@@ -14,4 +14,11 @@ class EventAdmin(GuardedModelAdmin):
 
 admin.site.register(event_models.Event, EventAdmin)
 
+
+"""
+class CalendarAdmin(admin.ModelAdmin):
+    list_display = ('year', 'month', 'day')
+
+admin.site.register(event_models.Calendar, CalendarAdmin)
+"""
 # admin.site.register(custom_calendar.EventCalendar)

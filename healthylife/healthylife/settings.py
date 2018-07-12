@@ -50,7 +50,7 @@ INSTALLED_APPS = (
     'guardian',
     'ckeditor',
     'corsheaders',
-    'datetimewidget'
+    'datetimewidget',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,12 +1,29 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-from django.shortcuts import render
 from django import template
+from events import models as events_models
+import datetime
 
 register = template.Library()
 
 @register.simple_tag
-def get():
-    pass
+def getEvents(user_id, year, month, day):
+    events = events_models.Event.objects.filter(owner=user_id)
+
+    return events
+
+@register.simple_tag
+def isMultipleBiggerThanZero(number):
+    if number % 7 == 0:
+        if number > 0:
+            return True
+    else:
+        return False
+
+
+@register.simple_tag
+def isToday(year, month, day):
+    today = datetime.datetime.now()
+    if int(year) == int(today.year) and int(month) == int(today.month) and int(day) == int(today.day):
+        return True

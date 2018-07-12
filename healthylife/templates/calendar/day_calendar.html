@@ -1,0 +1,29 @@
+{% extends "calendar.html" %}
+{% load static %}
+{% load calendar_tags %}
+
+{% block day %}
+
+<!-- Start Day Calendar Area -->
+    <div class="row">
+      <div class="monthly-header">
+        <div class="monthly-header-title">
+          <a class="monthly-header-title-date">{{ day_name }} {{ day }} {{ month_name }} {{ year }}</a>
+        </div>
+        <a href="{% url 'calendar:day_calendar' username=request.user.username year=year month=month day=previous_day %}" class="monthly-prev"></a>
+        <a href="{% url 'calendar:day_calendar' username=request.user.username year=year month=month day=next_day %}" class="monthly-next"></a>
+      </div>
+      <div class="monthly-day-wrap">
+        <div class="monthly-week">
+      {% for event in events %}
+        <li>
+          <p>
+            <a href="{% url 'calendar:detail_event' username=request.user.username year=year month=month day=day event_slug=event.slug %}">{{ event.title }}</a>
+          </p>
+        </li>
+      {% endfor %}
+    </div>
+    </div>
+    </div>
+
+{% endblock %}

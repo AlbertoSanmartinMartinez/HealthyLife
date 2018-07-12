@@ -2,7 +2,7 @@
 {% load static %}
 {% load calendar_tags %}
 
-{% block event %}
+{% block add_event %}
 
 <!-- Event Information Area -->
     <div class="row">
@@ -24,17 +24,22 @@
             </div>
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.privacity }}
+                    {{ event_form.address }}
                 </div>
             </div>
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.start }}
+                    {{ event_form.year }}
                 </div>
             </div>
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.end }}
+                    {{ event_form.month }}
+                </div>
+            </div>
+            <div class="single-contact-form">
+                <div class="contact-box subject">
+                    {{ event_form.day }}
                 </div>
             </div>
             <div class="contact-btn">
@@ -44,5 +49,4 @@
         </div>
       </div>
     </div>
-
 {% endblock %}

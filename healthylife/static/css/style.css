@@ -1670,6 +1670,7 @@ product__style--7
     font-size: 17px;
     text-transform: uppercase;
 }
+.calendar__filter__wrap.calendar__filter__menu__on,
 .award__filter__wrap.award__filter__menu__on,
 .sport__filter__wrap.sport__filter__menu__on,
 .nutrition__filter__wrap.nutrition__filter__menu__on,
@@ -1678,6 +1679,7 @@ product__style--7
     opacity: 1;
     right: calc(0px - 16px);
 }
+.calendar__filter__wrap,
 .award__filter__wrap,
 .sport__filter__wrap,
 .nutrition__filter__wrap,
@@ -1700,6 +1702,7 @@ product__style--7
     height: 100%;
     padding: 130px 50px 60px;
 }
+.calendar__filter__menu__close__btn,
 .award__filter__menu__close__btn,
 .sport__filter__menu__close__btn,
 .nutrition__filter__menu__close__btn,
@@ -1745,6 +1748,7 @@ product__style--7
 }
 .filter__list li:hover a ,
 .filter__menu__close__btn a:hover i,
+.calendar__filter__menu__close__btn a:hover i,
 .blog__filter__menu__close__btn a:hover i,
 .nutrition__filter__menu__close__btn a:hover i
 .sport__filter__menu__close__btn a:hover i
@@ -1752,6 +1756,7 @@ product__style--7
     color: #ff4136;
 }
 .filter__menu__close__btn a i,
+.calendar__filter__menu__close__btn a i,
 .blog__filter__menu__close__btn a i,
 .nutrition__filter__menu__close__btn a i
 .sport__filter__menu__close__btn a i
