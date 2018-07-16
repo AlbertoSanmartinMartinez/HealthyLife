@@ -4,7 +4,7 @@
 {% block calendar %}
 
 <!-- Calendar Breadcrumbs Area -->
-<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url({% static 'images/bg/2.jpg' %}) no-repeat scroll center center / cover ;">
+<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url({% static 'images/calendar_banner_1.jpg' %}) no-repeat scroll center center / cover ;">
   <div class="ht__bradcaump__wrap">
     <div class="container">
       <div class="row">
@@ -24,25 +24,24 @@
 </div>
 
 <!-- Start Calendar Area -->
-<section class="htc__product__area shop__page ptb--130 bg__white">
+<section class="htc__contact__area ptb--120 bg__white">
   <div class="container">
-    <div class="htc__product__container">
+    <!--<div class="htc__product__container">-->
 
-      {% include 'calendar_filter.html' %}
+      {% include 'add_event.html' %}
 
       {% block month %}
       {% endblock %}
 
+      <div class="row">
       {% block day %}
       {% endblock %}
 
       {% block event %}
       {% endblock %}
+      </div>
 
-      {% block add_event %}
-      {% endblock %}
-
-    </div>
+    <!--</div>-->
   </div>
 </section>
 

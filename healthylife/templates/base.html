@@ -200,7 +200,7 @@
                 <a href="{% url 'shop:ships' username=user.username %}">Pedidos</a>
               </li>
               <li>
-                <a href="{% url 'calendar:month_calendar' year=current_year month=current_month username=user.username %}">Calendario</a>
+                <a href="{% url 'calendar:month_calendar' username=user.username year=current_year month=current_month %}">Calendario</a>
               </li>
               <li class="profile__checkout"><a href="{% url 'logout' %}">Desconectar</a></li>
               {% endif %}
@@ -243,6 +243,9 @@
         {% endblock %}
 
         {% block profile %}
+        {% endblock %}
+
+        {% block collaborator_profile %}
         {% endblock %}
 
         {% block sport_profile %}

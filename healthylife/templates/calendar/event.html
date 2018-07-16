@@ -5,44 +5,71 @@
 {% block event %}
 
 <!-- Event Information Area -->
-    <div class="row">
-      <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-        <div class="htc__contact__container">
-          <form id="contact-form" method="POST">
+      <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 smt-30 xmt-30">
+        <div class="map-contacts">
+          <!--<form id="contact-form" method="POST">-->
+          <form action="{% url 'calendar:detail_event' event_slug=event.slug %}" method="POST">
             {% csrf_token %}
 
             <!-- Event Form Area -->
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.title }}
+                  <h3>Privacidad</h3>
+                  {{ event.privacity }}
                 </div>
             </div>
+            <!-- Event Form Area -->
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.description }}
+                  <h3>Categoría</h3>
+                  {{ event.type }}
                 </div>
             </div>
+            <!-- Event Form Area -->
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.privacity }}
+                  {{ event.title }}
                 </div>
             </div>
+            <!-- Event Form Area -->
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.start }}
+                  {{ event.description }}
                 </div>
             </div>
+            <!-- Event Form Area -->
             <div class="single-contact-form">
                 <div class="contact-box subject">
-                    {{ event_form.end }}
+                  {{ event.address }}
                 </div>
             </div>
+            <!-- Event Form Area -->
+            <div class="single-contact-form">
+                <div class="contact-box subject">
+                  <h3>Inicio</h3>
+                  {{ event.start }}
+                </div>
+            </div>
+            <!-- Event Form Area -->
+            <div class="single-contact-form">
+                <div class="contact-box subject">
+                  <h3>Fin</h3>
+                  {{ event.end }}
+                </div>
+            </div>
+            <!-- Event Form Area -->
+            <div class="single-contact-form">
+                <div class="contact-box subject">
+                  <h3>Privacidad</h3>
+                  {{ event.notes }}
+                </div>
+            </div>
+
             <div class="contact-btn">
-                <input type="submit" class="fv-btn" value="Guardar">
+                <input type="submit" class="fv-btn" value="Modificar">
             </div>
           </form>
         </div>
       </div>
-    </div>
 
 {% endblock %}

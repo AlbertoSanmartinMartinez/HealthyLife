@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^(?P<username>\w+)/(?P<year>\w+)/(?P<month>\w+)/(?P<day>\w+)/$', calendar_views.day, name='day_calendar'),
 
     # Event Urls
-    url(r'^(?P<username>\w+)/(?P<year>\w+)/(?P<month>\w+)/(?P<day>\w+)/eventos/(?P<event_slug>\w+)/$', calendar_views.event, name='detail_event'),
-    url(r'^eventos/nuevo/$', calendar_views.add_event, name='add_event'),
+    url(r'^events/(?P<event_slug>\w+)/$', calendar_views.event, name='detail_event'),
+    # url(r'^eventos/nuevo/$', calendar_views.add_event, name='add_event'),
 ]

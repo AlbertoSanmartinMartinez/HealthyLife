@@ -96,6 +96,7 @@ def month(request, username, year, month):
         'previous_month': previous_month,
         'next_month': next_month,
         'event_form': getEventform(request),
+        # 'type': 1,
         #'current_day': current_day,
         #'current_month': current_month,
         #'current_year': current_year
@@ -104,8 +105,6 @@ def month(request, username, year, month):
 
 @login_required(redirect_field_name='custom_login')
 def day(request, username, year, month, day):
-    events = events_models.Event.objects.all()
-
     month = int(month)
     year = int(year)
     day = int(day)
@@ -139,66 +138,123 @@ def day(request, username, year, month, day):
         year = unicode(year)
         day = unicode(day)
 
-        return redirect('calendar:day_calendar', username=username, year=year, month=month, day=day)
+        return redirect('calendar:day_calendar', username, year, month, day)
 
     day_name = getDayName(datetime.datetime(year, month, day).weekday())
 
+    month_name = getMonthName(month)
     previous_day = day-1
     next_day = day+1
     previous_day = unicode(previous_day)
     next_day = unicode(next_day)
 
     return render(request, 'day_calendar.html', {
-        'events': events,
         'day': day,
         'month': month,
-        'month_name': getMonthName(month),
+        'month_name': month_name,
         'day_name': day_name,
         'year': year,
         'previous_day': previous_day,
         'next_day': next_day,
         'event_form': getEventform(request),
+        "search_form": general_views.getSearchForm(),
     })
 
 
 # def event(request, event_slug):
-def event(request, username, year, month, day, event_slug):
-    user = get_object_or_404(User, username=username)
-    event = get_object_or_404(events_models.Event, slug=event_slug, owner=user.id)
+@login_required(redirect_field_name='custom_login')
+def event(request, event_slug=None):
+    # month = int(month)
+    # year = int(year)
+    # day = int(day)
+
+    # month_name = getMonthName(month)
+    # day_name = getDayName(datetime.datetime(year, month, day).weekday())
+
+    # previous_day = day-1
+    # next_day = day+1
+    # previous_day = unicode(previous_day)
+    # next_day = unicode(next_day)
+
+    try:
+        event = events_models.Event.objects.get(slug=event_slug)
+    except event.DoesNotExist:
+        event = None
+
+    if request.method == 'POST':
+        print("se actualiza con la informacion")
+        event_form = events_forms.EventForm(request.POST, instance=event)
+        if event_form.is_valid():
+            #data = event_form.cleaned_data
+            #user = request.user
+            #year = datetime.datetime.now().year
+            #month = data['month']
+            #day = data['day']
+            """
+            event.update(
+                title=data['title'],
+                description=data['description'],
+                type=data['type'],
+                address=data['address'],
+                privacity=data['privacity'],
+                owner=user,
+                start=datetime.datetime(int(year),int(month),int(day),int(data['start_hour']),int(data['start_minutes'])),
+                end=datetime.datetime(int(year),int(month),int(day),int(data['end_hour']),int(data['end_minutes'])),
+                notes=data['notes'])
+            """
+            event = event_form.save(commit=False)
+            event.owner = request.user
+            event.save()
+    else:
+        print("se muestra la informacion")
+        print(event)
+        # print(event.slug)
+            #title = request.GET.get('title')
+            #day = event.start.day
+            #month = event.start.month
+            #start_hour = event.start.hour
+            #start_minutes = event.start.minute
+        #data = {'slug': event.slug, 'description': event.description, 'privacity': event.privacity, 'type': event.type}
+        #print(data)
+        event = events_forms.EventForm(instance=event)
+
+    #day = unicode(day)
+    #month = unicode(month)
+    #year = unicode(year)
 
     return render(request, 'event.html', {
-        "search_form": general_views.getSearchForm(),
-        # "event_form": event_form,
+        # 'day': day,
+        # 'month': month,
+        # 'month_name': month_name,
+        # 'day_name': day_name,
+        # 'year': year,
+        # 'previous_day': previous_day,
+        # 'next_day': next_day,
+        'event': event,
+        'event_form': getEventform(request),
+        # "search_form": general_views.getSearchForm(),
     })
 
-
+"""
 def add_event(request):
+    year = None
+    month = None
+    day = None
+    event = None
+
     if request.method == 'POST':
         event_form = getEventform(request)
         if event_form.is_valid():
             data = event_form.cleaned_data
-            print(data['title'])
-            print(data['description'])
-            print(data['address'])
-            print(data['privacity'])
             user = request.user
-            print(user.id)
             year = datetime.datetime.now().year
-            print(year)
             month = data['month']
-            print(month)
             day = data['day']
-            print(day)
-            print(data['start_hour'])
-            print(data['start_minutes'])
-            print(data['end_hour'])
-            print(data['end_minutes'])
 
-            #int(data['start_hour']),int(data['start_minutes'])
-
-            events_models.Event.objects.create(
+            event = events_models.Event.objects.create_or_update(
                 title=data['title'],
                 description=data['description'],
+                type=data['type'],
                 address=data['address'],
                 privacity=data['privacity'],
                 owner=user,
@@ -206,12 +262,11 @@ def add_event(request):
                 end=datetime.datetime(int(year),int(month),int(day),int(data['end_hour']),int(data['end_minutes'])),
                 notes=data['notes']
             )
-            #event_form.save()
     else:
         event_form = events_forms.EventForm()
 
-    return redirect('calendar:day_calendar', username=user.username, year=year, month=month, day=day)
-
+    return redirect('calendar:detail_event', username=request.user.username, year=year, month=month, day=day, event_slug=event.slug)
+"""
 
 # Common Functions
 def getEventform(request):

@@ -8,9 +8,9 @@ from events import models as event_models
 
 # Register your models here.
 class EventAdmin(GuardedModelAdmin):
-    list_display = ('title', 'privacity', 'owner')
-    list_filter = ('title', 'privacity', 'owner')
-    search_fields = ('title', 'privacity', 'owner')
+    list_display = ('id', 'privacity', 'type', 'title', 'owner', 'creation_date', 'updated_date', 'start', 'end')
+    list_filter = ('privacity', 'type', 'start', 'end')
+    search_fields = ('title', 'owner', 'owner')
 
 admin.site.register(event_models.Event, EventAdmin)
 

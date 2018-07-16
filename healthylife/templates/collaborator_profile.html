@@ -1,13 +1,49 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block company %}
-    <form method="POST">
-      {% csrf_token %}
-      <p>Informacion de colaborador</p>
-      <img src="{{ collaborator_profile.collaborator_image.url }}">
-      {{ collaborator_profile_form.as_p }}
-      <button type="submit">Actualizar</button>
+{% block collaborator_profile %}
+
+<!-- Collaborator Profile Breadcrums Area -->
+<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url({% static 'images/banner_3.jpg' %}) no-repeat scroll center center / cover ;">
+  <div class="ht__bradcaump__wrap">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="bradcaump__inner text-center">
+            <h2 class="bradcaump-title">Perfil</h2>
+            <nav class="bradcaump-inner">
+              <a class="breadcrumb-item" href="index.html">Home</a>
+              <span class="brd-separetor">/</span>
+              <span class="breadcrumb-item active">Contact US</span>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Collaborator Profile Information Area -->
+<section class="htc__contact__area ptb--120 bg__white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+        <div class="htc__contact__container">
+
+          <!-- Collaborator Information Area -->
+          <div class="contact-form-wrap">
+            <div class="contact-title">
+              <h2 class="contact__title">Información de colaborador</h2>
+            </div>
+
+            <form method="POST">
+              {% csrf_token %}
+              <p>Informacion de colaborador</p>
+              <img src="{{ collaborator_profile.collaborator_image.url }}">
+              {{ collaborator_profile_form.as_p }}
+              <button type="submit">Actualizar</button>
     </form>
+
     <form method="POST">
       {% csrf_token %}
       {% if company is None %}
@@ -38,4 +74,12 @@
       <hr>
       <button type="submit">Actualizar</button>
     </form>
+
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+</section>
+
 {% endblock %}

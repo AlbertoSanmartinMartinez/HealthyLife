@@ -8,9 +8,9 @@
 
       <div class="row">
       <div class="monthly-header">
-        <div class="monthly-header-title">
-          <a class="monthly-header-title-date">{{ month_name }}/{{ year }}</a>
-        </div>
+        <!--<div class="monthly-header-title">-->
+          {{ month_name }} del {{ year }}
+        <!--</div>-->
         <a href="{% url 'calendar:month_calendar' username=request.user.username year=year month=previous_month %}" class="monthly-prev"></a>
         <a href="{% url 'calendar:month_calendar' username=request.user.username year=year month=next_month %}" class="monthly-next"></a>
       </div>
@@ -39,11 +39,11 @@
                   <p>Hoy</p>
                 {% endif %}
                 <ul>
-                {% getEvents request.user.id year month day as events %}
+                {% getEvents request.user.id year month day type=None as events %}
                 {% for event in events %}
                   <li>
                     <p>
-                      <a href="{% url 'calendar:detail_event' username=request.user.username year=year month=month day=day event_slug=event.slug %}">{{ event.title }}</a>
+                      <a href="{% url 'calendar:detail_event' event_slug=event.slug %}">{{ event.title }}</a>
                     </p>
                   </li>
                 {% endfor %}

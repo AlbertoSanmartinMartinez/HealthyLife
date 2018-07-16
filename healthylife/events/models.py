@@ -10,14 +10,9 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
+from django.utils import timezone
 
-# Calendar models
-"""
-class Calendar(object):
-    year
-    month
-    week
-"""
+timezone.now()
 
 # Event Models
 @autoconnect
@@ -30,20 +25,12 @@ class Event(models.Model):
     description = models.CharField(max_length=250, blank=True)
     PrivacityType = ((1, 'Público'), (2, 'Privado'))
     privacity = models.IntegerField(choices=PrivacityType, default=1, blank=True)
+    EVENT_TYPE = ((1, 'Deporte'), (2, 'Nutrición'), (3, 'Salud'))
+    type = models.IntegerField(choices=EVENT_TYPE, default=1)
     owner = models.ForeignKey(User)
     creation_date = models.DateTimeField(auto_now=True)
     updated_date= models.DateTimeField(auto_now_add=True)
-    # tipo de evento (sport, nutrition, health)
     participant = models.ManyToManyField(User, related_name='participants', blank=True)
-    """
-    year = models.PositiveIntegerField(default=str(datetime.datetime.now().year), blank=True)
-    MONTHS = ((1, 'Enero'), (3, 'Febrero'), (3, 'Marzo'), (4, 'Abril'), (5, 'Mayo'), (6, 'Junio'), (7, 'Julio'), (8, 'Agosto'), (9, 'Septiembre'), (10, 'Octubre'), (11, 'Noviembre'), (12, 'Diciembre'))
-    month = models.IntegerField(choices=MONTHS, default=1)
-    DAYS = [(i, str(i)) for i in range(1, 33)]
-    day = models.IntegerField(choices=DAYS, default=1)
-    start_hour = models.TimeField(auto_now=True)
-    end_hour = models.TimeField(auto_now=True)
-    """
     start = models.DateTimeField(default=datetime.datetime.now())
     end = models.DateTimeField(default=datetime.datetime.now())
     address = models.CharField(max_length=250, default='', blank=True)
@@ -63,6 +50,7 @@ class Event(models.Model):
         Metodo que envia un correo a un usuario para que se una al evento
         """
         pass
+
 
 # Sport Event
 # Nutrition Event
