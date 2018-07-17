@@ -163,14 +163,21 @@
           </div>
         </div>
 
-        <!-- Start Load ore Button -->
+        <!-- Pagination Shop Button -->
         <div class="row mt--60">
           <div class="col-md-12">
             <div class="htc__loadmore__btn">
-              <a href="#">load more</a>
+              {% if products.has_previous %}
+              <a href="?page={{ products.previous_page_number }}">Anterior</a>
+              {% endif %}
+              <a href="">{{ products.number }}</a>
+              {% if products.has_next %}
+              <a href="?page={{ products.next_page_number }}">Siguiente</a>
+              {% endif %}
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>

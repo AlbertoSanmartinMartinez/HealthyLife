@@ -9,6 +9,7 @@ from blog import forms as blog_forms
 from healthylifeapp import models as general_models
 from healthylifeapp import views as general_views
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, PageNotAnInteger
 
 # Blog Views
 def list_posts(request, blog_category_slug=None):
@@ -40,6 +41,16 @@ def list_posts(request, blog_category_slug=None):
                 posts = posts.all().order_by('-creation_date')
     else:
         blog_filter_form = blog_forms.PostFilter()
+
+    paginator = Paginator(posts, 12)
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
 
     return render(request, "blog.html", {
         'category': category,

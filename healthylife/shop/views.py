@@ -7,6 +7,7 @@ from healthylifeapp import views as general_views
 from shop import models as shop_models
 from shop import forms as shop_forms
 from healthylifeapp.views import *
+from django.core.paginator import Paginator, PageNotAnInteger
 
 
 # Shop Views
@@ -46,6 +47,16 @@ def product_list(request, shop_category_slug=None):
                 products = products.all().order_by('-price')
     else:
         shop_filter_form = shop_forms.ProductFilter()
+
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
 
     return render(request, 'product_list.html', {
         'category': category,

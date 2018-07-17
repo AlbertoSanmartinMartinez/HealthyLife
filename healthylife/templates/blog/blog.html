@@ -81,9 +81,26 @@
           {% endfor %}
         </div>
       </div>
+
+      <!-- Pagination Blog Button -->
+      <div class="row mt--60">
+        <div class="col-md-12">
+          <div class="htc__loadmore__btn">
+            {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}">Anterior</a>
+            {% endif %}
+            <a href="">{{ posts.number }}</a>
+            {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">Siguiente</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
+
           <!-- Deatil Post page -->
           {% block detail_post %}
           {% endblock %}
