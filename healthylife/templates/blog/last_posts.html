@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="blog__wrap clearfix mt--60 xmt-30">
 
@@ -31,11 +31,11 @@
                   {% endfor %}
                   <div class="blog__post__time">
                     <div class="post__time--inner">
-                      <span class="date">{{ post.creation_date }}</span>
+                      <span class="date">{{ post.created_date.day }}/{{ post.created_date.month }}/{{ post.created_date.year }}</span>
                     </div>
                   </div>
                 </div>
-                <div class="blog__hover__info">
+                <!--<div class="blog__hover__info">
                   <div class="blog__hover__action">
                     <ul class="bl__meta">
                       <li>By :
@@ -45,13 +45,18 @@
                         <a href="{% url 'blog:category_posts' category=post.category.slug %}">{{ post.category.name }}</a>
                       </li>
                     </ul>
-                    <p class="blog__des"><a href="{% url 'blog:detail_post' post_slug=post.slug %}">{{ post.title }}</a></p>
                     <div class="blog__btn">
                       <a class="read__more__btn" href="{% url 'blog:detail_post' post_slug=post.slug %}">Leer Más</a>
                     </div>
                   </div>
-                </div>
+                </div>-->
               </div>
+              <p>
+                {{ post.created_date.day }}/{{ post.created_date.month }}/{{ post.created_date.year }}<br>
+                <a href="{% url 'blog:author_posts' username=post.author.username %}">{{ post.author.username }}</a><br>
+                <a href="{% url 'blog:category_posts' category=post.category.slug %}">{{ post.category.name }}</a>
+              </p>
+              <a class="read__more__btn" href="{% url 'blog:detail_post' post_slug=post.slug %}">Leer Más</a>
             </div>
           </div>
         {% endfor %}

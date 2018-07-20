@@ -6,6 +6,7 @@ from nutritionapp import forms as nutrition_forms
 from django.shortcuts import render
 from healthylife import settings
 from healthylifeapp import views as general_views
+from shop import views as shop_views
 
 import requests
 import json
@@ -36,6 +37,7 @@ def nutrition(request):
         'subscribe_form': general_views.getSubscribeForm(),
         'search_food_form': getNutritionFilterForm(request),
         'food_information': food_information,
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 

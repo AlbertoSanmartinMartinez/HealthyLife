@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from healthylifeapp import views as general_views
 from awards import forms as awards_forms
+from shop import views as shop_views
 
 # Award views
 def awards(request):
@@ -17,6 +18,7 @@ def awards(request):
         'subscribe_form': general_views.getSubscribeForm(),
         'awards_filter_form': getAwardsFilterForm(request),
         'awards': awards,
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
@@ -35,4 +37,5 @@ def awards_profile(request, username):
     return render(request, 'awards_profile.html', {
         "search_form": general_views.getSearchForm(),
         'subscribe_form': general_views.getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })

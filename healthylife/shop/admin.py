@@ -8,38 +8,69 @@ from guardian.admin import GuardedModelAdmin
 
 # Admin Shop Models
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'status', 'name', 'created_date', 'category', 'stock', 'price', 'album', 'discount']
+    list_display = ['id', 'status', 'name', 'created_date', 'category', 'stock', 'price']
     list_filter = ['status', 'category']
-    list_editable = ['status', 'name', 'category', 'stock', 'price', 'album', 'discount']
-    search_fields = ['name', 'stock', 'price']
-    readonly_fields = ('slug', 'author', 'album')
+    list_editable = ['status', 'category', 'stock', 'price']
+    search_fields = ['name', 'description']
+    readonly_fields = ('slug', 'author', 'album', 'updated_date')
     # prepopulated_fields
 
+    """
     def save_model(self, request, obj, form, change):
         obj.author = request.user
         super(ProductAdmin, self).save_model(request, obj, form, change)
+    """
 
     def get_queryset(self, request):
+        """
+        Show only products created by user
+        """
         queryset = super(ProductAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return queryset
         return queryset.filter(author_id=request.user.id)
 
+    def save_model(self, request, obj, form, change):
+        """
+        Save the user that create the post as author
+        """
+        if not obj.author:
+            obj.author = request.user
+        obj.save()
+
 admin.site.register(shop_models.Product, ProductAdmin)
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'description', 'parent']
-    list_filter = ['name', 'description', 'parent']
-    list_editable = ['name', 'description', 'parent']
+    list_display = ['id', 'name', 'parent'] #, 'author']
+    # list_filter = ['author',]
     search_fields = ['name', 'description', 'parent']
+    list_editable = ['name', 'parent']
+    # readonly_fields = ['slug', 'author', 'updated_date']
     # prepopulated_fields
+
+    def get_queryset(self, request):
+        """
+        Show only categories created by user
+        """
+        queryset = super(CategoryAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(author_id=request.user.id)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Save the user that create the category as author
+        """
+        if not obj.author:
+            obj.author = request.user
+        obj.save()
 
 admin.site.register(shop_models.Category, CategoryAdmin)
 
 
 class ShopingChartAdmin(admin.ModelAdmin):
-    list_display = ['code', 'created_date', 'products']
+    list_display = ['id', 'status', 'code', 'created_date', 'products']
 
 admin.site.register(shop_models.ShopingChart, ShopingChartAdmin)
 
@@ -77,10 +108,20 @@ class AlbumAdmin(admin.ModelAdmin):
 admin.site.register(models.Album, AlbumAdmin)
 """
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('id', 'status', 'title', 'content', 'creation_date', 'author', 'product', 'parent')
+    list_display = ('id', 'status', 'title', 'created_date', 'author', 'product', 'parent')
     list_editable = ('status', 'author')
     list_filter = ('status', 'parent')
-    search_fields = ('title', 'content', 'author', 'post')
+    search_fields = ('title', 'content', 'author', 'product')
+
+    def get_queryset(self, request):
+        """
+        Show only comments from the post created by user
+        """
+        queryset = super(ReviewAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        products = shop_models.Product.objects.filter(author_id=request.user.id)
+        return queryset.filter(product_id__in=products)
 
 admin.site.register(shop_models.Review, ReviewAdmin)
 

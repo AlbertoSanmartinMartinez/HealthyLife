@@ -16,7 +16,7 @@ def get_comment_answers(comment_parent):
     Doesn´t use --> comment.answers.all
     Template tag method que busca las respuestas a un comentario
     """
-    comment_answers = blog_models.Comment.objects.filter(status=1).order_by("-creation_date")
+    comment_answers = blog_models.Comment.objects.filter(status=1).order_by("-created_date")
     #print(comment_answers)
 
     return comment_answers if comment_answers else None

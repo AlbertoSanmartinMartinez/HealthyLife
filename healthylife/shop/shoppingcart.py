@@ -8,6 +8,8 @@ from django.shortcuts import render, get_object_or_404
 class ShoppingCart(object):
 
     def __init__(self, resquest):
+        """
+        """
         self.session = resquest.session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
@@ -16,19 +18,28 @@ class ShoppingCart(object):
 
 
     #def add(self, product, quantity=1, update_quantity=False):
-    def add(self, product):
+    def add(self, product, quantity):
+        """
+        Function that add product to shoppingcart
+        If it's the first product added, we to create the shoppingcart object in the data base
+        """
+        print("funcion añadir del carrito")
+        print("id producto " + str(product.id))
+        print("cantidad " + str(quantity))
+
         product_id = str(product.id)
-        if product.id not in self.cart:
-            self.cart[product_id] = {'quantity': 1, 'price': str(product.price)}
-        #if not shop_models.ShopingChart.objects.filter(code=str(self.session.session_key)):
-        shoppingcart = shop_models.ShopingChart.objects.create(code=str(self.session.session_key))
-        """
-        if update_quantity:
-            self.cart[product_id]['quantity'] = quantity
-        else:
-            self.cart[product_id]['quantity'] += quantity
-        """
-        # crear el carrito en la base de datos
+
+        if product.id not in self.cart: # esto no funciona
+            print("el producto no esta en el carrito")
+            self.cart[product_id] = {'quantity': quantity, 'price': str(product.price)}
+
+        if not shop_models.ShopingChart.objects.filter(code=str(self.session.session_key)):
+            print("el carrito no existe, lo creamos")
+            print(self.session.session_key)
+            print(self.cart)
+            shoppingcart = shop_models.ShopingChart.objects.create(code=str(self.session.session_key))
+
+        shop_models.ShopingChart.objects.filter(code=str(self.session.session_key)).update(products=self.cart)
         self.save()
 
 
@@ -43,12 +54,13 @@ class ShoppingCart(object):
         shop_models.ShopingChart.objects.filter(code=str(self.session.session_key)).update(products=self.cart)
         self.save()
 
+    """
     def update(self, product, quantity):
         product_id = str(product.id)
         self.cart[product_id] = {'quantity': quantity, 'price': str(product.price)}
         shop_models.ShopingChart.objects.filter(code=str(self.session.session_key)).update(products=self.cart)
         self.save()
-
+    """
 
     def __iter__(self):
         product_ids = self.cart.keys()

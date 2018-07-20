@@ -7,6 +7,7 @@ from payments.models import BasePayment
 from healthylife.decorators import autoconnect
 from healthylifeapp import models as general_models
 from django.contrib.auth.models import User
+import datetime
 
 # Shop Models
 @autoconnect
@@ -19,6 +20,7 @@ class Category(models.Model):
     description = models.CharField(max_length=500, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
+    author = models.ForeignKey(User, related_name='category_author', editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = 'category'
@@ -28,17 +30,28 @@ class Category(models.Model):
         return self.name
 
     def pre_save(self):
-        self.slug = self.name.replace(' ', '_').lower()
+        """
+        """
+        self.slug = self.name.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
 
 
+@autoconnect
 class Discount(models.Model):
     name = models.CharField(max_length=50)
     DiscountType = ((1, "Cantidad"), (2, "Porcentaje"))
     type = models.IntegerField(choices=DiscountType, default=1)
     amount = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+    def pre_save(self):
+        """
+        """
+        self.slug = self.name.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
 
 
 @autoconnect
@@ -61,8 +74,8 @@ class Product(models.Model):
     size = models.IntegerField(choices=Size, default=1, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0)
     discount = models.ForeignKey(Discount, blank=True, null=True)
-    author = models.ForeignKey(User, default=3, blank=True)
-    #tag
+    author = models.ForeignKey(User, editable=False, null=True, blank=True)
+    # tags
 
     class Meta:
         verbose_name = 'product'
@@ -72,8 +85,11 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        """metodo de la clase post para calcular el slug de un producto y crear un album asociado a ese producto"""
+        """
+        metodo de la clase post para calcular el slug de un producto y crear un album asociado a ese producto
+        """
         self.slug = self.name.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
         if not self.pk:
             album = general_models.Album.objects.create(name='album '+self.name, author=self.author)
             self.album = album
@@ -82,19 +98,19 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     """
-    def pre_save(self):
-        self.slug = self.name.replace(' ', '_').lower()
-    """
-
     def get_absolute_url(self):
         return reverse('shop:product_detail', args=[self.slug])
+    """
 
 
 class ShopingChart(models.Model):
     # name = models.CharField(max_length=100, db_index=True)
     created_date = models.DateTimeField(auto_now=True)
-    code = models.CharField(max_length=300, default="")
+    updated_date = models.DateTimeField(auto_now_add=True)
+    code = models.CharField(max_length=300, default="", unique=True)
     products = models.CharField(max_length=300, default="")
+    STATUS = ((1, 'Activo'), (2, 'Abandonado'))
+    status = models.IntegerField(choices=STATUS, default=1)
     # controlar el estado del carrito
     # convertir en pedido cuando se finaliza el pedido
     # saber de quien es el carrito
@@ -109,6 +125,7 @@ class Order(models.Model):
     created_date = models.DateTimeField(auto_now=True)
     OrderStatus = ((1, 'Pendiente de pago'), (2, 'Cancelado'), (3, 'Pagado'), (4, 'En preparación'), (5, 'Enviado'), (6, 'Entregado'))
     status = models.IntegerField(choices=OrderStatus, default=1)
+    # pedidos para cada empresa
 
     def __unicode__(self):
         return self.code
@@ -126,6 +143,7 @@ class Tag(models.Model):
     name = models.CharField(primary_key=True, max_length=50)
     created_date = models.DateTimeField(auto_now=True)
     # slug
+    # author
 
     def __unicode__(self):
         return self.name
@@ -147,7 +165,7 @@ class Review(models.Model):
     status = models.IntegerField(choices=Status, default=2, blank=True)
     title = models.CharField(max_length=50)
     content = models.TextField()
-    creation_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     author = models.CharField(max_length=100)
     product = models.ForeignKey(Product)

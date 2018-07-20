@@ -4,8 +4,8 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from healthylifeapp import forms as general_forms
-from healthylifeapp import models
-from blog import models as blog_models
+from healthylifeapp import models as general_models
+# from blog import models as blog_models
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
@@ -20,14 +20,15 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Permission
 from django.contrib.auth import authenticate, login
 import calendar
-from calendar import HTMLCalendar
 from datetime import datetime
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from shop import models as shop_models
-from awards import models as award_models
-from healthylifeapp import models as general_models
-from events import models as events_models
+
+# from shop import models as shop_models
+# from awards import models as award_models
+# from events import models as events_models
+# from shop import forms as shop_forms
+# from shop import views as shop_views
 
 # API imports
 from rest_framework.decorators import api_view
@@ -37,10 +38,16 @@ from rest_framework import status
 
 # General views
 def home(request):
-    last_posts = blog_models.Post.objects.filter(status=1).order_by("-creation_date")[:3]
+    from blog import models as blog_models
+    from shop import models as shop_models
+    from shop import forms as shop_forms
+    from shop import views as shop_views
+    from awards import models as award_models
+
+    last_posts = blog_models.Post.objects.filter(status=1).order_by("-created_date")[:3]
     last_products = shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
     #next events
-    best_awards = award_models.Award.objects.filter(status=1).order_by("-creation_date")[:3]
+    best_awards = award_models.Award.objects.filter(status=1).order_by("-created_date")[:3]
 
     return render(request, "home.html", {
         "search_form":getSearchForm(),
@@ -48,10 +55,14 @@ def home(request):
         "last_products": last_products,
         "best_awards": best_awards,
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart_form': shop_forms.ShoppingCartForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def contact(request):
+    from shop import views as shop_views
+
     form = general_forms.ContactForm(request.POST or None)
     if form.is_valid():
         email_form = form.cleaned_data.get("email")
@@ -66,6 +77,7 @@ def contact(request):
         "contact_form": form,
         "search_form":getSearchForm(),
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     }
     return render(request, "contact.html", context)
 
@@ -74,6 +86,8 @@ def work_with_our(request):
     """
     Vista que regitra a un colaborador y le da permisos
     """
+    from shop import views as shop_views
+
     if request.method == 'POST':
         # perfil colaborador
         user_form = general_forms.CustomRegisterColaboratorForm(data=request.POST)
@@ -108,30 +122,38 @@ def work_with_our(request):
     return render(request, 'work_with_our.html', {
         "user_form": user_form,
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def legal_information(request):
+    from shop import views as shop_views
 
     return render(request, 'aviso_legal.html', {
         "search_form":getSearchForm(),
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def know_us(request):
-    collaborators = models.CollaboratorProfile.objects.all()
-    companies = models.Company.objects.all()
+    from shop import views as shop_views
+
+    collaborators = general_models.CollaboratorProfile.objects.all()
+    companies = general_models.Company.objects.all()
 
     return render(request, 'know_us.html', {
         "search_form":getSearchForm(),
         "companies": companies,
         "collaborators": collaborators,
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def know_us_collaborator(request, username):
+    from shop import views as shop_views
+
     user = User.objects.get(username=username)
     collaborator = models.CollaboratorProfile.objects.get(user_id=user.id)
 
@@ -139,21 +161,27 @@ def know_us_collaborator(request, username):
         "collaborator": collaborator,
         "search_form":getSearchForm(),
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def know_us_company(request, companyname):
+    from shop import views as shop_views
+
     company = models.Company.objects.get(slug=companyname)
 
     return render(request, 'company.html', {
         "company": company,
         "search_form":getSearchForm(),
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 # Login views
 def custom_login(request):
+    from shop import views as shop_views
+
     if request.method == 'POST':
         print("metodo post")
         form = general_forms.CustomAuthenticationForm(data=request.POST)
@@ -181,15 +209,20 @@ def custom_login(request):
         print("metodo no post")
         form = general_forms.CustomAuthenticationForm()
 
+    shoppingcart = shop_views.getShoppingCart(request)
+
     return render(request, 'custom_login.html', {
         "search_form": getSearchForm,
         "form": form,
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shoppingcart,
     })
 
 
 # Registration views
 def custom_registration(request):
+    from shop import views as shop_views
+
     if request.method == 'POST':
         form = general_forms.CustomRegisterForm(data=request.POST)
         if form.is_valid():
@@ -198,10 +231,13 @@ def custom_registration(request):
     else:
         form = general_forms.CustomRegisterForm()
 
+    shoppingcart = shop_views.getShoppingCart(request)
+
     return render(request, 'custom_register.html', {
         "search_form": getSearchForm,
         "form": form,
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shoppingcart,
     })
 
 
@@ -288,7 +324,7 @@ def search(request):
     form = forms.SearchForm(request.POST)
     if form.is_valid():
         word = form.cleaned_data['word']
-        posts = models.Post.objects.filter(status=1, title__contains=word).order_by("-creation_date")
+        posts = models.Post.objects.filter(status=1, title__contains=word).order_by("-created_date")
     else:
         form = forms.SearchForm()
         posts = None
@@ -306,7 +342,11 @@ def search(request):
 def profile(request, username):
     """
     Vista que muestra la informacion del perfil de usuario
+    multiple forms
+    https://www.codementor.io/lakshminp/handling-multiple-forms-on-the-same-page-in-django-fv89t2s3j
     """
+    from shop import views as shop_views
+
     user = User.objects.get(username=username)
     user_profile = general_models.UserProfile.objects.get(user_id=user.id)
     bank_information = general_models.BankInformation.objects.get(user_id=user.id, is_company=False)
@@ -341,6 +381,7 @@ def profile(request, username):
         "search_form": getSearchForm(),
         "user_profile": user_profile,
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
@@ -349,6 +390,8 @@ def collaborator_profile(request, username):
     """
     Vista que muestra la informacion del perfil de colaborador
     """
+    from shop import views as shop_views
+
     user = User.objects.get(username=username)
     collaborator_profile = models.CollaboratorProfile.objects.get(user_id=user.id)
     try:
@@ -446,17 +489,23 @@ def collaborator_profile(request, username):
         "collaborator_profile_form": collaborator_profile_form,
         "collaborator_profile": collaborator_profile,
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
         })
 
 
 def sport_profile(request, username):
+    from shop import views as shop_views
+
     return render(request, 'sport_profile.html', {
         "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def nutrition_profile(request, username):
+    from shop import views as shop_views
+
     return render(request, 'nutrition_profile.html', {
         "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
@@ -464,9 +513,12 @@ def nutrition_profile(request, username):
 
 
 def health_profile(request, username):
+    from shop import views as shop_views
+
     return render(request, 'health_profile.html', {
         "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 

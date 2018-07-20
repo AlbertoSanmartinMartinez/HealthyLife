@@ -3,17 +3,18 @@
 
 from __future__ import unicode_literals
 from django.shortcuts import render, get_object_or_404
-from healthylifeapp import views as general_views
+# from healthylifeapp import views as general_views
 from shop import models as shop_models
 from shop import forms as shop_forms
 from healthylifeapp.views import *
 from django.core.paginator import Paginator, PageNotAnInteger
-
+from shop.shoppingcart import ShoppingCart
 
 # Shop Views
 def product_list(request, shop_category_slug=None):
     """
     """
+
     category = None
     products = shop_models.Product.objects.filter(status=1, stock__gte=1)
     shop_filter_form = None
@@ -63,15 +64,19 @@ def product_list(request, shop_category_slug=None):
         'products': products,
         #'categories': getShopCategories(),
         'shop_filter_form': shop_filter_form,
-        'shoppingcart_form': getShoppingCart(),
+        # 'shoppingcart': getShoppingCart(),
+        'shoppingcart_form': getShoppingCartForm(),
         #"search_form": general_views.getSearchForm(),
         #'subscribe_form': general_views.getSubscribeForm(),
+        'shoppingcart': getShoppingCart(request),
     })
 
 
 def product_detail(request, product_slug):
+    from healthylifeapp import views as general_views
+
     product = get_object_or_404(shop_models.Product, slug=product_slug)
-    reviews = shop_models.Review.objects.filter(product=product.id, status=1, parent_id__isnull=True).order_by('creation_date')
+    reviews = shop_models.Review.objects.filter(product=product.id, status=1, parent_id__isnull=True).order_by('created_date')
     images = general_models.Image.objects.filter(album=product.album)
     shop_filter_form = shop_forms.ProductFilter()
     num_reviews = len(shop_models.Review.objects.filter(product=product.id, status=1))
@@ -83,8 +88,9 @@ def product_detail(request, product_slug):
         'reviews': reviews,
         'num_reviews': num_reviews,
         'review_form': getReviewForm(request),
+        'shoppingcart': getShoppingCart(request),
         'shop_filter_form': shop_filter_form,
-        'shoppingcart_form': getShoppingCart(),
+        'shoppingcart_form': getShoppingCartForm(),
         "search_form": general_views.getSearchForm(),
     })
 
@@ -93,7 +99,7 @@ def last_products():
     return shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
 
 
-# Comments Views
+# Review Views
 def add_review(request, product_slug):
     """
     Method that add comment to product:
@@ -139,24 +145,59 @@ def add_review(request, product_slug):
 
 
 # ShoppingCart Views
+def shoppingcart(request):
+    """
+    ShoppinCart view
+    """
+    cart = getShoppingCart(request)
+
+    return render(request, 'shoppingcart.html', {
+        'shoppingcart': cart,
+    })
+
+
+def shoppincart_resume(request):
+    """
+    ShoppinCart menu view
+    """
+    cart = ShoppingCart(request)
+    for item in cart:
+        item['shoppingcart_form'] = shop_forms.ShoppingCartForm(initial={'quantity': item['quantity']}) #, 'update':True})
+
+    return render(request, 'shoppingcart.html', {
+        'shoppingcart': cart,
+    })
+
+
 def cartAdd(request, product_id):
+    """
+    Function that add products to shoppingcart
+    """
+    print("funcion add de la vista")
+    print(product_id)
+
     cart = ShoppingCart(request)
     product = get_object_or_404(shop_models.Product, id=product_id)
-    cart.add(product)
-    form = shop_forms.ShoppingCartForm(request.POST)
-    if form.is_valid():
-        data = form.cleaned_data['quantity']
-        cart.update(product, data)
-    """
-    form = shop_forms.ShoppingCartForm(request.POST)
-    if form.is_valid():
-        cd = form.cleaned_data
-        cart.add(product=product, quantity=cd['quantity'], update_quantity=cd['update'])
-    """
+    quantity = 1
+
+    if request.method == 'POST':
+        print("metodo post")
+        form = shop_forms.ShoppingCartForm(request.POST)
+        if form.is_valid():
+            quantity = form.cleaned_data['quantity']
+            if quantity > 0:
+                print("catindad del formulario " + str(quantity))
+                cart.add(product, quantity)
+            else:
+                cart.remove(product)
+    else:
+        cart.add(product, quantity)
+
     return redirect('shop:shoppingcart_detail')
 
-
+"""
 def cartRemove(request, product_id):
+
     cart = ShoppingCart(request)
     product = get_object_or_404(shop_models.Product, id=product_id)
     cart.remove(product)
@@ -164,16 +205,8 @@ def cartRemove(request, product_id):
     return redirect('shop:shoppingcart_detail')
 
 
-def cartDetail(request):
-    cart = ShoppingCart(request)
-    for item in cart:
-        item['shoppingcart_form'] = shop_forms.ShoppingCartForm(initial={'quantity': item['quantity']}) #, 'update':True})
-    return render(request, 'shoppingcart.html', {
-        'shoppingcart': cart,
-    })
-
-
 def cartUpdate(request, product_id):
+
     cart = ShoppingCart(request)
     product = get_object_or_404(shop_models.Product, id=product_id)
     form = shop_forms.ShoppingCartForm(request.POST)
@@ -182,7 +215,7 @@ def cartUpdate(request, product_id):
         cart.update(product, data)
 
     return redirect('shop:shoppingcart_detail')
-
+"""
 
 # Payment Views
 """
@@ -241,7 +274,15 @@ def getShopCategories():
     return shop_models.Category.objects.all()
 
 
-def getShoppingCart():
+def getShoppingCart(request):
+    cart = ShoppingCart(request)
+    for item in cart:
+        item['shoppingcart_form'] = shop_forms.ShoppingCartForm(initial={'quantity': item['quantity']})
+
+    return cart
+
+
+def getShoppingCartForm():
     shoppingcart_form = shop_forms.ShoppingCartForm()
 
     return shoppingcart_form

@@ -829,15 +829,15 @@ h3.widget-title-modal {
     transition: all 0.4s ease 0s;
 }
 .blog:hover .blog__post__time {
-    opacity: 1;
+    opacity: 80%;
 }
 
 .blog__post__time {
     background: #fff none repeat scroll 0 0;
-    height: 65px;
+    height: 170px;
     padding: 5px;
     text-align: center;
-    width: 65px;
+    width: 250px;
 }
 .blog__post__time span.date {
     display: block;

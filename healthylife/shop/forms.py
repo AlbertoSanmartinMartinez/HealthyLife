@@ -46,7 +46,6 @@ PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(0, 26)]
 
 class ShoppingCartForm(forms.Form):
     quantity = forms.TypedChoiceField(choices=PRODUCT_QUANTITY_CHOICES, coerce=int, help_text = 'Uds.')
-    #update = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)
 
 
 REVIEW_MARK_CHOICES = [(i, str(i)) for i in range(0, 11)]

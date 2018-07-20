@@ -27,7 +27,7 @@ class PostSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = blog_models.Post
-        fields = ('uri', 'id', 'status', 'category', 'author', 'title', 'description', 'content', 'creation_date')
+        fields = ('uri', 'id', 'status', 'category', 'author', 'title', 'description', 'content', 'created_date')
 
 
 

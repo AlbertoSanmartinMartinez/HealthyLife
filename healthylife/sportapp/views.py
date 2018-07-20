@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from healthylifeapp import views as general_views
 from sportapp import forms as sport_forms
+from shop import views as shop_views
 
 # Sport views
 def sport(request):
@@ -19,6 +20,7 @@ def sport(request):
         'subscribe_form': general_views.getSubscribeForm(),
         'sport_filter_form': getSportFilterForm(request),
         'sport_information': sport_information,
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 

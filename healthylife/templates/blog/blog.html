@@ -53,7 +53,7 @@
                   {% endfor %}
                   <div class="blog__post__time">
                     <div class="post__time--inner">
-                      <span class="date">{{ post.creation_date }}</span>
+                      <span class="date">{{ post.created_date }}</span>
                     </div>
                   </div>
                 </div>
@@ -101,8 +101,8 @@
   </div>
 </section>
 
-          <!-- Deatil Post page -->
-          {% block detail_post %}
-          {% endblock %}
+  <!-- Deatil Post page -->
+  {% block detail_post %}
+  {% endblock %}
 
 {% endblock %}

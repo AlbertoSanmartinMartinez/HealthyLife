@@ -124,23 +124,26 @@
 
 														<!-- ShoppingCart Form Area -->
                             <div class="product-action-wrap">
-                                <div class="prodict-statas"><span>Cantidad</span></div>
+                                <div class="prodict-statas"><span>Cantidad:</span></div>
                                 <div class="product-quantity">
-                                    <form id='myform' method='POST' action='#'>
-                                        <div class="product-quantity">
+                                    <form method='POST' action="{% url 'shop:shoppingcart_add' product_id=product.id %}">
+																			{% csrf_token %}
+                                        <!--<div class="product-quantity">
                                             <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="02">
-                                            </div>
-                                        </div>
-                                    </form>
+                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="02">-->
+																								{{ shoppingcart_form.quantity }}
+                                            <!--</div>
+                                        </div>-->
+
                                 </div>
                             </div>
                             <ul class="pro__dtl__btn">
-                                <li class="buy__now__btn"><a href="#">Añadir al Carrito</a></li>
+                                <!--<li class="buy__now__btn"><a href="{% url 'shop:shoppingcart_add' product_id=product.id %}">Añadir al Carrito</a></li>-->
+																<li class="buy__now__btn"><input type="submit" value="Añadir al Carrito"></li>
                                 <!--<li><a href="#"><span class="ti-heart"></span></a></li>-->
                                 <!--<li><a href="#"><span class="ti-email"></span></a></li>-->
                             </ul>
-
+													</form>
 														<!-- Social Share Area -->
                             <div class="pro__social__share">
                                 <h2>Compartir: </h2>
@@ -252,7 +255,7 @@
 																												<h4><a href="#">{{ review.mark }}</a></h4>
 				                                            </div>
 				                                            <div class="review__date">
-				                                                <span>{{ review.author }} | {{ review.creation_date }}</span>
+				                                                <span>{{ review.author }} | {{ review.created_date }}</span>
 				                                            </div>
 				                                            <p>{{ review.content }}</p>
 																										<div class="review__date">
@@ -290,7 +293,7 @@
 				                                                </div>
 				                                            </div>
 				                                            <div class="review__date">
-				                                                <span>{{ answer.author }} | {{ answer.creation_date }}</span>
+				                                                <span>{{ answer.author }} | {{ answer.created_date }}</span>
 				                                            </div>
 				                                            <p>{{ answer.content }}</p>
 				                                        </div>

@@ -10,6 +10,7 @@ from healthylifeapp import models as general_models
 from healthylifeapp import views as general_views
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger
+from shop import views as shop_views
 
 # Blog Views
 def list_posts(request, blog_category_slug=None):
@@ -32,13 +33,13 @@ def list_posts(request, blog_category_slug=None):
             if data['category'] is not None:
                 posts = posts.filter(category_id=data['category'].id)
             if data['minimum_date'] is not None:
-                posts = posts.filter(creation_date__gte=data['minimum_date'])
+                posts = posts.filter(created_date__gte=data['minimum_date'])
             if data['maximum_date'] is not None:
-                posts = posts.filter(creation_date__lte=data['maximum_date'])
+                posts = posts.filter(created_date__lte=data['maximum_date'])
             if data['order_by'] == 1:
-                posts = posts.all().order_by('creation_date')
+                posts = posts.all().order_by('created_date')
             if data['order_by'] == 2:
-                posts = posts.all().order_by('-creation_date')
+                posts = posts.all().order_by('-created_date')
     else:
         blog_filter_form = blog_forms.PostFilter()
 
@@ -60,12 +61,13 @@ def list_posts(request, blog_category_slug=None):
         #'shoppingcart_form': getShoppingCart(),
         "search_form": general_views.getSearchForm(),
         'subscribe_form': general_views.getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def detail_post(request, post_slug):
     post = get_object_or_404(blog_models.Post, slug=post_slug)
-    comments = blog_models.Comment.objects.filter(post=post.id, status=1, parent_id__isnull=True).order_by("creation_date")
+    comments = blog_models.Comment.objects.filter(post=post.id, status=1, parent_id__isnull=True).order_by("created_date")
     images = general_models.Image.objects.filter(album=post.album)
     blog_filter_form = blog_forms.PostFilter()
     num_comments = len(blog_models.Comment.objects.filter(post=post.id, status=1))
@@ -82,6 +84,7 @@ def detail_post(request, post_slug):
         #'shoppingcart_form': getShoppingCart(),
         "search_form": general_views.getSearchForm(),
         #'subscribe_form': general_views.getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
@@ -94,6 +97,7 @@ def category_posts(request, category):
         "categories": getBlogCategories(),
         "search_form": general_views.getSearchForm(),
         'subscribe_form': general_views.getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
@@ -108,12 +112,13 @@ def author_posts(request, username):
         "categories": getBlogCategories(),
         "search_form": general_views.getSearchForm(),
         'subscribe_form': general_views.getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
 def last_posts():
 
-    return blog_models.Post.objects.filter(status=1).order_by('-creation_date')[:3]
+    return blog_models.Post.objects.filter(status=1).order_by('-created_date')[:3]
 
 
 # Comments Views

@@ -7,15 +7,18 @@ from healthylife.decorators import autoconnect
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from healthylifeapp import models as general_models
+import datetime
 
 # Blog models
 class Tag(models.Model):
     name = models.CharField(primary_key=True, max_length=50)
+    slug = models.CharField(max_length=100, blank=True)
     created_date = models.DateTimeField(auto_now=True)
-    # slug
+    updated_date = models.DateTimeField()
 
     def __unicode__(self):
         return self.name
+
 
 @autoconnect
 class Category(models.Model):
@@ -23,15 +26,23 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=200)
-    creation_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField()
     parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
     def __unicode__(self):
         return self.name
 
-    def pre_save(self):
-        """metodo de la clase Category para calcular el slug de una categoria"""
+    def pre_save(self, *args, **kwargs):
+        """
+        """
         self.slug = self.name.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
 
 
 class PostType(models.Model):
@@ -50,9 +61,9 @@ class Post(models.Model):
     description = models.CharField(max_length=200, blank=False)
     content = RichTextField(default=" ", blank=False)
     category = models.ForeignKey(Category, default=1)
-    creation_date = models.DateTimeField(auto_now_add=True)
-    #update_date = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, default=3, blank=True)
+    created_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField()
+    author = models.ForeignKey(User, editable=False, null=True, blank=True)
     album = models.ForeignKey(general_models.Album, default=1, blank=True, null=True)
     # tags
 
@@ -61,8 +72,11 @@ class Post(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        """metodo de la clase post para calcular el slug de un post y crear un album asociado a ese post"""
+        """
+        metodo de la clase post para calcular el slug de un post y crear un album asociado a ese post
+        """
         self.slug = self.title.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
         if not self.pk:
             album = general_models.Album.objects.create(name='album ' + self.title, author=self.author)
             self.album = album
@@ -82,14 +96,17 @@ class Comment(models.Model):
     status = models.IntegerField(choices=Status, default=2, blank=True)
     title = models.CharField(max_length=50)
     content = models.TextField()
-    creation_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField()
     author = models.CharField(max_length=100)
     post = models.ForeignKey(Post)
     parent = models.ForeignKey('self', related_name='answers', null=True, blank=True)
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.updated_date = datetime.datetime.now()
 
     def post_save(self):
         self.notifyNewComment()
