@@ -10,9 +10,17 @@ import datetime
 from calendar import monthrange
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from shop import views as shop_views
 
 # Calendar views
 def next_events(request):
+    pass
+
+
+def list_events(request):
     pass
 
 
@@ -96,6 +104,7 @@ def month(request, username, year, month):
         'previous_month': previous_month,
         'next_month': next_month,
         'event_form': getEventform(request),
+        'shoppingcart': shop_views.getShoppingCart(request),
         # 'type': 1,
         #'current_day': current_day,
         #'current_month': current_month,
@@ -158,121 +167,53 @@ def day(request, username, year, month, day):
         'next_day': next_day,
         'event_form': getEventform(request),
         "search_form": general_views.getSearchForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
-# def event(request, event_slug):
-@login_required(redirect_field_name='custom_login')
-def event(request, event_slug=None):
-    # month = int(month)
-    # year = int(year)
-    # day = int(day)
+class EventUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    https://stackoverflow.com/questions/7122071/how-can-i-fill-up-form-with-model-object-data
+    https://ccbv.co.uk/projects/Django/1.5/django.views.generic.edit/UpdateView/
+    """
+    model = events_models.Event
+    template_name = 'event.html'
+    fields = ['title', 'description']
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+    context_object_name = 'event'
+    template_name_name = 'event_update_form'
 
-    # month_name = getMonthName(month)
-    # day_name = getDayName(datetime.datetime(year, month, day).weekday())
 
-    # previous_day = day-1
-    # next_day = day+1
-    # previous_day = unicode(previous_day)
-    # next_day = unicode(next_day)
-
-    try:
-        event = events_models.Event.objects.get(slug=event_slug)
-    except event.DoesNotExist:
-        event = None
-
+def add_event(request):
+    print("funcion añadir un evento")
     if request.method == 'POST':
-        print("se actualiza con la informacion")
-        event_form = events_forms.EventForm(request.POST, instance=event)
+        print("metodo post")
+        event_form = events_forms.EventForm(request.POST)
         if event_form.is_valid():
-            #data = event_form.cleaned_data
-            #user = request.user
-            #year = datetime.datetime.now().year
-            #month = data['month']
-            #day = data['day']
-            """
-            event.update(
-                title=data['title'],
-                description=data['description'],
-                type=data['type'],
-                address=data['address'],
-                privacity=data['privacity'],
-                owner=user,
-                start=datetime.datetime(int(year),int(month),int(day),int(data['start_hour']),int(data['start_minutes'])),
-                end=datetime.datetime(int(year),int(month),int(day),int(data['end_hour']),int(data['end_minutes'])),
-                notes=data['notes'])
-            """
+            print("formulario válido")
+            data = event_form.cleaned_data
             event = event_form.save(commit=False)
             event.owner = request.user
             event.save()
+            print(data)
+        else:
+            print("formulario no válido")
     else:
-        print("se muestra la informacion")
-        print(event)
-        # print(event.slug)
-            #title = request.GET.get('title')
-            #day = event.start.day
-            #month = event.start.month
-            #start_hour = event.start.hour
-            #start_minutes = event.start.minute
-        #data = {'slug': event.slug, 'description': event.description, 'privacity': event.privacity, 'type': event.type}
-        #print(data)
-        event = events_forms.EventForm(instance=event)
-
-    #day = unicode(day)
-    #month = unicode(month)
-    #year = unicode(year)
-
-    return render(request, 'event.html', {
-        # 'day': day,
-        # 'month': month,
-        # 'month_name': month_name,
-        # 'day_name': day_name,
-        # 'year': year,
-        # 'previous_day': previous_day,
-        # 'next_day': next_day,
-        'event': event,
-        'event_form': getEventform(request),
-        # "search_form": general_views.getSearchForm(),
-    })
-
-"""
-def add_event(request):
-    year = None
-    month = None
-    day = None
-    event = None
-
-    if request.method == 'POST':
-        event_form = getEventform(request)
-        if event_form.is_valid():
-            data = event_form.cleaned_data
-            user = request.user
-            year = datetime.datetime.now().year
-            month = data['month']
-            day = data['day']
-
-            event = events_models.Event.objects.create_or_update(
-                title=data['title'],
-                description=data['description'],
-                type=data['type'],
-                address=data['address'],
-                privacity=data['privacity'],
-                owner=user,
-                start=datetime.datetime(int(year),int(month),int(day),int(data['start_hour']),int(data['start_minutes'])),
-                end=datetime.datetime(int(year),int(month),int(day),int(data['end_hour']),int(data['end_minutes'])),
-                notes=data['notes']
-            )
-    else:
+        print("metodo get")
         event_form = events_forms.EventForm()
 
-    return redirect('calendar:detail_event', username=request.user.username, year=year, month=month, day=day, event_slug=event.slug)
-"""
+    return redirect('home')
+
 
 # Common Functions
 def getEventform(request):
+    print("funcion para obtener el formulario de evento")
     if request.method == 'POST':
+        print("metodo post")
         return events_forms.EventForm(request.POST)
     else:
+        print("metodo get")
         return events_forms.EventForm()
 
 

@@ -8,16 +8,57 @@
 ---------------------------------------------------------------*/
 
 /* ----------------------------------------------------
-  01. Nutrition Search
+  01. Awards
   02.
   03.
 -------------------------------------------------------*/
 
 /* ----------------------------------------------------
-	01. Nutrition Search
+	01. Awards
 -------------------------------------------------------*/
 
+.award_register {
+  border: 1px solid black;
+  margin-bottom: 30px;
+  height: 250px;
+  background-color: yellow;
+}
 
+.thumbnail_photo {
+  margin: 10px;
+  height: 230px;
+  width: 250px;
+  background-color: red;
+  float: left;
+}
+
+.award_content {
+  margin-left: 10px;
+  position: relative;
+  background-color: blue;
+  /*float: right;*/
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.award_content h2 {
+  align: center;
+  color: black;
+}
+
+.award_content p {
+  color: grey;
+}
+
+@media screen and (max-width: 400px) {
+   .award_content {
+    float: none;
+    margin-bottom: 30px;
+    width:auto;
+    border:0;
+    border-bottom:2px solid #000;
+  }
+}
 
 /* ----------------------------------------------------
 	02. Sport Search

@@ -47,7 +47,6 @@ INSTALLED_APPS = (
     'events',
     'awards',
     'rest_framework',
-    'guardian',
     'ckeditor',
     'corsheaders',
     'datetimewidget',
@@ -169,7 +168,6 @@ LOGIN_REDIRECT_URL = 'home'
 AUTHENTICATION_BACKENDS = [
     'healthylifeapp.backend.CustomBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
     ]
 
 REST_FRAMEWORK = {

@@ -10,7 +10,6 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 from healthylife.decorators import autoconnect
 from django.core.validators import URLValidator
-from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
 #from taggit.models import TagBase
 
@@ -21,13 +20,13 @@ from taggit.managers import TaggableManager
 @autoconnect
 class Address(models.Model):
     """Modelo para las direcciones postales"""
-    address_name = models.CharField(max_length=50, default='mi direccion')
-    city = models.CharField(max_length=50, default=' ', blank=True)
-    postal_code = models.CharField(max_length=5, default='     ', blank=True)
-    street = models.CharField(max_length=50, default=' ', blank=True)
-    number = models.CharField(max_length=4, default=' ', blank=True)
-    floor = models.CharField(max_length=3, default=' ', blank=True)
-    door = models.CharField(max_length=3, default=' ', blank=True)
+    address_name = models.CharField(max_length=50)
+    city = models.CharField(max_length=50, blank=True)
+    postal_code = models.CharField(max_length=5)
+    street = models.CharField(max_length=50, blank=True)
+    number = models.CharField(max_length=4, blank=True)
+    floor = models.CharField(max_length=3, blank=True)
+    door = models.CharField(max_length=3, blank=True)
     user = models.ForeignKey(User, default=1)
     is_company = models.BooleanField(default=False)
 
@@ -49,12 +48,14 @@ class Address(models.Model):
 
 
 class BankInformation(models.Model):
-    """modelo para la informacion bancaria"""
-    bank_name = models.CharField(max_length=50, default='mi informacion bancaria')
-    account = models.CharField(max_length=20, default=' ', blank=True)
-    month = models.CharField(max_length=2, default=' ', blank=True)
-    year = models.CharField(max_length=4, default=' ', blank=True)
-    security_code = models.CharField(max_length=3, default=' ', blank=True)
+    """
+    Bank information model
+    """
+    bank_name = models.CharField(max_length=50)
+    account = models.CharField(max_length=20, blank=True)
+    month = models.CharField(max_length=2, blank=True)
+    year = models.CharField(max_length=4, blank=True)
+    security_code = models.CharField(max_length=3, blank=True)
     user = models.ForeignKey(User, default=1)
     is_company = models.BooleanField(default=False)
 
@@ -75,7 +76,7 @@ class UserProfile(models.Model):
     """Modelo para el perfil de un usuario"""
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100, blank=True)
-    phone = models.CharField(max_length=9, default='         ', blank=True)
+    phone = models.CharField(max_length=9, blank=True)
     profile_image = models.ImageField(upload_to="photos", default='user_default_image.jpg', blank=True)
 
     def __unicode__(self):

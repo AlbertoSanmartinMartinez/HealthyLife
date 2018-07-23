@@ -67,10 +67,14 @@
                 <a href="{% url 'shop:product_list' %}">Volver a la Tienda</a>
               </div>
               <div class="coupon">
-                <h3>Coupón</h3>
-                <p>Ver tus premios y descuentos</p>
-                <input type="text" placeholder="Coupon code" />
-                <input type="submit" value="Apply Coupon" />
+                {% if user.is_authenticated %}
+                  <h3><a href="{% url 'awardsapp:awards_profile' user.username %}">Ver tus premios y descuentos</a></h3>
+                {% endif %}
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <input type="text" placeholder="Coupon code" />
+                  <input type="submit" value="Apply Coupon" />
+                </form>
               </div>
             </div>
             <div class="col-md-4 col-sm-5 col-xs-12">
@@ -112,7 +116,7 @@
                   </tbody>
                 </table>
                 <div class="wc-proceed-to-checkout">
-                  <a href="checkout.html">Finalizar Pedido</a>
+                  <a href="{% url 'shop:order_checkout' %}">Finalizar Pedido</a>
                 </div>
               </div>
             </div>

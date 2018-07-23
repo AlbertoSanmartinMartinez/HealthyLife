@@ -8,7 +8,7 @@
       <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 smt-30 xmt-30">
         <div class="map-contacts">
           <!--<form id="contact-form" method="POST">-->
-          <form action="{% url 'calendar:detail_event' event_slug=event.slug %}" method="POST">
+          <form method="POST">
             {% csrf_token %}
 
             <!-- Event Form Area -->

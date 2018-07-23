@@ -1549,7 +1549,7 @@ product__style--7
     justify-content: center;
 }
 .team__hover__action .social__icon li {
-    padding: 0 17px;
+    padding: 17px 17px;
 }
 
 .team__hover__action .social__icon li a i {

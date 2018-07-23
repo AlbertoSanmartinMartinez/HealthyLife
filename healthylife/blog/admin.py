@@ -4,7 +4,6 @@
 from __future__ import unicode_literals
 from django.contrib import admin
 from blog import models as blog_models
-from guardian.admin import GuardedModelAdmin
 
 # Admin Blog Models
 class CategoryAdmin(admin.ModelAdmin):
@@ -67,13 +66,13 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(blog_models.Post, PostAdmin)
 
 
-class TagsAdmin(GuardedModelAdmin):
+class TagsAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_date')
 
 admin.site.register(blog_models.Tag, TagsAdmin)
 
 
-class CommentAdmin(GuardedModelAdmin):
+class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'status', 'title', 'created_date', 'author', 'post', 'parent')
     list_editable = ('status', 'author')
     list_filter = ('status', 'parent')

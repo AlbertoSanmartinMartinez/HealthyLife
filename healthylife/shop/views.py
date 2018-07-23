@@ -13,6 +13,7 @@ from shop.shoppingcart import ShoppingCart
 # Shop Views
 def product_list(request, shop_category_slug=None):
     """
+    Shop view for list of products
     """
 
     category = None
@@ -73,6 +74,9 @@ def product_list(request, shop_category_slug=None):
 
 
 def product_detail(request, product_slug):
+    """
+    Shop view for product detail
+    """
     from healthylifeapp import views as general_views
 
     product = get_object_or_404(shop_models.Product, slug=product_slug)
@@ -96,13 +100,17 @@ def product_detail(request, product_slug):
 
 
 def last_products():
+    """
+    Shop view for liast products
+    """
+
     return shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
 
 
 # Review Views
 def add_review(request, product_slug):
     """
-    Method that add comment to product:
+    Method that add a review to a product:
     - from existing user and new user
     - new comments and answers
     If user is new add it to subscribers list
@@ -149,10 +157,13 @@ def shoppingcart(request):
     """
     ShoppinCart view
     """
+    from awards import forms as awards_forms
+
     cart = getShoppingCart(request)
 
     return render(request, 'shoppingcart.html', {
         'shoppingcart': cart,
+        'coupon_form': awards_forms.CouponForm()
     })
 
 
@@ -171,7 +182,7 @@ def shoppincart_resume(request):
 
 def cartAdd(request, product_id):
     """
-    Function that add products to shoppingcart
+    Function that add and actualize products to shoppingcart
     """
     print("funcion add de la vista")
     print(product_id)
@@ -195,27 +206,6 @@ def cartAdd(request, product_id):
 
     return redirect('shop:shoppingcart_detail')
 
-"""
-def cartRemove(request, product_id):
-
-    cart = ShoppingCart(request)
-    product = get_object_or_404(shop_models.Product, id=product_id)
-    cart.remove(product)
-
-    return redirect('shop:shoppingcart_detail')
-
-
-def cartUpdate(request, product_id):
-
-    cart = ShoppingCart(request)
-    product = get_object_or_404(shop_models.Product, id=product_id)
-    form = shop_forms.ShoppingCartForm(request.POST)
-    if form.is_valid():
-        data = form.cleaned_data['quantity']
-        cart.update(product, data)
-
-    return redirect('shop:shoppingcart_detail')
-"""
 
 # Payment Views
 """
@@ -253,11 +243,20 @@ def payment_done(request):
 def payment_canceled(request):
     pass
 
+
 # Shipping Views
 def shipping_checkout(request):
 
 
     return render(request, 'shipping_checkout.html', {
+    })
+
+
+# Order Views
+def order_checkout(request):
+
+
+    return render(request, 'order_checkout.html', {
     })
 
 

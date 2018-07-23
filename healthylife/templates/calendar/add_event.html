@@ -30,86 +30,20 @@
 
       <div class="filter__content">
 
-        <form action="{% url 'calendar:detail_event' event_slug=None %}" method="POST">
+        <form action="{% url 'calendar:add_event' %}" method="POST">
           {% csrf_token %}
 
-          <!-- Single Filter -->
+          {{ event_form.as_p }}
+          
+          <!-- Filter Button -->
           <div class="fiter__content__inner">
             <div class="single__filter">
-              <h3>Privacidad</h3>
-              {{ event_form.privacity }}
+              <div class="contact-btn">
+                <input type="submit" class="fv-btn" value="Añadir">
+              </div>
             </div>
           </div>
-
-          <!-- Single Filter -->
-          <div class="fiter__content__inner">
-            <div class="single__filter">
-              <h3>Categoria</h3>
-              {{ event_form.type }}
-            </div>
-          </div>
-
-        <!-- Single Filter -->
-        <div class="fiter__content__inner">
-          <div class="single__filter">
-            {{ event_form.title }}
-          </div>
-        </div>
-
-        <!-- Single Filter -->
-        <div class="fiter__content__inner">
-          <div class="single__filter">
-            {{ event_form.description }}
-          </div>
-        </div>
-
-        <!-- Single Filter -->
-        <div class="fiter__content__inner">
-            <div class="single__filter">
-            {{ event_form.address }}
-          </div>
-        </div>
-
-        <!-- Single Filter -->
-        <div class="fiter__content__inner">
-          <div class="single__filter">
-            <h3>Día</h3>
-            {{ event_form.participant }}
-          </div>
-        </div>
-
-        <!-- Single Filter -->
-        <div class="fiter__content__inner">
-          <div class="single__filter">
-            <h3>Inicio</h3>
-            {{ event_form.start }}
-          </div>
-        </div>
-
-        <!-- Single Filter -->
-        <div class="fiter__content__inner">
-          <div class="single__filter">
-            <h3>Fin</h3>
-            {{ event_form.end }}
-          </div>
-        </div>
-
-        <!-- Single Filter -->
-        <div class="fiter__content__inner">
-          <div class="single__filter">
-            {{ event_form.notes }}
-          </div>
-        </div>
-
-        <!-- Filter Button -->
-        <div class="fiter__content__inner">
-          <div class="single__filter">
-            <div class="contact-btn">
-              <input type="submit" class="fv-btn" value="Añadir">
-            </div>
-          </div>
-        </div>
-      </form>
+        </form>
       </div>
     </div>
   </div>

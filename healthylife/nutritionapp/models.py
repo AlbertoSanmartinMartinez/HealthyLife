@@ -80,7 +80,7 @@ class Dish(models.Model):
 
 
 class Diet(models.Model):
-    DietType = ((1, "Definicion"), (2, "Aumento"), (3, "Mantenimiento"), (2, "Adelgazamiento"))
+    DietType = ((1, "Definicion"), (2, "Volumen"), (3, "Mantenimiento"), (2, "Adelgazamiento"))
     user = models.ForeignKey(User, default=1)
     name = models.CharField(max_length=100)
     type = models.IntegerField(choices=DietType, default=0)

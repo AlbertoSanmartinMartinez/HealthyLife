@@ -36,15 +36,8 @@
               <h2 class="contact__title">Información personal</h2>
             </div>
 
-            <form id="contact-form" method="POST" action="{% url 'profile' username=user.username %}">
+            <form method="POST" action="{% url 'profile' username=user.username %}">
               {% csrf_token %}
-
-              <!-- User Form Area -->
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ user_form.username }}
-                </div>
-              </div>
 
               <!-- User Profile Form Area -->
               <div class="single-contact-form">
@@ -67,78 +60,105 @@
                   <img src="{{ user_profile.profile_image.url }}">
                 </div>
               </div>
-
-              <div class="contact-title">
-                <h2 class="contact__title">Información bancaria</h2>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ bank_information_form.bank_name }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ bank_information_form.account }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ bank_information_form.month }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ bank_information_form.year }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ bank_information_form.security_code }}
-                </div>
-              </div>
-              <div class="contact-title">
-                <h2 class="contact__title">Información de envío</h2>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ address_form.address_name }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ address_form.city }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ address_form.postal_code }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ address_form.street }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ address_form.number }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ address_form.floor }}
-                </div>
-              </div>
-              <div class="single-contact-form">
-                <div class="contact-box subject">
-                  {{ address_form.door }}
-                </div>
-              </div>
+              <br>
               <div class="contact-btn">
-                <input type="submit" class="fv-btn" value="Actualizar">
+                <input type="submit" name="user_profile" class="fv-btn" value="Actualizar">
               </div>
             </form>
           </div>
+          <br>
+
+          <div class="contact-form-wrap">
+              <div class="contact-title">
+                <h2 class="contact__title">Información bancaria</h2>
+              </div>
+
+              <form method="POST" action="{% url 'profile' username=user.username %}">
+                {% csrf_token %}
+
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ bank_information_form.bank_name }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ bank_information_form.account }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ bank_information_form.month }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ bank_information_form.year }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ bank_information_form.security_code }}
+                  </div>
+                </div>
+                <br>
+                <div class="contact-btn">
+                  <input type="submit" name="bank_information" class="fv-btn" value="Actualizar">
+                </div>
+              </form>
+            </div>
+            <br>
+
+            <div class="contact-form-wrap">
+              <div class="contact-title">
+                <h2 class="contact__title">Información de envío</h2>
+              </div>
+
+              <form method="POST" action="{% url 'profile' username=user.username %}">
+                {% csrf_token %}
+
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ address_form.address_name }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ address_form.city }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ address_form.postal_code }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ address_form.street }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ address_form.number }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ address_form.floor }}
+                  </div>
+                </div>
+                <div class="single-contact-form">
+                  <div class="contact-box subject">
+                    {{ address_form.door }}
+                  </div>
+                </div>
+                <br>
+                <div class="contact-btn">
+                  <input type="submit" name="address" class="fv-btn" value="Actualizar">
+                </div>
+              </form>
+            </div>
+
         </div>
       </div>
     </div>

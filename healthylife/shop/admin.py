@@ -4,7 +4,6 @@
 from __future__ import unicode_literals
 from django.contrib import admin
 from shop import models as shop_models
-from guardian.admin import GuardedModelAdmin
 
 # Admin Shop Models
 class ProductAdmin(admin.ModelAdmin):
@@ -74,12 +73,12 @@ class ShopingChartAdmin(admin.ModelAdmin):
 
 admin.site.register(shop_models.ShopingChart, ShopingChartAdmin)
 
-
+"""
 class ProviderAdmin(admin.ModelAdmin):
     list_display = ['name', 'created_date']
 
 admin.site.register(shop_models.Provider, ProviderAdmin)
-
+"""
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ['name', 'created_date']
@@ -90,6 +89,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ['code', 'created_date', 'status']
 
 admin.site.register(shop_models.Order, OrderAdmin)
+
 """
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('id', 'image', 'description', 'alt', 'album')
@@ -107,6 +107,7 @@ class AlbumAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Album, AlbumAdmin)
 """
+
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('id', 'status', 'title', 'created_date', 'author', 'product', 'parent')
     list_editable = ('status', 'author')
@@ -125,9 +126,11 @@ class ReviewAdmin(admin.ModelAdmin):
 
 admin.site.register(shop_models.Review, ReviewAdmin)
 
+"""
 class DiscountAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'amount')
 
 admin.site.register(shop_models.Discount, DiscountAdmin)
+"""
 
 admin.site.register(shop_models.Shipping)

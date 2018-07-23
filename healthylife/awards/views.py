@@ -5,6 +5,7 @@ from django.shortcuts import render
 from healthylifeapp import views as general_views
 from awards import forms as awards_forms
 from shop import views as shop_views
+from awards import models as award_models
 
 # Award views
 def awards(request):
@@ -22,6 +23,14 @@ def awards(request):
     })
 
 
+def best_awards():
+    """
+    Award view for best wards in home slide
+    """
+
+    return award_models.Award.objects.filter(status=1).order_by("-created_date")[:3]
+
+
 def getAwardsFilterForm(request):
     """
     """
@@ -34,8 +43,18 @@ def getAwardsFilterForm(request):
 
 
 def awards_profile(request, username):
+    """
+    """
+    awards = award_models.Award.objects.filter(content_type_id=4, object=7)
+    print(awards)
+
     return render(request, 'awards_profile.html', {
+        'awards': awards,
         "search_form": general_views.getSearchForm(),
         'subscribe_form': general_views.getSubscribeForm(),
         'shoppingcart': shop_views.getShoppingCart(request),
     })
+
+
+def coupon(request):
+    pass

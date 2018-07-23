@@ -53,7 +53,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = event_models.Event
-        # exclude = ['slug', 'owner', 'creation_date', 'updated_date']
+        # exclude = ['slug', 'owner', 'created_date', 'updated_date']
         fields = '__all__'
 
 

@@ -36,6 +36,7 @@ class Category(models.Model):
         self.updated_date = datetime.datetime.now()
 
 
+"""
 @autoconnect
 class Discount(models.Model):
     name = models.CharField(max_length=50)
@@ -48,10 +49,9 @@ class Discount(models.Model):
         return self.name
 
     def pre_save(self):
-        """
-        """
         self.slug = self.name.replace(" ", "_").lower()
         self.updated_date = datetime.datetime.now()
+"""
 
 
 @autoconnect
@@ -73,7 +73,7 @@ class Product(models.Model):
     Size = ((1, "XS"), (2, 'S'), (3, 'M'), (4, 'L'), (5, 'XL'))
     size = models.IntegerField(choices=Size, default=1, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0)
-    discount = models.ForeignKey(Discount, blank=True, null=True)
+    # award = models.ForeignKey(award_models.Award, blank=True, null=True)
     author = models.ForeignKey(User, editable=False, null=True, blank=True)
     # tags
 
@@ -91,52 +91,11 @@ class Product(models.Model):
         self.slug = self.name.replace(" ", "_").lower()
         self.updated_date = datetime.datetime.now()
         if not self.pk:
-            album = general_models.Album.objects.create(name='album '+self.name, author=self.author)
+            album = general_models.Album.objects.create(name='Album Producto '+self.name, author=self.author)
             self.album = album
             general_models.Image.objects.create(album=self.album, header_image=True, image='photos/header_product_default_image.jpg')
         general_models.Album.objects.filter(id=self.album.id).update(name='Album Product ' + self.name)
         super(Product, self).save(*args, **kwargs)
-
-    """
-    def get_absolute_url(self):
-        return reverse('shop:product_detail', args=[self.slug])
-    """
-
-
-class ShopingChart(models.Model):
-    # name = models.CharField(max_length=100, db_index=True)
-    created_date = models.DateTimeField(auto_now=True)
-    updated_date = models.DateTimeField(auto_now_add=True)
-    code = models.CharField(max_length=300, default="", unique=True)
-    products = models.CharField(max_length=300, default="")
-    STATUS = ((1, 'Activo'), (2, 'Abandonado'))
-    status = models.IntegerField(choices=STATUS, default=1)
-    # controlar el estado del carrito
-    # convertir en pedido cuando se finaliza el pedido
-    # saber de quien es el carrito
-
-    def __unicode__(self):
-        return self.code
-
-
-# https://www.wordstream.com/blog/ws/2016/03/17/shopping-cart-abandonment
-class Order(models.Model):
-    code = models.CharField(max_length=300, default="")
-    created_date = models.DateTimeField(auto_now=True)
-    OrderStatus = ((1, 'Pendiente de pago'), (2, 'Cancelado'), (3, 'Pagado'), (4, 'En preparación'), (5, 'Enviado'), (6, 'Entregado'))
-    status = models.IntegerField(choices=OrderStatus, default=1)
-    # pedidos para cada empresa
-
-    def __unicode__(self):
-        return self.code
-
-
-class Provider(models.Model):
-    name = models.CharField(max_length=100, db_index=True, default='proveedor')
-    created_date = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return self.name
 
 
 class Tag(models.Model):
@@ -147,15 +106,6 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.name
-
-
-# SEO Models
-class MetaData(models.Model):
-    pass
-
-
-# Payment Models
-
 
 
 @autoconnect
@@ -184,6 +134,55 @@ class Review(models.Model):
         print("notificacion enviada")
 
 
+# ShoppinCart Models
+class ShopingChart(models.Model):
+    # name = models.CharField(max_length=100, db_index=True)
+    created_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField(auto_now_add=True)
+    code = models.CharField(max_length=300, default="", unique=True)
+    products = models.CharField(max_length=300, default="")
+    STATUS = ((1, 'Activo'), (2, 'Abandonado'))
+    status = models.IntegerField(choices=STATUS, default=1)
+    # controlar el estado del carrito
+    # convertir en pedido cuando se finaliza el pedido
+    # saber de quien es el carrito
+
+    def __unicode__(self):
+        return self.code
+
+
+# Order Models
+# https://www.wordstream.com/blog/ws/2016/03/17/shopping-cart-abandonment
+class Order(models.Model):
+    code = models.CharField(max_length=300, default="")
+    created_date = models.DateTimeField(auto_now=True)
+    OrderStatus = ((1, 'Pendiente de pago'), (2, 'Cancelado'), (3, 'Pagado'), (4, 'En preparación'), (5, 'Enviado'), (6, 'Entregado'))
+    status = models.IntegerField(choices=OrderStatus, default=1)
+    # pedidos para cada empresa
+
+    def __unicode__(self):
+        return self.code
+
+
+"""
+class Provider(models.Model):
+    name = models.CharField(max_length=100, db_index=True, default='proveedor')
+    created_date = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.name
+"""
+
+
+# SEO Models
+class MetaData(models.Model):
+    pass
+
+
+# Payment Models
+
+
+# Shipping Models
 class Shipping(models.Model):
     company = models.CharField(max_length=100)
     # weight

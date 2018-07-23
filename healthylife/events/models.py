@@ -28,22 +28,23 @@ class Event(models.Model):
     EVENT_TYPE = ((1, 'Deporte'), (2, 'Nutrición'), (3, 'Salud'))
     type = models.IntegerField(choices=EVENT_TYPE, default=1)
     owner = models.ForeignKey(User)
-    creation_date = models.DateTimeField(auto_now=True)
-    updated_date= models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
+    updated_date= models.DateTimeField()
     participant = models.ManyToManyField(User, related_name='participants', blank=True)
-    start = models.DateTimeField(default=datetime.datetime.now())
-    end = models.DateTimeField(default=datetime.datetime.now())
+    start = models.DateTimeField()
+    end = models.DateTimeField()
     address = models.CharField(max_length=250, default='', blank=True)
     notes = models.CharField(max_length=250, default='', blank=True)
 
     def __unicode__(self):
         return self.title
 
-    def pre_save(self):
-        """Metodo para aignar el slug de un evento automaticamente al crearlo"""
+    def save(self):
+        """
+        Metodo para aignar el slug de un evento automaticamente al crearlo
+        """
         self.slug = self.title.replace(" ", "_").lower()
-        # self.year = str(datetime.datetime.now().year)
-        # hora final mayor que hora inicial
+        self.updated_date = datetime.datetime.now()
 
     def inviteParticipants(self):
         """

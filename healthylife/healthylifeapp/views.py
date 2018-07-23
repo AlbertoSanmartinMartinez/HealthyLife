@@ -43,17 +43,18 @@ def home(request):
     from shop import forms as shop_forms
     from shop import views as shop_views
     from awards import models as award_models
+    from awards import views as award_views
 
     last_posts = blog_models.Post.objects.filter(status=1).order_by("-created_date")[:3]
-    last_products = shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
-    #next events
-    best_awards = award_models.Award.objects.filter(status=1).order_by("-created_date")[:3]
+    # last_products = shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
+    # next events
+    # best_awards = award_models.Award.objects.filter(status=1).order_by("-created_date")[:3]
 
     return render(request, "home.html", {
         "search_form":getSearchForm(),
         "last_posts": last_posts,
-        "last_products": last_products,
-        "best_awards": best_awards,
+        "last_products": shop_views.last_products(),
+        "best_awards": award_views.best_awards(),
         'subscribe_form': getSubscribeForm(),
         'shoppingcart_form': shop_forms.ShoppingCartForm(),
         'shoppingcart': shop_views.getShoppingCart(request),
@@ -341,8 +342,7 @@ def search(request):
 @login_required(redirect_field_name='custom_login')
 def profile(request, username):
     """
-    Vista que muestra la informacion del perfil de usuario
-    multiple forms
+    View for user information section
     https://www.codementor.io/lakshminp/handling-multiple-forms-on-the-same-page-in-django-fv89t2s3j
     """
     from shop import views as shop_views
@@ -352,34 +352,34 @@ def profile(request, username):
     bank_information = general_models.BankInformation.objects.get(user_id=user.id, is_company=False)
     address = general_models.Address.objects.get(user_id=user.id, is_company=False)
 
-    if request.method == 'POST':
-        user_form = general_forms.UserForm(data=request.POST, instance=request.user)
+    if request.method == 'POST' and 'user_profile' in request.POST:
         user_profile_form = general_forms.UserProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
-        address_form = general_forms.AddressForm(data=request.POST, instance=address)
-        bank_information_form = general_forms.BankInformationForm(data=request.POST, instance=bank_information)
-
-        if user_form.is_valid():
-            user_form.save()
         if user_profile_form.is_valid():
             user_profile_form.save()
-        if bank_information_form.is_valid():
-            bank_information_form.save()
-        if address_form.is_valid():
-            address_form.save()
-
     else:
-        user_form = general_forms.UserForm(instance=request.user)
-        bank_information_form = general_forms.BankInformationForm(instance=bank_information)
-        address_form = general_forms.AddressForm(instance=address)
         user_profile_form = general_forms.UserProfileForm(instance=request.user.userprofile)
 
+    if request.method == 'POST' and 'bank_information' in request.POST:
+        bank_information_form = general_forms.BankInformationForm(data=request.POST, instance=bank_information)
+        if bank_information_form.is_valid():
+            bank_information_form.save()
+    else:
+        bank_information_form = general_forms.BankInformationForm(instance=bank_information)
+
+    if request.method == 'POST' and 'address' in request.POST:
+        address_form = general_forms.AddressForm(data=request.POST, instance=address)
+        if address_form.is_valid():
+            address_form.save()
+    else:
+        address_form = general_forms.AddressForm(instance=address)
+
     return render(request, 'profile.html', {
-        "user_form": user_form,
+        # "user_form": user_form,
         "bank_information_form": bank_information_form,
         "address_form": address_form,
         "user_profile_form": user_profile_form,
-        "search_form": getSearchForm(),
         "user_profile": user_profile,
+        "search_form": getSearchForm(),
         'subscribe_form': getSubscribeForm(),
         'shoppingcart': shop_views.getShoppingCart(request),
     })
