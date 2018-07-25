@@ -80,10 +80,25 @@ class ProviderAdmin(admin.ModelAdmin):
 admin.site.register(shop_models.Provider, ProviderAdmin)
 """
 
-class TagAdmin(admin.ModelAdmin):
-    list_display = ['name', 'created_date']
+class TagsAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    readonly_fields = ('author', 'updated_date', 'slug')
 
-admin.site.register(shop_models.Tag, TagAdmin)
+    def get_queryset(self, request):
+        queryset = super(TagsAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(author_id=request.user.id)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Save the user that create a tag as author
+        """
+        if not obj.author:
+            obj.author = request.user
+        obj.save()
+
+admin.site.register(shop_models.Tag, TagsAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['code', 'created_date', 'status']

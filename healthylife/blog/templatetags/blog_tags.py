@@ -29,14 +29,37 @@ def get_user_image(username):
     Method that return user profile image from user
     """
     user_profile = None
-    print("funcion para obtener la foto")
-    print(username)
     try:
         user = User.objects.filter(username=username)
     except:
         user = None
     if user:
         user_profile = general_models.UserProfile.objects.get(user_id=user)
-        print(user_profile.profile_image)
 
     return user_profile
+
+
+@register.simple_tag
+def get_user_authenticated(request, username):
+    """
+    Method that check if an author of post is an user registered or not
+    """
+    try:
+        user = get_object_or_404(User, username=username)
+    except:
+        user = None
+    if user:
+        if str(request.user) == str(user.username):
+            return True
+
+    return False
+
+
+@register.simple_tag
+def get_comment_parent_id(comment_parent_id):
+    print("comment parent id is "+str(comment_parent_id))
+    return comment_parent_id
+
+
+
+#

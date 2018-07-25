@@ -30,9 +30,8 @@ class PostSerializer(HyperlinkedModelSerializer):
         fields = ('uri', 'id', 'status', 'category', 'author', 'title', 'description', 'content', 'created_date')
 
 
-
+"""
 class CommentSerializer(HyperlinkedModelSerializer):
-    """clase para serializar el modelo comentario"""
     uri = HyperlinkedIdentityField(
         view_name = 'api:comment-detail',
     )
@@ -42,3 +41,4 @@ class CommentSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = blog_models.Comment
         fields = ('uri', 'status', 'title', 'content', 'author_id', 'post_id')
+"""

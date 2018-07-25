@@ -10,6 +10,25 @@ from django.contrib.auth.models import User
 import datetime
 
 # Shop Models
+class Tag(models.Model):
+    name = models.CharField(primary_key=True, max_length=50, unique=True)
+    slug = models.CharField(max_length=100, blank=True)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True, related_name='shop_tag_author')
+    created_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField(default=datetime.datetime.now())
+
+    def __unicode__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        """
+        metodo de la clase Tag para calcular el slug de una etiqueta y actualizar la fecha de creación
+        """
+        self.slug = self.name.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
+        super(Tag, self).save(*args, **kwargs)
+
+
 @autoconnect
 class Category(models.Model):
     """
@@ -36,24 +55,6 @@ class Category(models.Model):
         self.updated_date = datetime.datetime.now()
 
 
-"""
-@autoconnect
-class Discount(models.Model):
-    name = models.CharField(max_length=50)
-    DiscountType = ((1, "Cantidad"), (2, "Porcentaje"))
-    type = models.IntegerField(choices=DiscountType, default=1)
-    amount = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    author = models.ForeignKey(User, editable=False, null=True, blank=True)
-
-    def __unicode__(self):
-        return self.name
-
-    def pre_save(self):
-        self.slug = self.name.replace(" ", "_").lower()
-        self.updated_date = datetime.datetime.now()
-"""
-
-
 @autoconnect
 class Product(models.Model):
     Status = ((1, "Activo"), (2, 'Inactivo'))
@@ -75,7 +76,7 @@ class Product(models.Model):
     weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0)
     # award = models.ForeignKey(award_models.Award, blank=True, null=True)
     author = models.ForeignKey(User, editable=False, null=True, blank=True)
-    # tags
+    tags = models.ManyToManyField(Tag, related_name='shop_tags')
 
     class Meta:
         verbose_name = 'product'
@@ -96,16 +97,6 @@ class Product(models.Model):
             general_models.Image.objects.create(album=self.album, header_image=True, image='photos/header_product_default_image.jpg')
         general_models.Album.objects.filter(id=self.album.id).update(name='Album Product ' + self.name)
         super(Product, self).save(*args, **kwargs)
-
-
-class Tag(models.Model):
-    name = models.CharField(primary_key=True, max_length=50)
-    created_date = models.DateTimeField(auto_now=True)
-    # slug
-    # author
-
-    def __unicode__(self):
-        return self.name
 
 
 @autoconnect
@@ -162,16 +153,6 @@ class Order(models.Model):
 
     def __unicode__(self):
         return self.code
-
-
-"""
-class Provider(models.Model):
-    name = models.CharField(max_length=100, db_index=True, default='proveedor')
-    created_date = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return self.name
-"""
 
 
 # SEO Models

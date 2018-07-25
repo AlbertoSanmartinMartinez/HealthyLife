@@ -107,7 +107,21 @@ def author_posts(request, username):
     categories = blog_models.Category.objects.order_by("name")
 
     return render(request, 'blog.html', {
-        "categories":categories,
+        "posts":posts,
+        "categories": getBlogCategories(),
+        "search_form": general_views.getSearchForm(),
+        'subscribe_form': general_views.getSubscribeForm(),
+        'shoppingcart': shop_views.getShoppingCart(request),
+    })
+
+
+def tag_posts(request, tag_slug):
+    print(tag_slug)
+    tag = blog_models.Tag.objects.filter(slug=tag_slug)
+    print(tag)
+    posts = blog_models.Post.objects.filter(status=1, tags=tag)
+
+    return render(request, 'blog.html', {
         "posts":posts,
         "categories": getBlogCategories(),
         "search_form": general_views.getSearchForm(),
@@ -135,8 +149,10 @@ def add_comment(request, post_slug):
     comment_parent = None
 
     try:
+        print("probamos a coger el identificador del padre")
         comment_parent_id = int(request.POST.get('comment_parent_id'))
     except:
+        print("el identificador del padre no existe")
         comment_parent_id = None
 
     if comment_form.is_valid():
@@ -152,16 +168,30 @@ def add_comment(request, post_slug):
                 name = user.username
 
         if comment_parent_id:
+            print("el identificador del padre existe")
             comment_parent = blog_models.Comment.objects.get(id=comment_parent_id)
             if comment_parent:
                 comment_parent_id = comment_parent.id
 
         blog_models.Comment.objects.create(
+            status=2,
             title=data['title'],
             content=data['content'],
             author=name,
             post=post,
             parent=comment_parent)
+
+    return redirect('blog:detail_post', post_slug=post.slug)
+
+
+def delete_comment(request, comment_id):
+    print("funcion que borrar un comentario")
+    print(comment_id)
+    comment = get_object_or_404(blog_models.Comment, id=comment_id)
+    post = get_object_or_404(blog_models.Post, id=comment.post.id)
+    print(comment)
+    print(post)
+    comment.delete()
 
     return redirect('blog:detail_post', post_slug=post.slug)
 
@@ -225,7 +255,7 @@ class APICategoryDetail(generics.RetrieveUpdateDestroyAPIView):
         queryset = blog_models.Category.objects.all()
         queryset = queryset.filter(name=self.request.query_params.get('category_id'))
 
-
+"""
 class APICommentList(generics.ListCreateAPIView):
     #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     model = blog_models.Category
@@ -234,10 +264,15 @@ class APICommentList(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         data = self.request.query_params
         return blog_models.Comment.objects.filter(post_id=data['post_id'])
-
-
+"""
+"""
 class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = (IsOwnerOrReadOnly,)
     # model = models.Category
     queryset = blog_models.Comment.objects.all()
     serializer_class = blog_serializer.CommentSerializer
+"""
+
+
+
+#

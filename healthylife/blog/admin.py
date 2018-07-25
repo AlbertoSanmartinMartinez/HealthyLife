@@ -62,30 +62,51 @@ class PostAdmin(admin.ModelAdmin):
         if not obj.author:
             obj.author = request.user
         obj.save()
+    
 
 admin.site.register(blog_models.Post, PostAdmin)
 
 
 class TagsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_date')
+    list_display = ('name',)
+    readonly_fields = ('author', 'updated_date', 'slug')
+
+    def get_queryset(self, request):
+        queryset = super(TagsAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(author_id=request.user.id)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Save the user that create a tag as author
+        """
+        if not obj.author:
+            obj.author = request.user
+        obj.save()
 
 admin.site.register(blog_models.Tag, TagsAdmin)
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'status', 'title', 'created_date', 'author', 'post', 'parent')
-    list_editable = ('status', 'author')
+    list_display = ('id', 'status', 'title', 'author', 'post', 'parent')
+    list_editable = ('status',)
     list_filter = ('status', 'parent')
-    search_fields = ('title', 'content', 'author', 'post')
+    search_fields = ('title', 'content',)
+    readonly_fields = ('author', 'updated_date')
 
     def get_queryset(self, request):
-        """
-        Show only comments from the post created by user
-        """
         queryset = super(CommentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return queryset
         posts = blog_models.Post.objects.filter(author_id=request.user.id)
         return queryset.filter(post_id__in=posts)
 
+
 admin.site.register(blog_models.Comment, CommentAdmin)
+
+
+
+
+
+#

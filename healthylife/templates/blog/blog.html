@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Start Post Information Area -->
-                <div class="blog__hover__info">
+                <!--div class="blog__hover__info">
                   <div class="blog__hover__action">
                     <ul class="bl__meta">
                       <li>By :
@@ -74,7 +74,8 @@
                       <a class="read__more__btn" href="{% url 'blog:detail_post' post_slug=post.slug %}">Leer Más</a>
                     </div>
                   </div>
-                </div>
+                </div>-->
+                <a class="read__more__btn" href="{% url 'blog:detail_post' post_slug=post.slug %}">Leer Más</a>
               </div>
             </div>
           </div>
@@ -82,7 +83,12 @@
         </div>
       </div>
 
+      <!-- Deatil Post page -->
+      {% block detail_post %}
+      {% endblock %}
+
       <!-- Pagination Blog Button -->
+      
       <div class="row mt--60">
         <div class="col-md-12">
           <div class="htc__loadmore__btn">
@@ -100,9 +106,5 @@
     </div>
   </div>
 </section>
-
-  <!-- Deatil Post page -->
-  {% block detail_post %}
-  {% endblock %}
 
 {% endblock %}

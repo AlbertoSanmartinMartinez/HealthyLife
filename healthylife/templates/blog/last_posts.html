@@ -22,6 +22,8 @@
             <div class="blog foo">
               <div class="blog__inner">
                 <div class="blog__thumb">
+
+                  <!-- Star Header Image Area -->
                   {% for item in post.album.image_set.all %}
                     {% if item.header_image %}
                       <a href="">
@@ -51,11 +53,11 @@
                   </div>
                 </div>-->
               </div>
-              <p>
+              <!--<p>
                 {{ post.created_date.day }}/{{ post.created_date.month }}/{{ post.created_date.year }}<br>
                 <a href="{% url 'blog:author_posts' username=post.author.username %}">{{ post.author.username }}</a><br>
                 <a href="{% url 'blog:category_posts' category=post.category.slug %}">{{ post.category.name }}</a>
-              </p>
+              </p>-->
               <a class="read__more__btn" href="{% url 'blog:detail_post' post_slug=post.slug %}">Leer Más</a>
             </div>
           </div>

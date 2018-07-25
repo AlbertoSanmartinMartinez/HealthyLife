@@ -29,20 +29,38 @@ class PostFilter(forms.ModelForm):
         model = blog_models.Post
         exclude = ['description', 'content']
 
-class CommentFormAuthenticated(forms.ModelForm):
+
+class CommentForm(forms.ModelForm):
+    
+    class Meta:
+        model = blog_models.Comment
+        fields = '__all__'
+
+
+class CommentFormAuthenticated(forms.Form):
     title = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
     content = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
+    """
     class Meta:
         model = blog_models.Comment
         fields = ['title', 'content']
+    """
 
-class CommentFormNotAuthenticated(forms.ModelForm):
+class CommentFormNotAuthenticated(forms.Form):
     name = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Nombre'}))
     email = forms.EmailField(label='', required=False, widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Email'}))
     title = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
     content = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
+    """
     class Meta:
         model = blog_models.Comment
         fields = ['name', 'title', 'content', 'email']
+    """
+
+
+
+
+
+    #

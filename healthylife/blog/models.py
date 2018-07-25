@@ -11,13 +11,22 @@ import datetime
 
 # Blog models
 class Tag(models.Model):
-    name = models.CharField(primary_key=True, max_length=50)
+    name = models.CharField(primary_key=True, max_length=50, unique=True)
     slug = models.CharField(max_length=100, blank=True)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True, related_name='blog_tag_author')
     created_date = models.DateTimeField(auto_now=True)
     updated_date = models.DateTimeField()
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        """
+        metodo de la clase Tag para calcular el slug de una etiqueta y actualizar la fecha de creación
+        """
+        self.slug = self.name.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
+        super(Tag, self).save(*args, **kwargs)
 
 
 @autoconnect
@@ -29,7 +38,7 @@ class Category(models.Model):
     created_date = models.DateTimeField(auto_now=True)
     updated_date = models.DateTimeField()
     parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
-    author = models.ForeignKey(User, editable=False, null=True, blank=True)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True, related_name='post_category_author')
 
     class Meta:
         verbose_name = 'category'
@@ -57,15 +66,15 @@ class Post(models.Model):
     Status = ((1, "Publicado"), (2, "Borrador"), (3, "Eliminado"))
     status = models.IntegerField(choices=Status, default=2, blank=True)
     title = models.CharField(max_length=100, blank=False)
-    slug = models.CharField(max_length=100, default=' ', blank=True)
+    slug = models.CharField(max_length=100, default='', blank=True)
     description = models.CharField(max_length=200, blank=False)
     content = RichTextField(default=" ", blank=False)
-    category = models.ForeignKey(Category, default=1)
+    category = models.ForeignKey(Category, null=True)
     created_date = models.DateTimeField(auto_now=True)
     updated_date = models.DateTimeField()
-    author = models.ForeignKey(User, editable=False, null=True, blank=True)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True, related_name='post_author')
     album = models.ForeignKey(general_models.Album, default=1, blank=True, null=True)
-    # tags
+    tags = models.ManyToManyField(Tag, related_name='post_tags')
 
 
     def __unicode__(self):
@@ -91,14 +100,16 @@ class Post(models.Model):
 
 @autoconnect
 class Comment(models.Model):
-    """Modelo para los comentarios del blog"""
+    """
+    https://stackoverflow.com/questions/44837733/how-to-make-add-replies-to-comments-in-django
+    """
     Status = ((1, "Publicado"), (2, "Pendiente de Revision"), (3, "Eliminado"))
-    status = models.IntegerField(choices=Status, default=2, blank=True)
+    status = models.IntegerField(choices=Status, default=2)
     title = models.CharField(max_length=50)
     content = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
     updated_date = models.DateTimeField()
-    author = models.CharField(max_length=100)
+    author = models.CharField(max_length=50)
     post = models.ForeignKey(Post)
     parent = models.ForeignKey('self', related_name='answers', null=True, blank=True)
 
@@ -107,11 +118,15 @@ class Comment(models.Model):
 
     def save(self, *args, **kwargs):
         self.updated_date = datetime.datetime.now()
+        super(Comment, self).save(*args, **kwargs)
 
     def post_save(self):
         self.notifyNewComment()
 
     def notifyNewComment(self):
-        """Metodo que avisa de un nuevo comentario en el blog"""
         self.status = 1
         print("notificacion enviada")
+
+
+
+#
