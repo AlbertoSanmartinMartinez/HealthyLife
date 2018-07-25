@@ -31,15 +31,15 @@ class PostFilter(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
-    
+
     class Meta:
         model = blog_models.Comment
         fields = '__all__'
 
 
 class CommentFormAuthenticated(forms.Form):
-    title = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+    title = forms.CharField(label='', required=True, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(label='', required=True, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
     """
     class Meta:
@@ -48,10 +48,10 @@ class CommentFormAuthenticated(forms.Form):
     """
 
 class CommentFormNotAuthenticated(forms.Form):
-    name = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Nombre'}))
-    email = forms.EmailField(label='', required=False, widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Email'}))
-    title = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
-    content = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
+    name = forms.CharField(label='', required=True, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Nombre'}))
+    email = forms.EmailField(label='', required=True, widget=forms.EmailInput(attrs={'id': 'comment_email', 'placeholder': 'Email'}))
+    title = forms.CharField(label='', required=True, widget=forms.TextInput(attrs={'id': 'comment_title', 'placeholder':'Título del comentario'}))
+    content = forms.CharField(label='', required=True, widget=forms.TextInput(attrs={'id': 'comment_content', 'placeholder':'Contenido del comentario'}))
 
     """
     class Meta:

@@ -1,7 +1,7 @@
 {% load static %}
 {% load blog_tags %}
 
-<div id="answer_form" class="contact-form-wrap">
+<div class="contact-form-wrap">
   <form method="POST" action="{% url 'blog:add_comment' post_slug=post.slug %}">
     {% csrf_token %}
 
@@ -25,8 +25,13 @@
         {{ comment_form.content }}
       </div>
     </div>
+    <!--<div class="single-contact-form">
+      <div class="contact-box subject">
+        {{ comment_form.comment_parent_id }}
+      </div>
+    </div>-->
     <div class="contact__btn">
-      <input type="hidden" name="comment_parent_id" value="{{ comment_parent_id }}">
+      <input id="comment_parent_id" type="hidden" name="comment_parent_id" value="">
       <input type="submit" class="fv-btn" value="Comentar">
       <a href="#comments" class="blog__answer__reply__close">CANCELAR</a>
     </div>

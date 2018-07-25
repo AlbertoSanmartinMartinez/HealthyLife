@@ -73,6 +73,7 @@ def detail_post(request, post_slug):
     num_comments = len(blog_models.Comment.objects.filter(post=post.id, status=1))
 
     return render(request, "post.html", {
+        # 'comment_parent_id': 1,
         "post": post,
         "images": images,
         #"categories": getBlogCategories(),
@@ -148,15 +149,16 @@ def add_comment(request, post_slug):
     name = None
     comment_parent = None
 
+
     try:
-        print("probamos a coger el identificador del padre")
-        comment_parent_id = int(request.POST.get('comment_parent_id'))
+        comment_parent_id = int(request.POST['comment_parent_id'])
     except:
-        print("el identificador del padre no existe")
         comment_parent_id = None
+
 
     if comment_form.is_valid():
         data = comment_form.cleaned_data
+
         if request.user.is_authenticated():
             name = request.user.username
         else:
@@ -168,8 +170,7 @@ def add_comment(request, post_slug):
                 name = user.username
 
         if comment_parent_id:
-            print("el identificador del padre existe")
-            comment_parent = blog_models.Comment.objects.get(id=comment_parent_id)
+            comment_parent = blog_models.Comment.objects.get(id=str(comment_parent_id))
             if comment_parent:
                 comment_parent_id = comment_parent.id
 

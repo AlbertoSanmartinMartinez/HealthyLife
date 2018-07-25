@@ -55,10 +55,8 @@ def get_user_authenticated(request, username):
     return False
 
 
-@register.simple_tag
-def get_comment_parent_id(comment_parent_id):
-    print("comment parent id is "+str(comment_parent_id))
-    return comment_parent_id
+
+
 
 
 

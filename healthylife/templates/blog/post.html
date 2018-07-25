@@ -101,7 +101,7 @@
                                <a href="{% url 'blog:delete_comment' comment_id=comment.id %}">BORRAR</a>
                             {% else %}
                               <a href="#answer_form" class="blog__answer__reply">
-                                <input class="blog__answer__reply" type="submit" onclick="{% get_comment_parent_id comment.id as comment_parent_id %}" value="RESPONDER">
+                                <input class="blog__answer__reply" type="button" onclick="set_comment_parent_id({{ comment.id|escapejs }})" value="RESPONDER">
                               </a>
                             {% endif %}
                           </span>
@@ -110,8 +110,6 @@
                   </div>
 
                     <!-- Start Post Deatil Replay Comment -->
-                    <!--{% get_comment_answers comment_parent=comment.id as answers %}
-                    -->
                     {% for answer in comment.answers.all %}
                       <div class="single-blog-comment comment-reply">
                         <div class="blog-comment-thumb">
@@ -151,10 +149,12 @@
                     </div>
                 </div>
 
+
               <!-- Start Post Deatil Comment Form Area -->
-              <!--<div class="htc__contact__address">-->
-              <div class="our-reply-form-area mt--20">
-                <a class="blog__comment__reply"><h2 class="contact__title">DEJA TU COMENTARIO</h2></a>
+              <br>
+              <br>
+              <div id="answer_form"  class="our-reply-form-area mt--20">
+                <h2 class="contact__title">DEJA TU COMENTARIO</h2>
 
                 <!-- Start Comment Form Area -->
                 <div class="blog__comment__form">
