@@ -2,14 +2,15 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, get_object_or_404, redirect
-from rest_framework import permissions, generics
+from django.db.models import Q
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator, PageNotAnInteger
+
 from blog import models as blog_models
 from blog import serializer as blog_serializer
 from blog import forms as blog_forms
 from healthylifeapp import models as general_models
 from healthylifeapp import views as general_views
-from django.contrib.auth.models import User
-from django.core.paginator import Paginator, PageNotAnInteger
 from shop import views as shop_views
 
 # Blog Views
@@ -17,7 +18,7 @@ def list_posts(request, blog_category_slug=None):
 
     category = None
     posts = blog_models.Post.objects.filter(status=1)
-    blog_filter_form = None
+    # blog_filter_form = None
 
     if blog_category_slug:
         category = get_object_or_404(blog_models.Category, slug=blog_category_slug)
@@ -27,21 +28,35 @@ def list_posts(request, blog_category_slug=None):
         blog_filter_form = blog_forms.PostFilter(request.POST)
         if blog_filter_form.is_valid():
             data = blog_filter_form.cleaned_data
-            posts = posts.filter(title__icontains=data['title'],
-                description__icontains=data['title'],
-                content__icontains=data['title'])
+            if data['title'] is not None:
+                print(data['title'])
+                posts = posts.filter(
+                    Q(title__icontains=data["title"]) |
+                    Q(description__icontains=data["title"]) |
+                    Q(tags__name__icontains=data["title"]))
             if data['category'] is not None:
+                print("categoria introducido")
                 posts = posts.filter(category_id=data['category'].id)
+            """
             if data['minimum_date'] is not None:
+                print("fecha minima introducido")
                 posts = posts.filter(created_date__gte=data['minimum_date'])
             if data['maximum_date'] is not None:
+                print("fecha maxima introducido")
                 posts = posts.filter(created_date__lte=data['maximum_date'])
+            """
             if data['order_by'] == 1:
+                print("ordenacion introducido")
                 posts = posts.all().order_by('created_date')
-            if data['order_by'] == 2:
-                posts = posts.all().order_by('-created_date')
+                #posts = posts.all().order_by('-created_date')
+        else:
+            print(blog_filter_form.errors)
+
     else:
         blog_filter_form = blog_forms.PostFilter()
+
+    posts = posts.all().order_by('-created_date')
+    #print(posts)
 
     paginator = Paginator(posts, 12)
     page = request.GET.get('page')
@@ -53,7 +68,7 @@ def list_posts(request, blog_category_slug=None):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
 
-    return render(request, "blog.html", {
+    return render(request, "post_list.html", {
         'category': category,
         "posts": posts,
         #"categories": getBlogCategories(),
@@ -71,10 +86,12 @@ def detail_post(request, post_slug):
     images = general_models.Image.objects.filter(album=post.album)
     blog_filter_form = blog_forms.PostFilter()
     num_comments = len(blog_models.Comment.objects.filter(post=post.id, status=1))
+    #related_posts = related_posts(post.title, post.category, post.tags, post.author)
 
-    return render(request, "post.html", {
+    return render(request, "post_detail.html", {
         # 'comment_parent_id': 1,
         "post": post,
+        "related_posts": related_posts(post_slug),
         "images": images,
         #"categories": getBlogCategories(),
         "comments":comments,
@@ -84,7 +101,7 @@ def detail_post(request, post_slug):
         'blog_filter_form': blog_filter_form,
         #'shoppingcart_form': getShoppingCart(),
         "search_form": general_views.getSearchForm(),
-        #'subscribe_form': general_views.getSubscribeForm(),
+        'subscribe_form': general_views.getSubscribeForm(),
         'shoppingcart': shop_views.getShoppingCart(request),
     })
 
@@ -93,7 +110,7 @@ def category_posts(request, category):
     category = blog_models.Category.objects.get(slug=category)
     posts = blog_models.Post.objects.filter(status=1, category=category.id)
 
-    return render(request, 'blog.html', {
+    return render(request, 'post_list.html', {
         "posts":posts,
         "categories": getBlogCategories(),
         "search_form": general_views.getSearchForm(),
@@ -107,7 +124,7 @@ def author_posts(request, username):
     posts = blog_models.Post.objects.filter(status=1, author=author.id)
     categories = blog_models.Category.objects.order_by("name")
 
-    return render(request, 'blog.html', {
+    return render(request, 'post_list.html', {
         "posts":posts,
         "categories": getBlogCategories(),
         "search_form": general_views.getSearchForm(),
@@ -122,7 +139,7 @@ def tag_posts(request, tag_slug):
     print(tag)
     posts = blog_models.Post.objects.filter(status=1, tags=tag)
 
-    return render(request, 'blog.html', {
+    return render(request, 'post_list.html', {
         "posts":posts,
         "categories": getBlogCategories(),
         "search_form": general_views.getSearchForm(),
@@ -133,8 +150,24 @@ def tag_posts(request, tag_slug):
 
 def last_posts():
 
-    return blog_models.Post.objects.filter(status=1).order_by('-created_date')[:3]
+    return blog_models.Post.objects.filter(status=1).order_by('-created_date')[:6]
 
+
+def related_posts(post_slug):
+    post = get_object_or_404(blog_models.Post, slug=post_slug)
+    #tags = blog_models.Tag.objects.filter(post_id=post.id)
+    related_posts = blog_models.Post.objects.filter(
+        Q(status=1) |
+        Q(author=post.author) |
+        Q(category=post.category))
+        #Q(tags__in=tags))
+
+    print(post.title)
+    print(post.category)
+    #print(post.tags)
+    print(post.author)
+
+    return related_posts
 
 # Comments Views
 def add_comment(request, post_slug):
@@ -196,6 +229,7 @@ def delete_comment(request, comment_id):
 
     return redirect('blog:detail_post', post_slug=post.slug)
 
+
 # Common Functions
 def getBlogCategories():
     return blog_models.Category.objects.filter(parent__isnull=True).order_by("name")
@@ -214,65 +248,12 @@ def getCommentForm(request):
             return blog_forms.CommentFormNotAuthenticated()
 
 
-# Blog Api Views
-class APIPostList(generics.ListAPIView):
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    # filter_backends = [SearchFilter, OrderingFilter]
-    # search_fields = ['title', 'slug']
-    model = blog_models.Post
-    serializer_class = blog_serializer.PostSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        data = self.request.query_params
-        return blog_models.Post.objects.filter(status=data['status'])
 
 
-class APIPostDetail(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsOwnerOrReadOnly,)
-    serializer_class = blog_serializer.PostSerializer
-    model = blog_models.Post
-    """
-    def get_queryset(self, *args, **kwargs):
-        status = self.request.query_params.get('status', None)
-        if status:
-            queryset = models.Post.objects.filter(status=status)
-            return queryset
-    """
-
-class APICategoryList(generics.ListCreateAPIView):
-    #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    # model = models.Category
-    queryset = blog_models.Category.objects.all()
-    serializer_class = blog_serializer.CategorySerializer
 
 
-class APICategoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsOwnerOrReadOnly,)
-    # model = models.Category
-    queryset = blog_models.Category.objects.all()
-    serializer_class = blog_serializer.CategorySerializer
 
-    def get_queryset(self):
-        queryset = blog_models.Category.objects.all()
-        queryset = queryset.filter(name=self.request.query_params.get('category_id'))
 
-"""
-class APICommentList(generics.ListCreateAPIView):
-    #permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    model = blog_models.Category
-    serializer_class = blog_serializer.CommentSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        data = self.request.query_params
-        return blog_models.Comment.objects.filter(post_id=data['post_id'])
-"""
-"""
-class APICommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsOwnerOrReadOnly,)
-    # model = models.Category
-    queryset = blog_models.Comment.objects.all()
-    serializer_class = blog_serializer.CommentSerializer
-"""
 
 
 

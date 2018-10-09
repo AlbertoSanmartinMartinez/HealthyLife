@@ -62,7 +62,7 @@ def getNutritionixApiInformation(food):
 
     url = "https://trackapi.nutritionix.com/v2/search/instant?"
     """
-    Populate any search interface, including autocomplete, with common foods and branded foods from Nutritionix.  This searches our entire database of 600K+ foods.  Once a user selects the food from the autocomplete interface, make a separate API request to look up the nutrients of the food.
+    Populate any search interface, including autocomplete, with common foods and branded foods from Nutritionix. This searches our entire database of 600K+ foods.  Once a user selects the food from the autocomplete interface, make a separate API request to look up the nutrients of the food.
     https://gist.github.com/mattsilv/6d19997bbdd02cf5337e9d4806b4f464
     """
 

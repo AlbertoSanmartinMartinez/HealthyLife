@@ -6,9 +6,11 @@ from django.shortcuts import render, get_object_or_404
 # from healthylifeapp import views as general_views
 from shop import models as shop_models
 from shop import forms as shop_forms
+from shop import serializer as shop_serializer
 from healthylifeapp.views import *
 from django.core.paginator import Paginator, PageNotAnInteger
 from shop.shoppingcart import ShoppingCart
+from rest_framework import permissions, generics
 
 # Shop Views
 def product_list(request, shop_category_slug=None):
@@ -222,6 +224,7 @@ def payment_details(request, payment_id):
     })
 """
 
+# Payment Checkout Views
 def payment_checkout(request):
     print("payment_checkout view")
     cart = ShoppingCart(request)
@@ -244,7 +247,7 @@ def payment_canceled(request):
     pass
 
 
-# Shipping Views
+# Shipping  Checkout Views
 def shipping_checkout(request):
 
 
@@ -252,7 +255,15 @@ def shipping_checkout(request):
     })
 
 
-# Order Views
+# Address Checkout Views
+def address_checkout(request):
+
+
+    return render(request, 'address_checkout.html', {
+    })
+
+
+# Address Checkout Views
 def order_checkout(request):
 
 

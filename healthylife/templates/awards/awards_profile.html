@@ -1,48 +1,28 @@
-{% extends "base.html" %}
+{% extends "awards.html" %}
 {% load static %}
 
 {% block awards_profile %}
 
-<!-- Sport Breadcrumbs Area -->
-<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url({% static 'images/bg/2.jpg' %}) no-repeat scroll center center / cover ;">
-  <div class="ht__bradcaump__wrap">
+  <section class="htc__new__product bg__white ptb--100">
     <div class="container">
       <div class="row">
-        <div class="col-xs-12">
-          <div class="bradcaump__inner text-center">
-            <h2 class="bradcaump-title">Shop Page</h2>
-            <nav class="bradcaump-inner">
-              <a class="breadcrumb-item" href="index.html">Home</a>
-              <span class="brd-separetor">/</span>
-              <span class="breadcrumb-item active">Shop Page</span>
-            </nav>
+        <div class="new__product__wrap clearfix">
+          {% for award in awards %}
+            <div class="award_register">
+              <div class="thumbnail_photo">
+              </div>
+              <div class="award_content">
+                <h2>{{ award.title }}</h2>
+                <p>{{ award.content_type }}</p>
+                <p>{{ award.description }}</p>
+                <p>{{ award.amount }}</p>
+                <a href="#">autor</a>
+              </div>
+            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<section class="htc__new__product bg__white ptb--100">
-  <div class="container">
-    <div class="row">
-      <div class="new__product__wrap clearfix">
-        {% for award in awards %}
-          <div class="award_register">
-            <div class="thumbnail_photo">
-            </div>
-            <div class="award_content">
-              <h2>{{ award.title }}</h2>
-              <p>{{ award.content_type }}</p>
-              <p>{{ award.description }}</p>
-              <p>{{ award.amount }}</p>
-              <a href="#">autor</a>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-</section>
+  </section>
 
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block login %}
 
@@ -36,7 +37,20 @@
               <div class="tabs__checkbox">
                 <!--<input type="checkbox">
                 <span> Remember me</span>-->
-                <span class="forget"><a href="{% url 'password_reset' %}">Has olvidado tu contraseña ?</a></span>
+                <span class="forget"><a href="{% url 'reset' %}">Has olvidado tu contraseña ?</a></span>
+              </div>
+              <div>
+                {% if form.errors %}
+                  {% for field in form %}
+                    {% for error in field.errors %}
+                      {% trans error|escape %}<br>
+                    {% endfor %}
+                  {% endfor %}
+                  {% for error in form.non_field_errors %}
+                    {% trans error|escape %}<br>
+                  {% endfor %}
+                {% endif %}
+                {{ error_message }}
               </div>
               <div class="contact-btn">
                 <!--<a href="{% url 'custom_login' %}">Acceder</a>-->
@@ -44,16 +58,24 @@
               </div>
             </form>
 
+            <br>
+            <br>
 
-            <!--<div class="htc__social__connect">
-              <h2>Or Login With</h2>
-              <ul class="htc__soaial__list">
-                <li><a class="bgtwitter" href="https://twitter.com/devitemsllc" target="_blank"><i class="zmdi zmdi-twitter"></i></a></li>
-                <li><a class="bginstagram" href="https://www.instagram.com/devitems/" target="_blank"><i class="zmdi zmdi-instagram"></i></a></li>
-                <li><a class="bgfacebook" href="https://www.facebook.com/devitems/?ref=bookmarks" target="_blank"><i class="zmdi zmdi-facebook"></i></a></li>
-                <li><a class="bggoogleplus" href="https://plus.google.com/" target="_blank"><i class="zmdi zmdi-google-plus"></i></a></li>
+            <div class="ft__widget">
+              <h2 class="ft__title">Síguenos</h2>
+              <ul class="social__icon">
+                <li><a href="https://twitter.com/BarbastroSMueve" target="_blank"><i class="zmdi zmdi-twitter"></i></a></li>
+                <li><a href="https://www.instagram.com/barbastrosemueve/" target="_blank"><i class="zmdi zmdi-instagram"></i></a></li>
+                <li><a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank"><i class="zmdi zmdi-facebook"></i></a></li>
+                <li><a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank"><i class="zmdi zmdi-linkedin"></i></a></li>
+                <li><a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank"><i class="zmdi zmdi-google-plus"></i></a></li>
+                <li><a href="https://www.facebook.com/BarbastroSeMueve/" target="_blank"><i class="zmdi zmdi-youtube"></i></a></li>
               </ul>
-            </div>-->
+            </div>
+
+            <br>
+            <br>
+
           </div>
         </div>
       </div>

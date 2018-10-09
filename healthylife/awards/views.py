@@ -6,6 +6,7 @@ from healthylifeapp import views as general_views
 from awards import forms as awards_forms
 from shop import views as shop_views
 from awards import models as award_models
+from django.contrib.auth.models import User
 
 # Award views
 def awards(request):
@@ -19,6 +20,21 @@ def awards(request):
         'subscribe_form': general_views.getSubscribeForm(),
         'awards_filter_form': getAwardsFilterForm(request),
         'awards': awards,
+        'shoppingcart': shop_views.getShoppingCart(request),
+    })
+
+
+def award_detail(request, award_slug):
+    """
+    View for award details
+    """
+    award = award_models.Award.objects.filter(slug=award_slug)
+
+    return render(request, 'award_detail.html', {
+        'award': award,
+        'awards_filter_form': getAwardsFilterForm(request),
+        'subscribe_form': general_views.getSubscribeForm(),
+        "search_form": general_views.getSearchForm(),
         'shoppingcart': shop_views.getShoppingCart(request),
     })
 
@@ -44,8 +60,11 @@ def getAwardsFilterForm(request):
 
 def awards_profile(request, username):
     """
+    View that returns the awards that a user has obtained
     """
-    awards = award_models.Award.objects.filter(content_type_id=4, object=7)
+    user = User.objects.filter(username=username)
+    awards = award_models.Award.objects.filter(users=user)
+    print("secion de premios del perfil")
     print(awards)
 
     return render(request, 'awards_profile.html', {

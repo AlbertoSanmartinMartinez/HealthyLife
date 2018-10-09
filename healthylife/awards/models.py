@@ -7,16 +7,40 @@ from healthylife.decorators import autoconnect
 from django.contrib.auth.models import User
 from shop import models as shop_models
 from healthylifeapp import models as general_models
-# from django.contrib.contenttypes.models import ContentType
-# from django.contrib.contenttypes.fields import GenericForeignKey
 import datetime
 
 # Awards models
 @autoconnect
+class Category(models.Model):
+    """
+    Model for awards categories
+    """
+    name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=200)
+    created_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField()
+    parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True, related_name='award_category_author')
+
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
+
+    def __unicode__(self):
+        return self.name
+
+    def pre_save(self, *args, **kwargs):
+        """
+        """
+        self.slug = self.name.replace(" ", "_").lower()
+        self.updated_date = datetime.datetime.now()
+
+
+@autoconnect
 class Award(models.Model):
     """
     modelo para los premios de los usuarios
-    https://docs.djangoproject.com/en/2.0/ref/contrib/contenttypes/#reverse-generic-relations
     """
     Status = ((1, "Activo"), (2, "Inactivo"))
     status = models.IntegerField(choices=Status, default=2, blank=True)
@@ -25,12 +49,14 @@ class Award(models.Model):
     description = models.CharField(max_length=100)
     created_date = models.DateTimeField(auto_now=True)
     updated_date = models.DateTimeField()
+    category = models.ForeignKey(Category, null=True)
     AwardType = ((1,'Porcentaje'), (2, 'Cantidad'))
     award_type = models.IntegerField(choices=AwardType, default=2)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
-    author = models.ForeignKey(User, editable=False, null=True, blank=True)
+    author = models.ForeignKey(User, editable=False, null=True, blank=True, related_name='award_author')
     album = models.ForeignKey(general_models.Album, blank=True, null=True)
-    object = models.ManyToManyField(shop_models.Product)
+    shop_objects = models.ManyToManyField(shop_models.Product, blank=True)
+    users = models.ManyToManyField(User, related_name='Beneficiario', blank=True)
 
     def __unicode__(self):
         return self.title
@@ -47,9 +73,6 @@ class Award(models.Model):
             general_models.Image.objects.create(album=self.album, header_image=True, image='photos/header_award_default_image.jpg')
         general_models.Album.objects.filter(id=self.album.id).update(name='Album Premio ' + self.title)
         super(Award, self).save(*args, **kwargs)
-
-    def get_limit_choices_to(self):
-        pass
 
 
 

@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 {% now "n" as current_month %}
 {% now "Y" as current_year %}
@@ -46,120 +46,21 @@
   </head>
   <body>
 
-    <div class="wrapper fixed__footer">
+    <div class="wrapper fixed__footer home-v5">
 
-      {% include 'navbar.html' %}
+      {% include 'header.html' %}
 
       <div class="body__overlay"></div>
       <div class="offset__wrapper">
 
         {% include 'search.html' %}
 
-        <!-- Start Icon Menu -->
-        <div class="offsetmenu home-five">
-          <div class="offsetmenu__inner sidebar__menu--inner">
-            <div class="offsetmenu__close__btn">
-              <a href="#"><i class="zmdi zmdi-close"></i></a>
-            </div>
-            <div class="off__contact">
-              <div class="logo">
-                <a href="{% url 'home' %}">
-                  <img src="{% static 'LetraBarbastroSeMueve_100.jpg' %}" alt="logo">
-                </a>
-              </div>
-              <!--<p>Intentamos mejorar la salud de las personas de Barbastro</p>-->
-            </div>
-            <nav>
-              <ul class="sidebar__menu">
-                <li><a href="{% url 'home' %}">Inicio</a></li>
-                <li><a href="{% url 'sportapp:sport' %}">Deporte</a></li>
-                <li><a href="{% url 'nutritionapp:nutrition' %}">Nutricion</a></li>
-                <li><a href="{% url 'healthapp:health' %}">Salud</a></li>
-                <li><a href="{% url 'awardsapp:awards' %}">Premios</a></li>
-                <!--<li><a href="{% url 'know_us' %}">Proyecto</a></li>-->
-                <li><a href="{% url 'know_us' %}">Conocenos</a></li>
-                <li><a href="{% url 'blog:list_post' %}">Blog</a></li>
-                <li><a href="{% url 'shop:product_list' %}">Tienda</a></li>
-                <li><a href="{% url 'contact' %}">Contacto</a></li>
-              </ul>
-            </nav>
-            <!--<div class="offset__widget">
-              <div class="offset__single">
-                <h4 class="offset__title">Language</h4>
-                <ul>
-                  <li><a href="#"> Engish </a></li>
-                  <li><a href="#"> French </a></li>
-                  <li><a href="#"> German </a></li>
-                </ul>
-              </div>
-              <div class="offset__single">
-                <h4 class="offset__title">Currencies</h4>
-                <ul>
-                  <li><a href="#"> USD : Dollar </a></li>
-                  <li><a href="#"> EUR : Euro </a></li>
-                  <li><a href="#"> POU : Pound </a></li>
-                </ul>
-              </div>
-            </div>-->
-            <div class="offset__sosial__share">
-              <h4 class="offset__title">SIGUENOS</h4>
-              <ul class="social__icon">
-                <li><a href="https://twitter.com/devitemsllc" target="_blank" title="Twitter"><i class="zmdi zmdi-twitter"></i></a></li>
-                <li><a href="https://www.instagram.com/devitems/" target="_blank" title="Instagram"><i class="zmdi zmdi-instagram"></i></a></li>
-                <li><a href="https://www.facebook.com/devitems/?ref=bookmarks" target="_blank" title="Facebook"><i class="zmdi zmdi-facebook"></i></a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        {% include 'navbar_menu.html'%}
 
         {% include 'shoppingcart_menu.html'%}
 
-        <!-- Start Profiel Menu -->
-        <div class="profile">
-          <div class="profile__inner">
-            <div class="offsetmenu__close__btn">
-              <a href="#"><i class="zmdi zmdi-close"></i></a>
-            </div>
-            <ul class="profile__btn">
-              {% if not user.is_authenticated %}
-              <li>
-                <a href="{% url 'custom_login' %}">Acceder</a>
-              </li>
-              {% else %}
-              <li>
-                <a href="{% url 'profile' username=user.username %}">{{ user.username }}</a>
-              </li>
-              {% if user.is_staff %}
-              <li>
-                <a href="{% url 'collaborator_profile' username=user.username %}">Colaborador</a>
-              </li>
-              <li>
-                <a href="/administracion" target="_blank">Administracion</a>
-              </li>
-              {% endif %}
-              <li>
-                <a href="{% url 'sport_profile' username=user.username %}">Deporte</a>
-              </li>
-              <li>
-                <a href="{% url 'nutrition_profile' username=user.username %}">Nutricion</a>
-              </li>
-              <li>
-                <a href="{% url 'health_profile' username=user.username %}">Salud</a>
-              </li>
-              <li>
-                <a href="{% url 'awardsapp:awards_profile' username=user.username %}">Premios</a>
-              </li>
-              <li>
-                <a href="{% url 'shop:ships' username=user.username %}">Pedidos</a>
-              </li>
-              <li>
-                <a href="{% url 'calendar:month_calendar' username=user.username year=current_year month=current_month %}">Calendario</a>
-              </li>
-              <li class="profile__checkout"><a href="{% url 'logout' %}">Desconectar</a></li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
+        {% include 'profile_menu.html'%}
+
       </div>
 
         {% block home %}
@@ -195,6 +96,15 @@
         {% block ships %}
         {% endblock %}
 
+        {% block address_checkout %}
+        {% endblock %}
+
+        {% block shipping_checkout %}
+        {% endblock %}
+
+        {% block payment_checkout %}
+        {% endblock %}
+
         {% block order_checkout %}
         {% endblock %}
 
@@ -214,9 +124,6 @@
         {% endblock %}
 
         {% block health_profile %}
-        {% endblock %}
-
-        {% block awards_profile %}
         {% endblock %}
 
         {% block statistics %}
@@ -244,6 +151,9 @@
         {% endblock %}
 
         {% block login %}
+        {% endblock %}
+
+        {% block reset %}
         {% endblock %}
 
         {% block admin %}

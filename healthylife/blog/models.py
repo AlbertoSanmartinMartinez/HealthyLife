@@ -2,12 +2,17 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
 from django.db import models
-from healthylife.decorators import autoconnect
-from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
+
+from healthylife.decorators import autoconnect
 from healthylifeapp import models as general_models
+
 import datetime
+
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 # Blog models
 class Tag(models.Model):
@@ -68,9 +73,9 @@ class Post(models.Model):
     title = models.CharField(max_length=100, blank=False)
     slug = models.CharField(max_length=100, default='', blank=True)
     description = models.CharField(max_length=200, blank=False)
-    content = RichTextField(default=" ", blank=False)
+    content = RichTextUploadingField('content', config_name='full')
     category = models.ForeignKey(Category, null=True)
-    created_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField()
     updated_date = models.DateTimeField()
     author = models.ForeignKey(User, editable=False, null=True, blank=True, related_name='post_author')
     album = models.ForeignKey(general_models.Album, default=1, blank=True, null=True)
@@ -87,6 +92,7 @@ class Post(models.Model):
         self.slug = self.title.replace(" ", "_").lower()
         self.updated_date = datetime.datetime.now()
         if not self.pk:
+            self.created_date = datetime.datetime.now()
             album = general_models.Album.objects.create(name='album ' + self.title, author=self.author)
             self.album = album
             general_models.Image.objects.create(album=self.album, header_image=True, image='photos/header_post_default_image.jpg')

@@ -5,9 +5,6 @@
     <div class="col-md-12">
       <div class="filter__menu__container">
         <div class="product__menu">
-          <!--<button data-filter="*"  class="is-checked">All</button>
-          <h3>Filtrar</h3>
-          <a class="filter__menu" href="#"><span class="ti-search"></span></a>-->
         </div>
         <div class="filter__box">
           <a class="filter__menu" href="#"><span class="ti-search"></span> Buscar</a>
@@ -42,7 +39,7 @@
           <!-- Single Filter -->
           <div class="fiter__content__inner">
             <div class="single__filter">
-              <h2>Categoria</h2>
+              <h2>Categoría</h2>
               {{ shop_filter_form.category }}
             </div>
           </div>
@@ -93,11 +90,3 @@
       </div>
     </div>
 </div>
-
-<!-- ###################################################################### -->
-
-    <!--<form action="{% url 'shop:shop_search' %}" method="POST">
-      {% csrf_token %}
-      {{ shop_filter_form.as_p }}
-      <button type="submit">Filtrar</button>
-    </form>-->

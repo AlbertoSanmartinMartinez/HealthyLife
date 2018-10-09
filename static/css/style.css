@@ -1698,7 +1698,8 @@ product__style--7
     width: 500px;
     z-index: 99999;
 }
-.filter__cart__inner {
+.filter__cart__inner,
+.filter__sport__inner {
     height: 100%;
     padding: 130px 50px 60px;
 }

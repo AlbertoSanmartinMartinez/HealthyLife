@@ -1,51 +1,50 @@
 #!/usr/local/bin/python
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
-from healthylifeapp import forms as general_forms
-from healthylifeapp import models as general_models
-# from blog import models as blog_models
 from django.utils import timezone
-from django.core.mail import send_mail
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
-from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse_lazy
 from django.forms.formsets import formset_factory
-from rest_framework import permissions, generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from healthylifeapp import serializers
-from rest_framework import viewsets
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import Permission
+from django.template import RequestContext
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.contrib.auth.password_validation import validate_password
+
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from rest_framework import viewsets
+from rest_framework import permissions, generics
+
+from healthylifeapp.tokens import account_activation_token
+from healthylifeapp import forms as general_forms
+from healthylifeapp import models as general_models
+from healthylifeapp import serializers
+from healthylifeapp import serializers as general_serializer
+
 import calendar
 from datetime import datetime
-from django.template import RequestContext
-from django.http import HttpResponseRedirect
-
-# from shop import models as shop_models
-# from awards import models as award_models
-# from events import models as events_models
-# from shop import forms as shop_forms
-# from shop import views as shop_views
-
-# API imports
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
 
 
 # General views
 def home(request):
     from blog import models as blog_models
+    from blog import views as blog_views
     from shop import models as shop_models
     from shop import forms as shop_forms
     from shop import views as shop_views
     from awards import models as award_models
     from awards import views as award_views
 
-    last_posts = blog_models.Post.objects.filter(status=1).order_by("-created_date")[:3]
+    last_posts = blog_views.last_posts()
     # last_products = shop_models.Product.objects.filter(status=1, stock__gte=1).order_by("-created_date")[:6]
     # next events
     # best_awards = award_models.Award.objects.filter(status=1).order_by("-created_date")[:3]
@@ -104,9 +103,11 @@ def work_with_our(request):
             if data['shop_colaborator'] == True:
                 shop_colaborator_group = Group.objects.get(name='colaboradores_tienda')
                 shop_colaborator_group.user_set.add(user)
+            """
             if data['award_colaborator'] == True:
                 award_colaborator_group = Group.objects.get(name='colaboradores_premios')
                 award_colaborator_group.user_set.add(user)
+            """
             if data['sport_colaborator'] == True:
                 sport_colaborator_group = Group.objects.get(name='colaboradores_deporte')
                 sport_colaborator_group.user_set.add(user)
@@ -116,6 +117,9 @@ def work_with_our(request):
             if data['health_colaborator'] == True:
                 health_colaborator_group = Group.objects.get(name='colaboradores_salud')
                 health_colaborator_group.user_set.add(user)
+            award_colaborator_group = Group.objects.get(name='colaboradores_premios')
+            award_colaborator_group.user_set.add(user)
+
             return redirect('home')
     else:
         user_form = general_forms.CustomRegisterColaboratorForm()
@@ -148,7 +152,7 @@ def know_us(request):
         "companies": companies,
         "collaborators": collaborators,
         'subscribe_form': getSubscribeForm(),
-        'shoppingcart': shop_views.getShoppingCart(request),
+        #'shoppingcart': shop_views.getShoppingCart(request),
     })
 
 
@@ -186,6 +190,7 @@ def custom_login(request):
     if request.method == 'POST':
         print("metodo post")
         form = general_forms.CustomAuthenticationForm(data=request.POST)
+
         if form.is_valid():
             print("formulario valido")
             data = form.cleaned_data
@@ -227,14 +232,18 @@ def custom_registration(request):
     if request.method == 'POST':
         form = general_forms.CustomRegisterForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            #sendEmail(request)
+
             return redirect('home')
     else:
         form = general_forms.CustomRegisterForm()
 
     shoppingcart = shop_views.getShoppingCart(request)
 
-    return render(request, 'custom_register.html', {
+    return render(request, 'custom_registration.html', {
         "search_form": getSearchForm,
         "form": form,
         'subscribe_form': getSubscribeForm(),
@@ -242,6 +251,83 @@ def custom_registration(request):
     })
 
 
+def custom_activation(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not Nobe and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('home')
+    else:
+        return HttpResponse("El link de activación no es valido.")
+
+
+def custom_reset_password(request):
+
+    from shop import views as shop_views
+
+    if request.method == 'POST':
+        form = general_forms.CustomPasswordResetForm(data=request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            email = data['email']
+
+            current_site = get_current_site(request)
+            mail_subject = 'Activa tu cuenta.'
+            message = render_to_response('confirmation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(mail_subject, message, to_email)
+            email.send()
+
+            #sendEmail(request)
+            return redirect('home')
+    else:
+        form = general_forms.CustomPasswordResetForm()
+
+    shoppingcart = shop_views.getShoppingCart(request)
+
+    return render(request, 'custom_password_reset.html', {
+        "search_form": getSearchForm,
+        "form": form,
+        'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shoppingcart,
+    })
+
+
+def custom_reset_password_form(request):
+
+    from shop import views as shop_views
+
+    if request.method == 'POST':
+        form = general_forms.CustomPasswordResetForm(data=request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+
+            return redirect('home')
+    else:
+        form = general_forms.CustomPasswordResetForm()
+
+    shoppingcart = shop_views.getShoppingCart(request)
+
+    return render(request, 'custom_password_reset.html', {
+        "search_form": getSearchForm,
+        "form": form,
+        'subscribe_form': getSubscribeForm(),
+        'shoppingcart': shoppingcart,
+    })
+
+
+"""
 def registration_complete(request):
     return render(request, 'registration_complete.html', {})
 
@@ -256,7 +342,7 @@ def registration_activate(request):
 
 def registration_activation_complete(request):
     return render(request, 'activation_complete.html', {})
-
+"""
 
 # Statistics views
 def statistics(request):
@@ -280,44 +366,12 @@ def subscribe(request):
         subscribe_form = forms.SubscriberForm(data=request.POST)
         if subscribe_form.is_valid():
             data = subscribe_form.cleaned_data['email']
+            #sendEmail(request)
             subscribe_form.save()
     else:
         subscribe_form = forms.SubscriberForm()
 
     return redirect('home')
-
-
-"""
-#@login_required(redirect_field_name='custom_login')
-def comment(request, post_slug, comment_parent_id):
-    post = models.Post.objects.get(slug=post_slug)
-    if request.method == 'POST':
-        print("metodo post")
-        if request.user.is_authenticated:
-            print("usuario suscrito")
-            comment_form = forms.CommentFormAuthenticated(data=request.POST)
-            if comment_form.is_valid():
-                print("formulario valido")
-                data = comment_form.cleaned_data
-                comment = models.Comment.objects.create(
-                    author_id=request.user.id,
-                    post_id=post.id,
-                    title = data['title'],
-                    content = data['content'],
-                    parent_id = comment_parent_id)
-        else:
-            print("usuario no suscrito")
-            comment_form = forms.CommentFormNotAuthenticated(data=request.POST)
-            if comment_form.is_valid():
-                #data = comment_form.cleaned_data
-                print("formulario valido")
-                #subscribe(request)
-    else:
-        print("metodo no post")
-        comment_form = forms.CommentForm()
-
-    return detail_post(request, post_slug)
-"""
 
 
 # Search views
@@ -345,7 +399,11 @@ def profile(request, username):
     View for user information section
     https://www.codementor.io/lakshminp/handling-multiple-forms-on-the-same-page-in-django-fv89t2s3j
     """
+
     from shop import views as shop_views
+    from PIL import Image
+
+    print("profile view")
 
     user = User.objects.get(username=username)
     user_profile = general_models.UserProfile.objects.get(user_id=user.id)
@@ -357,6 +415,7 @@ def profile(request, username):
         if user_profile_form.is_valid():
             user_profile_form.save()
     else:
+        #print(user_profile_form.errors)
         user_profile_form = general_forms.UserProfileForm(instance=request.user.userprofile)
 
     if request.method == 'POST' and 'bank_information' in request.POST:
@@ -374,7 +433,7 @@ def profile(request, username):
         address_form = general_forms.AddressForm(instance=address)
 
     return render(request, 'profile.html', {
-        # "user_form": user_form,
+        "user": user,
         "bank_information_form": bank_information_form,
         "address_form": address_form,
         "user_profile_form": user_profile_form,
@@ -392,45 +451,64 @@ def collaborator_profile(request, username):
     """
     from shop import views as shop_views
 
+    print("collaborator view")
+
     user = User.objects.get(username=username)
-    collaborator_profile = models.CollaboratorProfile.objects.get(user_id=user.id)
+    collaborator_profile = general_models.CollaboratorProfile.objects.get(user_id=user.id)
+
     try:
-        company = models.Company.objects.get(user_id=user.id)
+        company = general_models.Company.objects.get(user_id=user.id)
     except:
         company = None
     try:
-        bank_information = models.BankInformation.objects.get(user_id=user.id, is_company=True)
+        bank_information = general_models.BankInformation.objects.get(user_id=user.id, is_company=True)
     except:
         bank_information = None
     try:
-        address = models.Address.objects.get(user_id=user.id, is_company=True)
+        address = general_models.Address.objects.get(user_id=user.id, is_company=True)
     except:
         address = None
+
+    if request.method == 'POST' and 'collaborator_profile' in request.POST:
+        print("collaborator profile actualizado")
+        collaborator_profile_form = general_forms.CollaboratorProfileForm(request.POST, request.FILES, instance=collaborator_profile)
+        if collaborator_profile_form.is_valid():
+            #image = collaborator_profile_form.cleaned_data.get('collaborator_image')
+            #collaborator_profile = collaborator_profile_form.save()
+            #image = normalize_image(image, "collaborator")
+            #collaborator_profile.collaborator_image = image
+            collaborator_profile_form.save()
+    else:
+        print("collaborator profile no actualizado")
+        collaborator_profile_form = general_forms.CollaboratorProfileForm(instance=collaborator_profile)
+
     if request.method == 'POST':
-        collaborator_profile_form = forms.CollaboratorProfileForm(data=request.POST, instance=collaborator_profile)
         if user.is_staff:
             if company is None:
-                company_form = forms.CompanyForm(request.POST, request.FILES)
+                company_form = general_forms.CompanyForm(request.POST, request.FILES)
                 if company_form.is_valid():
                     data = company_form.cleaned_data
-                    company = models.Company.objects.create(
+                    company_image = collaborator_profile_form.cleaned_data.get('collaborator_image')
+                    company_image = normalize_image(company_image, "company")
+                    company = general_models.Company.objects.create(
                         user_id=user.id,
                         company_name=data['company_name'],
                         description=data['description'],
                         phone=data['phone'],
-                        web=data['web'])
+                        web=data['web'],
+                        company_image = company_image)
                     company.save()
             else:
-                company_form = forms.CompanyForm(request.POST, request.FILES, instance=company)
+                company_form = general_forms.CompanyForm(request.POST, request.FILES, instance=company)
                 if company_form.is_valid():
                     company_form.save()
 
             if bank_information is None:
-                bank_information_form = forms.BankInformationForm(data=request.POST)
+                bank_information_form = general_forms.BankInformationForm(data=request.POST)
                 if bank_information_form.is_valid():
                     data_bank_information = bank_information_form.cleaned_data
                     # bank_information_form.save()
-                    data_bank_information = models.BankInformation.objects.create(
+                    data_bank_information = general_models.BankInformation.objects.create(
                         bank_name = data_bank_information['bank_name'],
                         account = data_bank_information['account'],
                         month = data_bank_information['month'],
@@ -439,15 +517,15 @@ def collaborator_profile(request, username):
                         user_id = user.id,
                         is_company = True)
             else:
-                bank_information_form = forms.BankInformationForm(data=request.POST, instance=bank_information)
+                bank_information_form = general_forms.BankInformationForm(data=request.POST, instance=bank_information)
                 if bank_information_form.is_valid():
                     bank_information_form.save()
 
             if address is None:
-                address_form = forms.AddressForm(data=request.POST)
+                address_form = general_forms.AddressForm(data=request.POST)
                 if address_form.is_valid():
                     data = address_form.cleaned_data
-                    address = models.Address.objects.create(
+                    address = general_models.Address.objects.create(
                         user_id=user.id,
                         address_name=data['address_name'],
                         city=data['city'],
@@ -459,11 +537,9 @@ def collaborator_profile(request, username):
                         is_company = True)
                     address.save()
             else:
-                address_form = forms.AddressForm(data=request.POST, instance=address)
+                address_form = general_forms.AddressForm(data=request.POST, instance=address)
                 if address_form.is_valid():
                     address_form.save()
-        if collaborator_profile_form.is_valid():
-            collaborator_profile_form.save()
 
     else:
         if company is None:
@@ -478,7 +554,7 @@ def collaborator_profile(request, username):
             address_form = general_forms.AddressForm()
         else:
             address_form = general_forms.AddressForm(instance=address)
-        collaborator_profile_form = general_forms.CollaboratorProfileForm(instance=collaborator_profile)
+        #collaborator_profile_form = general_forms.CollaboratorProfileForm(instance=collaborator_profile)
 
     return render(request, 'collaborator_profile.html', {
         "bank_information_form": bank_information_form,
@@ -522,65 +598,6 @@ def health_profile(request, username):
     })
 
 
-############################## API VIEWS ##############################
-def api(request):
-    return render(request, 'api.html', {
-        "search_form": getSearchForm(),
-        'subscribe_form': getSubscribeForm(),
-    })
-
-
-class IsOwnerOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
-    """clase para los permisos de la API∫"""
-
-    def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # Instance must have an attribute named `owner`.
-        return obj.user == request.user
-
-
-# General Api Views
-def userLoginAPI(request):
-    pass
-
-
-@api_view(['POST'])
-def userRegistrationAPI(request):
-    """metodo de la api para registrar a un usuario"""
-    if request.method == 'POST':
-        print('metodo post django')
-        serializer = User(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            user = User.objects.create(
-                username = serializer['username'],
-                mail = serializer['email'],
-                password = serializer['password']
-            )
-            return response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'GET':
-        print('metodo get')
-    else:
-        print('otro metodo')
-
-
-#@user_passes_test(lambda u: u.is_superuser)
-class APIUserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-
-
-#@user_passes_test(lambda u: u.is_superuser)
-class APIUserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-
-
 # Common Functions
 def getSearchForm():
     return general_forms.SearchForm()
@@ -588,6 +605,20 @@ def getSearchForm():
 
 def getSubscribeForm():
     return general_forms.SubscriberForm()
+
+
+def sendEmail(request):
+    current_site = get_current_site(request)
+    mail_subject = 'Activa tu cuenta.'
+    message = render_to_response('confirmation_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+    })
+    to_email = form.cleaned_data.get('email')
+    email = EmailMessage(mail_subject, message, to_email)
+    email.send()
 
 
 # Error Views

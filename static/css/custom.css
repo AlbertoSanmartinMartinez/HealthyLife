@@ -33,7 +33,7 @@
 }
 
 .award_content {
-  margin-left: 10px;
+  margin: 10px;
   position: relative;
   background-color: blue;
   /*float: right;*/
@@ -61,5 +61,5 @@
 }
 
 /* ----------------------------------------------------
-	02. Sport Search
+	02. Comment And Answer Button
 -------------------------------------------------------*/

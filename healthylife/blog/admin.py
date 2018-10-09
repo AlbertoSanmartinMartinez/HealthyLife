@@ -34,11 +34,11 @@ admin.site.register(blog_models.Category, CategoryAdmin)
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id', 'status', 'title', 'category', 'author')
+    list_display = ('id', 'status', 'created_date', 'title', 'category', 'author')
     list_filter = ('status', 'category', 'author')
     search_fields = ('title', 'description',)
     list_editable = ('status', 'title', 'category')
-    readonly_fields = ('album', 'slug', 'author', 'updated_date')
+    readonly_fields = ('album', 'slug', 'author', 'created_date', 'updated_date')
 
     """
     def save_model(self, request, obj, form, change):
@@ -62,7 +62,7 @@ class PostAdmin(admin.ModelAdmin):
         if not obj.author:
             obj.author = request.user
         obj.save()
-    
+
 
 admin.site.register(blog_models.Post, PostAdmin)
 

@@ -6,9 +6,6 @@
     <div class="col-md-12">
       <div class="filter__menu__container">
         <div class="product__menu">
-          <!--<button data-filter="*"  class="is-checked">All</button>
-          <h3>Filtrar</h3>
-          <a class="blog_filter__menu" href="#"><span class="ti-search"></span></a>-->
         </div>
         <div class="filter__box">
           <a class="blog__filter__menu" href="#"><span class="ti-search"></span> Buscar</a>
@@ -22,9 +19,8 @@
     <div class="filter__cart">
       <div class="filter__cart__inner">
 
-        <!-- -->
         <div class="blog__filter__menu__close__btn">
-          <a href="#"><i class="zmdi zmdi-close"></i></a>
+          <a href=""><i class="zmdi zmdi-close"></i></a>
         </div>
 
         <!-- Start Single Filter Area -->
@@ -44,24 +40,32 @@
           <!-- Single Filter -->
           <div class="fiter__content__inner">
             <div class="single__filter">
-              <h2>Categoria</h2>
+              <h2>Categoría</h2>
               {{ blog_filter_form.category }}
             </div>
           </div>
 
           <!-- Single Filter -->
-          <div class="fiter__content__inner">
+          <!--<div class="fiter__content__inner">
+            <div class="single__filter">
+              <h2>Etiquetas</h2>
+              {{ blog_filter_form.tags }}
+            </div>
+          </div>-->
+
+          <!-- Single Filter -->
+          <!--<div class="fiter__content__inner">
               <div class="single__filter">
               <h2>Fecha</h2>
               {{ blog_filter_form.minimum_date }}
               {{ blog_filter_form.maximum_date }}
             </div>
-          </div>
+          </div>-->
 
           <!-- Single Filter -->
           <div class="fiter__content__inner">
             <div class="single__filter">
-              <h2>Ordenar por</h2>
+              <h2>Ordenar por:</h2>
               {{ blog_filter_form.order_by }}
               <!--<ul class="filter__list">
                 <li><a href="#default">Default</a></li>

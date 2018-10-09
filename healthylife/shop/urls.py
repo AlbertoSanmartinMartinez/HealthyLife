@@ -22,13 +22,13 @@ urlpatterns = [
     # Payments Urls
     url(r'^pago/realizado$', shop_views.payment_done, name='payment_done'),
     url(r'^pago/cancelado$', shop_views.payment_canceled, name='payment_canceled'),
-    url(r'^pago/$', shop_views.payment_checkout, name='payment_checkout'),
 
     # Shipping Urls
+    url(r'^direccion_envio/$', shop_views.address_checkout, name='address_checkout'),
+    url(r'^metodo_envio/$', shop_views.shipping_checkout, name='shipping_checkout'),
+    url(r'^metodo_pago/$', shop_views.payment_checkout, name='payment_checkout'),
+
     url(r'^pedido/$', shop_views.order_checkout, name='order_checkout'),
-
-    # Shipping Urls
-    url(r'^envio/$', shop_views.shipping_checkout, name='shipping_checkout'),
 
     # ShopingChart Urls
     url(r'^carrito/$', shop_views.shoppingcart, name='shoppingcart_detail'),
@@ -36,4 +36,5 @@ urlpatterns = [
 
     #Profile Urls
     url(r'^mi_cuenta/(?P<username>\w+)/pedidos/$', shop_views.ships, name='ships'),
+    
 ]

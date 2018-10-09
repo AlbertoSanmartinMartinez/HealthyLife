@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
-# coding: utf-8
+# -*- coding: utf-8 -*-
+
 """
 https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.save_model
 """
@@ -13,10 +14,6 @@ from taggit.managers import TaggableManager
 # from myapp.seo import MyMetadata
 # from collections import OrderedDict as SortedDict
 
-
-# Admin Statistics Models
-admin.site.register(models.GeneralStatistics)
-admin.site.register(models.SpecificStatistics)
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('id', 'image', 'description', 'alt', 'album')

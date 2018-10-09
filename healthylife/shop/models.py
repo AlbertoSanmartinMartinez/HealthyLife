@@ -73,7 +73,7 @@ class Product(models.Model):
     # color
     Size = ((1, "XS"), (2, 'S'), (3, 'M'), (4, 'L'), (5, 'XL'))
     size = models.IntegerField(choices=Size, default=1, blank=True, null=True)
-    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0)
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default=0) # revisar peso de los productos
     # award = models.ForeignKey(award_models.Award, blank=True, null=True)
     author = models.ForeignKey(User, editable=False, null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='shop_tags')
@@ -145,6 +145,10 @@ class ShopingChart(models.Model):
 # Order Models
 # https://www.wordstream.com/blog/ws/2016/03/17/shopping-cart-abandonment
 class Order(models.Model):
+    """
+    - enviar por correo electronico
+    - generar factura
+    """
     code = models.CharField(max_length=300, default="")
     created_date = models.DateTimeField(auto_now=True)
     OrderStatus = ((1, 'Pendiente de pago'), (2, 'Cancelado'), (3, 'Pagado'), (4, 'En preparación'), (5, 'Enviado'), (6, 'Entregado'))
@@ -165,16 +169,32 @@ class MetaData(models.Model):
 
 # Shipping Models
 class Shipping(models.Model):
+    """
+    https://django-oscar.readthedocs.io/en/releases-1.0/index.html
+
+    """
     company = models.CharField(max_length=100)
-    # weight
-    # country
-    # region
-    # province
-    # city
-    # time
+    #max_weight = models.IntegerField()
+    #max_num_items = models.IntegerField()
+    COUNTRIES = ((1,'España'),)
+    country = models.IntegerField(choices=COUNTRIES, default=1)
+    REGIONS = ((1,'Aragon'),)
+    region = models.IntegerField(choices=REGIONS, default=1)
+    PROVINCES = ((1,'España'),)
+    province = models.IntegerField(choices=PROVINCES, default=1)
+    TIME = ((1,'24h'), (2, '48h'))
+    time = models.ImageField(choices=TIME, default=1)
 
     def __unicode__(self):
         return self.company
+
+
+
+
+
+
+
+
 """
 https://www.youtube.com/watch?v=Z5dBopZWOzo
 https://django-payments.readthedocs.io/en/latest/index.html

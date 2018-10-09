@@ -715,7 +715,7 @@
   transition: all 0.25s ease 0s;
   width: 100%;
   z-index: 99999;
-  width: 475px;
+  width: 400px;
 
 }
 .user__meta .htc__login__register {

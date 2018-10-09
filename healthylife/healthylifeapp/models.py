@@ -1,5 +1,5 @@
 #!/usr/local/bin/python
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser, UserManager
@@ -8,9 +8,12 @@ from django.forms import ModelForm
 from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.text import slugify
+
 from healthylife.decorators import autoconnect
 from django.core.validators import URLValidator
-from taggit.managers import TaggableManager
+
+#from taggit.managers import TaggableManager
+from image_cropping import ImageRatioField
 #from taggit.models import TagBase
 
 # from imagekit.models import ProcessedImageField
@@ -20,7 +23,7 @@ from taggit.managers import TaggableManager
 @autoconnect
 class Address(models.Model):
     """Modelo para las direcciones postales"""
-    address_name = models.CharField(max_length=50)
+    address_name = models.CharField(max_length=50, default="Mi dirección de envío")
     city = models.CharField(max_length=50, blank=True)
     postal_code = models.CharField(max_length=5)
     street = models.CharField(max_length=50, blank=True)
@@ -51,7 +54,7 @@ class BankInformation(models.Model):
     """
     Bank information model
     """
-    bank_name = models.CharField(max_length=50)
+    bank_name = models.CharField(max_length=50, default="Mi información bancaria")
     account = models.CharField(max_length=20, blank=True)
     month = models.CharField(max_length=2, blank=True)
     year = models.CharField(max_length=4, blank=True)
@@ -60,7 +63,7 @@ class BankInformation(models.Model):
     is_company = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return str(self.bank_name)
+        return self.bank_name
 
     def pre_save(self):
         """metodo de la clase BankInformation para estandarizar los atributos"""
@@ -77,7 +80,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     bio = models.TextField(max_length=100, blank=True)
     phone = models.CharField(max_length=9, blank=True)
-    profile_image = models.ImageField(upload_to="photos", default='user_default_image.jpg', blank=True)
+    profile_image = models.ImageField(upload_to="photos", default='photos/user_profile.jpg', blank=True)
+    cropping = ImageRatioField('profile_image', '390x450')
 
     def __unicode__(self):
         return str(self.user.username)
@@ -92,11 +96,12 @@ class UserProfile(models.Model):
 class CollaboratorProfile(models.Model):
     """Modelo para el perfil de un colaborador"""
     user = models.ForeignKey(User)
-    position = models.CharField(max_length=50, default=' ', blank=True)
-    company = models.CharField(max_length=50, default=' ', blank=True)
-    education = models.CharField(max_length=50, default=' ', blank=True)
+    position = models.CharField(max_length=50, default='', blank=True)
+    company = models.CharField(max_length=50, default='', blank=True)
+    education = models.CharField(max_length=50, default='', blank=True)
     extract = models.TextField(default=' ', blank=True)
-    collaborator_image = models.ImageField(upload_to="photos", default='photos/perfil.jpg', blank=True)
+    collaborator_image = models.ImageField(upload_to="photos", default='photos/user_profile.jpg', blank=True)
+    cropping = ImageRatioField('collaborator_image', '390x450')
 
     def __unicode__(self):
         return self.user.username
@@ -110,16 +115,6 @@ class Subscriber(models.Model):
 
 
 # Statistics models
-class GeneralStatistics(models.Model):
-    pass
-
-    def __unicode__(self):
-        pass
-
-
-class SpecificStatistics(models.Model):
-    pass
-
 
 # Gallery models
 @autoconnect
@@ -165,7 +160,8 @@ class Company(models.Model):
     phone = models.CharField(max_length=9, default='000000000', blank=True)
     web =  models.CharField(max_length=50, blank=True)
     user = models.ForeignKey(User, default=1)
-    company_image = models.ImageField(upload_to="photos", default='photos/perfil.jpg', blank=True)
+    company_image = models.ImageField(upload_to="photos", default='photos/default_company_image.jpg', blank=True)
+    cropping = ImageRatioField('company_image', '160x160')
 
     def __unicode__(self):
         return self.company_name

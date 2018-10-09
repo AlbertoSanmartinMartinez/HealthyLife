@@ -41,6 +41,8 @@
   26. Award Filter Area
   27. Calendar Add Event Area
 
+  29. Blog Hover Area
+
 /*--------------------------------
 [ End table content ]
 -----------------------------------*/
@@ -241,13 +243,18 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
 
   $('.filter__menu__close__btn').on('click', function() {
       $('.filter__wrap').removeClass('filter__menu__on');
+      $('.sport__filter__wrap').removeClass('sport__filter__menu__on');
+      $('.nutrition__filter__wrap').removeClass('nutrition__filter__menu__on');
+      $('.health__filter__wrap').removeClass('health__filter__menu__on');
+      $('.calendar__filter__wrap').removeClass('calendar__filter__menu__on');
+      $('.awards__filter__wrap').removeClass('awards__filter__menu__on');
       $('.body__overlay').removeClass('is-visible');
   });
 
 
 /*------------------------------------
   13. User Menu
---------------------------------------*/
+--------------------------------------
 
   $('.user__menu').on('click', function() {
     $('.user__meta').addClass('user__meta__on');
@@ -259,7 +266,7 @@ $('.fixed__footer').css({'margin-bottom': $newsletter_height.height() + 'px'});
       $('.user__meta').removeClass('user__meta__on');
       $('.body__overlay').removeClass('is-visible');
   });
-
+*/
 
 
 /*------------------------------------
@@ -516,7 +523,6 @@ $('.image-popup').magnificPopup({
   $('.blog__filter__menu').on('click', function() {
     $('.blog__filter__wrap').addClass('blog__filter__menu__on');
     $('.body__overlay').addClass('is-visible');
-
   });
 
   $('.blog__filter__menu__close__btn').on('click', function() {
@@ -532,7 +538,6 @@ $('.image-popup').magnificPopup({
   $('.nutrition__filter__menu').on('click', function() {
     $('.nutrition__filter__wrap').addClass('nutrition__filter__menu__on');
     $('.body__overlay').addClass('is-visible');
-
   });
 
   $('.nutrition__filter__menu__close__btn').on('click', function() {
@@ -548,10 +553,9 @@ $('.image-popup').magnificPopup({
   $('.sport__filter__menu').on('click', function() {
     $('.sport__filter__wrap').addClass('sport__filter__menu__on');
     $('.body__overlay').addClass('is-visible');
-
   });
 
-  $('.sport__filter__menu__close__btn').on('click', function() {
+  $('.filter__menu__close__btn').on('click', function() {
       $('.sport__filter__wrap').removeClass('sport__filter__menu__on');
       $('.body__overlay').removeClass('is-visible');
   });
@@ -564,7 +568,6 @@ $('.image-popup').magnificPopup({
   $('.award__filter__menu').on('click', function() {
     $('.award__filter__wrap').addClass('award__filter__menu__on');
     $('.body__overlay').addClass('is-visible');
-
   });
 
   $('.award__filter__menu__close__btn').on('click', function() {
@@ -580,7 +583,6 @@ $('.image-popup').magnificPopup({
   $('.calendar__filter__menu').on('click', function() {
     $('.calendar__filter__wrap').addClass('calendar__filter__menu__on');
     $('.body__overlay').addClass('is-visible');
-
   });
 
   $('.calendar__filter__menu__close__btn').on('click', function() {
@@ -614,3 +616,7 @@ $('.image-popup').magnificPopup({
   });
 
 })(jQuery);
+
+/*------------------------------------
+  29. Blog Hover Area
+--------------------------------------*/

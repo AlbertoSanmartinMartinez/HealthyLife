@@ -1,8 +1,9 @@
 #!/usr/local/bin/python
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 import os
-# from collections import OrderedDict as SortedDict
+
+from easy_thumbnails.conf import Settings as thumbnail_settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -18,15 +19,22 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '192.168.1.21',
     '192.168.1.100',
+    '192.168.1.101',
+    '192.168.1.110',
     '127.0.0.1',
-    '172.16.120.113',
+    '172.16.116.90',
+    '192.168.1.66',
+    '192.168.0.12',
+    '192.168.0.131',
 ]
 
-EMAIL_HOST = 'mail.barbastrosemueve.es'
-EMAIL_HOST_USER = 'info@barbastrosemueve.es'
-EMAIL_HOST_PASSWORD = 'Barbastro2017'
+"""
+EMAIL_HOST = 'mail.hostingaragon.info'
+EMAIL_HOST_USER = 'info@preconcebido.com'
+EMAIL_HOST_PASSWORD = 'Motoscoot.es7620'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = False
+EMAIL_USE_TLS = True
+"""
 
 # Application definition
 
@@ -46,10 +54,13 @@ INSTALLED_APPS = (
     'shop',
     'events',
     'awards',
+    'api',
     'rest_framework',
     'ckeditor',
     'corsheaders',
-    'datetimewidget',
+    'image_cropping',
+    'easy_thumbnails',
+    # 'datetimewidget',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -98,14 +109,6 @@ WSGI_APPLICATION = 'healthylife.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -117,9 +120,9 @@ DATABASES = {
     },
 }
 
-ACCOUNT_ACTIVATION_DAYS = 1
-REGISTRATION_AUTO_LOGIN = True
-SITE_ID = 1
+#ACCOUNT_ACTIVATION_DAYS = 1
+#REGISTRATION_AUTO_LOGIN = True
+#SITE_ID = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -165,21 +168,37 @@ LOGIN_URL = 'custom_login'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 
+# Authentication Backends for Django and Admin
 AUTHENTICATION_BACKENDS = [
     'healthylifeapp.backend.CustomBackend',
     'django.contrib.auth.backends.ModelBackend',
-    ]
+]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10,
+    'DEFAULT_PERMISSION_CLASSES': (
+        # 'rest_framework.permissions.IsAuthenticated',
+    ),
+    # Authentication Backends for DRF and Ionic
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
-CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_UPLOAD_PATH = 'ckeditor/'
+CKEDITOR_UPLOAD_SLUGIFY_FILENAME = False
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+CKEDITOR_IMAGE_BACKEND = 'pillow'
+
 CKEDITOR_CONFIGS = {
-    'default': {
-        # 'toolbar': None
+    'full': {
         'toolbar': 'Full'
+    },
+    'basic': {
+        'toolbar': 'Basic'
     }
 }
 
@@ -189,6 +208,7 @@ CORS_ORIGIN_WHITELIST = (
     '127.0.0.1',
     '192.168.1.21',
     '172.16.120.113'
+    '192.168.1.101',
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -205,3 +225,53 @@ X_APP_KEY = '1a3868de0641119014fc38bb848af63e'
 
 # SHOPPING CART
 CART_SESSION_ID = 'cart'
+
+# ********** CROP MEDIA FILES **********
+
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS
+
+#IMAGE_CROPPING_BACKEND = 'image_cropping.backends.easy_thumbs.EasyThumbnailsBackend'
+#IMAGE_CROPPING_BACKEND_PARAMS = {}
+
+# ********** PASSWORD VALIDATORS **********
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'healthylifeapp.validators.NumberValidator',
+        'OPTIONS': {
+            'min_digits': 1,
+        }
+    },
+    {
+        'NAME': 'healthylifeapp.validators.UppercaseValidator',
+        'OPTIONS': {
+            'min_uper': 1,
+        }
+    },
+    {
+        'NAME': 'healthylifeapp.validators.LowercaseValidator',
+        'OPTIONS': {
+            'min_lower': 1,
+        }
+    },
+    {
+        'NAME': 'healthylifeapp.validators.SymbolValidator',
+        'OPTIONS': {
+            'min_char': 1,
+        }
+    }
+]
